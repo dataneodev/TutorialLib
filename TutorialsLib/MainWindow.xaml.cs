@@ -26,6 +26,8 @@ namespace TutorialsLib
         {
             Core.Initialize();
             InitializeComponent();
+            this.DataContext = new MainWindowVM();
+
 
             _controls = new Controls(this);
             VideoView.Content = _controls;

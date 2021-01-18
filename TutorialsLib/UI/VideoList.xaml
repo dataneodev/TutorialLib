@@ -1,0 +1,211 @@
+﻿<UserControl
+    x:Class="TutorialsLib.UI.VideoList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TutorialsLib.UI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <DataTemplate x:Key="VideoItemTemplate">
+            <Grid MinWidth="200" Margin="8,0,4,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Line
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0"
+                    HorizontalAlignment="Center"
+                    Stroke="DarkSlateGray"
+                    StrokeThickness="2"
+                    X1="0"
+                    X2="0"
+                    Y1="0"
+                    Y2="8">
+                    <Line.Style>
+                        <Style TargetType="Line">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding LocationOnList}" Value="FirstElement">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Line.Style>
+                </Line>
+                <Ellipse
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Width="12"
+                    Height="12"
+                    HorizontalAlignment="Center">
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse">
+                            <Setter Property="Fill" Value="Green" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding WatchStatus}" Value="NotWatched">
+                                    <Setter Property="Fill" Value="DarkSlateGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="2,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="8"
+                    Foreground="White">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding WatchStatus}" Value="Watched">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Text" Value="✓" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding WatchStatus}" Value="InProgress">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Text" Value="▶" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <Line
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    HorizontalAlignment="Center"
+                    Stroke="DarkSlateGray"
+                    StrokeThickness="2"
+                    X1="0"
+                    X2="0"
+                    Y1="0"
+                    Y2="8">
+                    <Line.Style>
+                        <Style TargetType="Line">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding LocationOnList}" Value="LastElement">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Line.Style>
+                </Line>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    Foreground="White"
+                    Text="{Binding Name}" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="FolderItemTemplate">
+            <Grid Margin="4,0,4,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Ellipse
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="0"
+                    Width="20"
+                    Height="20"
+                    Margin="0,6,0,6"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse">
+                            <Setter Property="Fill" Value="DarkSlateGray" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding WatchStatus}" Value="Watched">
+                                    <Setter Property="Fill" Value="Green" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="LightGray">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="{Binding Position}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding WatchStatus}" Value="Watched">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Text" Value="✔" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="10,2,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="15"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="{Binding Name}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="10,0,0,2"
+                    VerticalAlignment="Center"
+                    Foreground="Gray"
+                    Text="{Binding FolderPlayTime}" />
+            </Grid>
+        </DataTemplate>
+        <local:VideoListItemTemplateSelector
+            x:Key="ListItemDataTemplateSelector"
+            FolderItemTemplate="{StaticResource FolderItemTemplate}"
+            VideoItemTemplate="{StaticResource VideoItemTemplate}" />
+    </UserControl.Resources>
+    <ListView
+        x:Name="tvVideoList"
+        Padding="0"
+        Background="Black"
+        ItemTemplateSelector="{StaticResource ListItemDataTemplateSelector}">
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="0" />
+            </Style>
+        </ListView.ItemContainerStyle>
+
+    </ListView>
+</UserControl>
