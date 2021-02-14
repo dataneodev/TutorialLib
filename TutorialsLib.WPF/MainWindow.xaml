@@ -15,7 +15,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="*" MinWidth="200" />
+            <ColumnDefinition Width="*" MinWidth="220" />
         </Grid.ColumnDefinitions>
         <uc:VideoView
             x:Name="VideoView"

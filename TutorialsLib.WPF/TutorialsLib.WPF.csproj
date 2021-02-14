@@ -12,4 +12,10 @@
     <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.11" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TutorialLib.Infrastructure\TutorialLibs.Infrastructure.csproj" />
+    <ProjectReference Include="..\TutorialLib.SharedKernel\TutorialLibs.SharedKernel.csproj" />
+    <ProjectReference Include="..\TutorialsLib.Core\TutorialsLib.Core.csproj" />
+  </ItemGroup>
+
 </Project>

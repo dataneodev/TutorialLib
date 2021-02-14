@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TutorialLib.SharedKernel\TutorialLibs.SharedKernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Constans\" />
+    <Folder Include="ExtensionsMethod\" />
+    <Folder Include="Specifications\" />
+    <Folder Include="Servises\" />
+  </ItemGroup>
+
+</Project>
