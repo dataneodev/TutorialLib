@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,8 +13,9 @@
   <ItemGroup>
     <Folder Include="Constans\" />
     <Folder Include="ExtensionsMethod\" />
+    <Folder Include="Interfaces\Respositories\" />
     <Folder Include="Specifications\" />
-    <Folder Include="Servises\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
