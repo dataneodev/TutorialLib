@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Exceptions
+namespace TutorialLibs.SharedKernel.Common
 {
     /// <summary>
     /// The version of the Result class with enum.

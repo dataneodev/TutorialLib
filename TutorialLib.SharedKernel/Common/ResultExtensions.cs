@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CustomerManagement.Logic.Common
+namespace TutorialLibs.SharedKernel.Common
 {
     public static class ResultExtensions
     {

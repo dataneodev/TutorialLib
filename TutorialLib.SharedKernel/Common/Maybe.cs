@@ -1,7 +1,7 @@
-﻿using System;
-using NullGuard;
+﻿using NullGuard;
+using System;
 
-namespace CustomerManagement.Logic.Common
+namespace TutorialLibs.SharedKernel.Common
 {
     public struct Maybe<T> : IEquatable<Maybe<T>>
         where T : class

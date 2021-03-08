@@ -1,4 +1,4 @@
-﻿namespace CustomerManagement.Logic.Common
+﻿namespace TutorialLibs.SharedKernel.Common
 {
     public abstract class ValueObject<T>
         where T : ValueObject<T>

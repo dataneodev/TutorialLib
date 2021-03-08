@@ -1,4 +1,4 @@
-﻿namespace CustomerManagement.Logic.Common
+﻿namespace TutorialLibs.SharedKernel.Common
 {
     public abstract class Entity
     {
@@ -14,7 +14,7 @@
             if (ReferenceEquals(this, other))
                 return true;
 
-            if (GetRealType() != other.GetRealType())
+            if (GetType() != other.GetType())
                 return false;
 
             if (Id == 0 || other.Id == 0)
