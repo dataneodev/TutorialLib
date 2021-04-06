@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TutorialLibs.SharedKernel.Common
+namespace TutorialLibs.SharedKernel.Functional
 {
     public static class ResultExtensions
     {

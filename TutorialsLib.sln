@@ -9,13 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TutorialLibs.SharedKernel",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{9BF06453-6B03-43B3-81ED-9B099B43E136}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TutorialLibs.Domain", "TutorialLibs.Domain\TutorialLibs.Domain.csproj", "{6A9E6D1D-9796-4D05-B85E-4AA87590E700}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TutorialLibs.Domain", "TutorialLibs.Domain\TutorialLibs.Domain.csproj", "{6A9E6D1D-9796-4D05-B85E-4AA87590E700}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TutorialLibs.Application", "TutorialLibs.Application\TutorialLibs.Application.csproj", "{B286C57F-7ED0-4681-8C5B-E1A30135333D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TutorialLibs.Application", "TutorialLibs.Application\TutorialLibs.Application.csproj", "{B286C57F-7ED0-4681-8C5B-E1A30135333D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{DA9F6A3E-105E-46EB-B184-4305A5C7750E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TutorialLibs.Persistence.EF.SQLite", "TutorialLibs.Persistence.EF.SQLite\TutorialLibs.Persistence.EF.SQLite.csproj", "{AA5B2EBB-D706-413E-B6E4-F0BE8FEF3132}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TutorialLibs.Persistence.EF.SQLite", "TutorialLibs.Persistence.EF.SQLite\TutorialLibs.Persistence.EF.SQLite.csproj", "{AA5B2EBB-D706-413E-B6E4-F0BE8FEF3132}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{1C5876E2-691D-47D7-A7EB-56149A468738}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{C2242B04-3810-4E56-8C27-0526CC5F2488}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +52,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{52B34334-00A6-43AB-A5F2-7A801B0E6E72} = {C2242B04-3810-4E56-8C27-0526CC5F2488}
+		{F50C4E31-D5CF-418C-BD87-BB38D8E4865B} = {9BF06453-6B03-43B3-81ED-9B099B43E136}
 		{6A9E6D1D-9796-4D05-B85E-4AA87590E700} = {9BF06453-6B03-43B3-81ED-9B099B43E136}
 		{B286C57F-7ED0-4681-8C5B-E1A30135333D} = {9BF06453-6B03-43B3-81ED-9B099B43E136}
 		{AA5B2EBB-D706-413E-B6E4-F0BE8FEF3132} = {DA9F6A3E-105E-46EB-B184-4305A5C7750E}

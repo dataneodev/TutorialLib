@@ -1,4 +1,4 @@
-﻿namespace TutorialsLib.Core.Enums
+﻿namespace TutorialLibs.Domain.Enums
 {
     public enum VideoWatchStatus
     {

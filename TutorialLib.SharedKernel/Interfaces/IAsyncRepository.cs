@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using TutorialLibs.SharedKernel.Common;
 using TutorialsLib.SharedKernel.Specification;
-using TutorialsLib.Core.Entities;
 
-namespace TutorialsLib.Core.Interfaces
+namespace TutorialLibs.SharedKernel.Interfaces
 {
     public interface IAsyncRepository<T> where T : BaseEntity, IAggregateRoot
     {

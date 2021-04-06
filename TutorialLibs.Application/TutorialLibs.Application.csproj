@@ -11,4 +11,9 @@
     <Folder Include="Specifications\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TutorialLib.SharedKernel\TutorialLibs.SharedKernel.csproj" />
+    <ProjectReference Include="..\TutorialLibs.Domain\TutorialLibs.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

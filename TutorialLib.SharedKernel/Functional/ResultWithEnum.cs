@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TutorialLibs.SharedKernel.Common
+namespace TutorialLibs.SharedKernel.Functional
 {
     /// <summary>
     /// The version of the Result class with enum.

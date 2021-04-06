@@ -1,7 +1,7 @@
 ﻿using NullGuard;
 using System;
 
-namespace TutorialLibs.SharedKernel.Common
+namespace TutorialLibs.SharedKernel.Functional
 {
     public class Result
     {

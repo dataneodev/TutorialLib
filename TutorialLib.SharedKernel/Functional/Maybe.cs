@@ -1,7 +1,7 @@
 ﻿using NullGuard;
 using System;
 
-namespace TutorialLibs.SharedKernel.Common
+namespace TutorialLibs.SharedKernel.Functional
 {
     public struct Maybe<T> : IEquatable<Maybe<T>>
         where T : class
