@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="9.5.1" />
-    <PackageReference Include="NullGuard.Fody" Version="3.0.0" />
+    <PackageReference Include="Ardalis.GuardClauses" Version="3.1.0" />
+    <PackageReference Include="Ardalis.Specification" Version="5.0.3" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.15.1" />
+    <PackageReference Include="FluentValidation" Version="10.0.2" />
   </ItemGroup>
 
 </Project>
