@@ -8,7 +8,8 @@ namespace TutorialLibs.Domain.Entities
     {
         public short Lp { get; set; }
         public string Name { get; set; }
-        public string Path { get; set; }
+        public string FileName { get; set; }
+        public string FolderName { get; set; }
         public VideoWatchStatus Status { get; set; }
         public TimeSpan Duraction { get; set; }
         public TimeSpan PlayedTime { get; set; }

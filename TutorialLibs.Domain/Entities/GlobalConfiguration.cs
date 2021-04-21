@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TutorialLibs.Domain.Entities
+﻿namespace TutorialLibs.Domain.Entities
 {
-    class GlobalConfiguration
+    public class Configuration
     {
+        public string Name { get; set; }
+        public string Value { get; set; }
     }
 }
