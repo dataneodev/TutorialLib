@@ -1,6 +1,6 @@
-﻿using System;
+﻿using dataneo.DDD;
+using System;
 using TutorialLibs.Domain.Enums;
-using TutorialLibs.SharedKernel.Common;
 
 namespace TutorialLibs.Domain.Entities
 {

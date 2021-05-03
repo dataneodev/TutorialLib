@@ -1,6 +1,6 @@
-﻿using System;
-using TutorialLibs.SharedKernel.Common;
-using TutorialLibs.SharedKernel.Interfaces;
+﻿using dataneo.DDD;
+using System;
+
 
 namespace TutorialLibs.Domain.Entities
 {

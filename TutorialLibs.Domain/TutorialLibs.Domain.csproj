@@ -9,7 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TutorialLib.SharedKernel\TutorialLibs.SharedKernel.csproj" />
+    <PackageReference Include="FluentValidation" Version="10.1.0" />
   </ItemGroup>
+
+  <Import Project="..\Shared\dataneo\dataneo.DDD\dataneo.DDD.projitems" Label="Shared" />
+
+  <Import Project="..\Shared\dataneo\dataneo.Extension\dataneo.Extension.projitems" Label="Shared" />
 
 </Project>

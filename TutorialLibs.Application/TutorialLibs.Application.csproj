@@ -12,8 +12,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TutorialLib.SharedKernel\TutorialLibs.SharedKernel.csproj" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.15.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TutorialLibs.Domain\TutorialLibs.Domain.csproj" />
   </ItemGroup>
+
+  <Import Project="..\Shared\dataneo\dataneo.DDD\dataneo.DDD.projitems" Label="Shared" />
+
+  <Import Project="..\Shared\dataneo\dataneo.Extension\dataneo.Extension.projitems" Label="Shared" />
 
 </Project>
