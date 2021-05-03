@@ -1,8 +1,7 @@
 ﻿using dataneo.DDD;
 using System;
-using TutorialLibs.Domain.Enums;
 
-namespace TutorialLibs.Domain.Entities
+namespace dataneo.TutorialLibs.Domain.Entities
 {
     public class Episode : BaseEntity
     {

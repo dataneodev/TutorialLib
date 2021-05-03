@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TutorialLibs.Application\dataneo.TutorialLibs.Application.csproj" />
-    <ProjectReference Include="..\TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
+    <ProjectReference Include="..\dataneo.TutorialLibs.Application\dataneo.TutorialLibs.Application.csproj" />
+    <ProjectReference Include="..\dataneo.TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
   </ItemGroup>
 
 </Project>

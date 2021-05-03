@@ -1,9 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TutorialLibs.Application.Model;
 
-namespace TutorialLibs.Application.Interfaces
+namespace dataneo.TutorialLibs.Application.Interfaces
 {
     public interface ITutorialScan
     {

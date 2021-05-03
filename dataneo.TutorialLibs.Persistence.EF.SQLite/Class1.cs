@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TutorialLibs.Persistence.EF.SQLite
+﻿namespace dataneo.TutorialLibs.Persistence.EF.SQLite
 {
     public class Class1
     {

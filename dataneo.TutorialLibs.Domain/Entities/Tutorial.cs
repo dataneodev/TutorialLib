@@ -2,7 +2,7 @@
 using System;
 
 
-namespace TutorialLibs.Domain.Entities
+namespace dataneo.TutorialLibs.Domain.Entities
 {
     public class Tutorial : BaseEntity, IAggregateRoot
     {

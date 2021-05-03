@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
+    <ProjectReference Include="..\dataneo.TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
   </ItemGroup>
 
   <Import Project="..\..\dataneo\dataneo.DDD\dataneo.DDD.projitems" Label="Shared" />

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TutorialLibs.Application.Model
+namespace dataneo.TutorialLibs.Application.Model
 {
     public struct EpisodeFile
     {

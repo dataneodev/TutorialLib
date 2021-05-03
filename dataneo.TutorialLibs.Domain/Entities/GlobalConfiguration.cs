@@ -1,4 +1,4 @@
-﻿namespace TutorialLibs.Domain.Entities
+﻿namespace dataneo.TutorialLibs.Domain.Entities
 {
     public class Configuration
     {
