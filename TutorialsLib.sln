@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TutorialsLib.WPF", "TutorialsLib.WPF\TutorialsLib.WPF.csproj", "{52B34334-00A6-43AB-A5F2-7A801B0E6E72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialsLib.WPF", "dataneo.TutorialsLib.WPF\dataneo.TutorialsLib.WPF.csproj", "{52B34334-00A6-43AB-A5F2-7A801B0E6E72}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{9BF06453-6B03-43B3-81ED-9B099B43E136}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TutorialLibs.Domain", "TutorialLibs.Domain\TutorialLibs.Domain.csproj", "{6A9E6D1D-9796-4D05-B85E-4AA87590E700}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialLibs.Domain", "dataneo.TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj", "{6A9E6D1D-9796-4D05-B85E-4AA87590E700}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TutorialLibs.Application", "TutorialLibs.Application\TutorialLibs.Application.csproj", "{B286C57F-7ED0-4681-8C5B-E1A30135333D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialLibs.Application", "dataneo.TutorialLibs.Application\dataneo.TutorialLibs.Application.csproj", "{B286C57F-7ED0-4681-8C5B-E1A30135333D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{DA9F6A3E-105E-46EB-B184-4305A5C7750E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TutorialLibs.Persistence.EF.SQLite", "TutorialLibs.Persistence.EF.SQLite\TutorialLibs.Persistence.EF.SQLite.csproj", "{AA5B2EBB-D706-413E-B6E4-F0BE8FEF3132}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialLibs.Persistence.EF.SQLite", "dataneo.TutorialLibs.Persistence.EF.SQLite\dataneo.TutorialLibs.Persistence.EF.SQLite.csproj", "{AA5B2EBB-D706-413E-B6E4-F0BE8FEF3132}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{1C5876E2-691D-47D7-A7EB-56149A468738}"
 EndProject
@@ -21,18 +21,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{C2242B04-3810-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{6FB61415-06B8-438F-A4A8-913E8FDD4E34}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "dataneo.DDD", "Shared\dataneo\dataneo.DDD\dataneo.DDD.shproj", "{97D2DC3B-ADF6-4A14-ACBA-B3E4027B6307}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "dataneo.DDD", "..\dataneo\dataneo.DDD\dataneo.DDD.shproj", "{97D2DC3B-ADF6-4A14-ACBA-B3E4027B6307}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "dataneo.Extensions", "Shared\dataneo\dataneo.Extension\dataneo.Extensions.shproj", "{75335CB5-49E9-4697-9D01-CF09F5CCCBAC}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "dataneo.Extensions", "..\dataneo\dataneo.Extensions\dataneo.Extensions.shproj", "{75335CB5-49E9-4697-9D01-CF09F5CCCBAC}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Shared\dataneo\dataneo.DDD\dataneo.DDD.projitems*{6a9e6d1d-9796-4d05-b85e-4aa87590e700}*SharedItemsImports = 5
-		Shared\dataneo\dataneo.Extension\dataneo.Extension.projitems*{6a9e6d1d-9796-4d05-b85e-4aa87590e700}*SharedItemsImports = 5
-		Shared\dataneo\dataneo.Extension\dataneo.Extension.projitems*{75335cb5-49e9-4697-9d01-cf09f5cccbac}*SharedItemsImports = 13
-		Shared\dataneo\dataneo.DDD\dataneo.DDD.projitems*{97d2dc3b-adf6-4a14-acba-b3e4027b6307}*SharedItemsImports = 13
-		Shared\dataneo\dataneo.DDD\dataneo.DDD.projitems*{b286c57f-7ed0-4681-8c5b-e1a30135333d}*SharedItemsImports = 5
-		Shared\dataneo\dataneo.Extension\dataneo.Extension.projitems*{b286c57f-7ed0-4681-8c5b-e1a30135333d}*SharedItemsImports = 5
+		..\dataneo\dataneo.DDD\dataneo.DDD.projitems*{6a9e6d1d-9796-4d05-b85e-4aa87590e700}*SharedItemsImports = 5
+		..\dataneo\dataneo.Extensions\dataneo.Extensions.projitems*{6a9e6d1d-9796-4d05-b85e-4aa87590e700}*SharedItemsImports = 5
+		..\dataneo\dataneo.Extensions\dataneo.Extensions.projitems*{75335cb5-49e9-4697-9d01-cf09f5cccbac}*SharedItemsImports = 13
+		..\dataneo\dataneo.DDD\dataneo.DDD.projitems*{97d2dc3b-adf6-4a14-acba-b3e4027b6307}*SharedItemsImports = 13
+		..\dataneo\dataneo.DDD\dataneo.DDD.projitems*{b286c57f-7ed0-4681-8c5b-e1a30135333d}*SharedItemsImports = 5
+		..\dataneo\dataneo.Extensions\dataneo.Extensions.projitems*{b286c57f-7ed0-4681-8c5b-e1a30135333d}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

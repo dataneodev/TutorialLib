@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>dataneo.TutorialLibs.Application</AssemblyName>
+    <RootNamespace>dataneo.TutorialLibs.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="ExtensionsMethod\" />
+    <Folder Include="Interfaces\Respositories\" />
+    <Folder Include="Services\" />
+    <Folder Include="Specifications\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.15.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\..\dataneo\dataneo.DDD\dataneo.DDD.projitems" Label="Shared" />
+
+  <Import Project="..\..\dataneo\dataneo.Extensions\dataneo.Extensions.projitems" Label="Shared" />
+
+</Project>
