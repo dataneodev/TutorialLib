@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using dataneo.TutorialLibs.Domain.Enums;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using TutorialsLib.Core.Enums;
 
 namespace TutorialsLib
 {

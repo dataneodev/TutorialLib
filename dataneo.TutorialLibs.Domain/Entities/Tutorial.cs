@@ -1,4 +1,4 @@
-﻿using dataneo.DDD;
+﻿using dataneo.SharedKernel;
 using System;
 
 

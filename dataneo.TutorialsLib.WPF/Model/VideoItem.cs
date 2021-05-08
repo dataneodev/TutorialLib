@@ -1,4 +1,4 @@
-﻿using TutorialsLib.Core;
+﻿using dataneo.TutorialLibs.Domain.Enums;
 
 namespace TutorialsLib
 {

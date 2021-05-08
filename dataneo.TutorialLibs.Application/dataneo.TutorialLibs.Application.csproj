@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>dataneo.TutorialLibs.Application</AssemblyName>
     <RootNamespace>dataneo.TutorialLibs.Application</RootNamespace>
   </PropertyGroup>
@@ -14,15 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpFunctionalExtensions" Version="2.15.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\dataneo.TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
   </ItemGroup>
-
-  <Import Project="..\..\dataneo\dataneo.DDD\dataneo.DDD.projitems" Label="Shared" />
-
-  <Import Project="..\..\dataneo\dataneo.Extensions\dataneo.Extensions.projitems" Label="Shared" />
 
 </Project>

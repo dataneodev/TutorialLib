@@ -1,4 +1,5 @@
-﻿using dataneo.DDD;
+﻿using dataneo.SharedKernel;
+using dataneo.TutorialLibs.Domain.Enums;
 using System;
 
 namespace dataneo.TutorialLibs.Domain.Entities
