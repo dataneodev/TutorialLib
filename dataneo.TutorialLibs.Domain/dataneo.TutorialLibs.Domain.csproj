@@ -18,4 +18,6 @@
 
   <Import Project="..\..\dataneo\dataneo.SharedKernel\dataneo.SharedKernel.projitems" Label="Shared" />
 
+  <Import Project="..\..\dataneo\dataneo.Helpers\dataneo.Helpers.projitems" Label="Shared" />
+
 </Project>
