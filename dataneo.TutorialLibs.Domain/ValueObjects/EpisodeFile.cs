@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using dataneo.TutorialLibs.Domain.Translation;
 using System;
 using System.Collections.Generic;
 
@@ -7,6 +8,7 @@ namespace dataneo.TutorialLibs.Domain.ValueObjects
     public class EpisodeFile : ValueObject
     {
         public const short MinPlayTimeInSeconds = 1;
+        public const short MinFileSizeInBytes = 1024;
 
         public TimeSpan PlayTime { get; init; }
         public string FileName { get; init; }
@@ -24,9 +26,26 @@ namespace dataneo.TutorialLibs.Domain.ValueObjects
             DateTime dateModified)
         {
             if (playTime.TotalSeconds < MinPlayTimeInSeconds)
-                return
+                return FailureResult(Errors.EPISODE_TO_SHORT);
 
+            if (fileSize < MinFileSizeInBytes)
+                return FailureResult(Errors.FILE_SIZE_TO_SMALL);
 
+            if (string.IsNullOrWhiteSpace(fileName))
+                return FailureResult(Errors.FILENAME_INCORECT);
+
+            return Result.Success(
+                new EpisodeFile
+                {
+                    FileName = fileName,
+                    FileSize = fileSize,
+                    PlayTime = playTime,
+                    DateCreated = dateCreated,
+                    DateModified = dateModified
+                });
+
+            Result<EpisodeFile> FailureResult(string msg)
+              => Result.Failure<EpisodeFile>(msg);
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

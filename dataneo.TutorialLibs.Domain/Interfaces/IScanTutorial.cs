@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using dataneo.TutorialLibs.Application.Model;
+using dataneo.TutorialLibs.Domain.ValueObjects;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

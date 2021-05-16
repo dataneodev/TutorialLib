@@ -22,11 +22,16 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public VideoWatchStatus GetWatchStatus()
         {
             if (this.File == null)
-                throw new NullReferenceException();
+                throw new NullReferenceException(nameof(File));
 
+            var playRatio = (PlayedTime / File.PlayTime) * 100;
+            if (playRatio < UnWatchPercentage)
+                return VideoWatchStatus.NotWatched;
 
+            if (playRatio > WatchPercentage)
+                return VideoWatchStatus.Watched;
 
-
+            return VideoWatchStatus.InProgress;
         }
     }
 }
