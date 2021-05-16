@@ -1,6 +1,6 @@
 ﻿namespace dataneo.TutorialLibs.Domain.Enums
 {
-    public enum VideoWatchStatus
+    public enum VideoWatchStatus : byte
     {
         NotWatched,
         InProgress,

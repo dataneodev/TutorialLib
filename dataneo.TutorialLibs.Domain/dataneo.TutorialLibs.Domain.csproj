@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Constans\" />
     <Folder Include="ExtensionsMethod\" />
     <Folder Include="Interfaces\Respositories\" />
     <Folder Include="Model\" />

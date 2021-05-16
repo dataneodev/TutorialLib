@@ -123,6 +123,9 @@
   <data name="FILENAME_INCORECT" xml:space="preserve">
     <value>File name incorrect</value>
   </data>
+  <data name="FILE_EXTENSION_NOT_SUPPORTED" xml:space="preserve">
+    <value>File extension not supported</value>
+  </data>
   <data name="FILE_SIZE_TO_SMALL" xml:space="preserve">
     <value>File size to small</value>
   </data>

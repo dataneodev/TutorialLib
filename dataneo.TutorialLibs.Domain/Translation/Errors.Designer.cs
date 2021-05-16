@@ -70,6 +70,15 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File extension not supported.
+        /// </summary>
+        public static string FILE_EXTENSION_NOT_SUPPORTED {
+            get {
+                return ResourceManager.GetString("FILE_EXTENSION_NOT_SUPPORTED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File size to small.
         /// </summary>
         public static string FILE_SIZE_TO_SMALL {

@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using dataneo.TutorialLibs.Domain.Constans;
 using dataneo.TutorialLibs.Domain.Translation;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,11 @@ namespace dataneo.TutorialLibs.Domain.ValueObjects
         public const short MinPlayTimeInSeconds = 1;
         public const short MinFileSizeInBytes = 1024;
 
-        public TimeSpan PlayTime { get; init; }
-        public string FileName { get; init; }
-        public long FileSize { get; init; }
-        public DateTime DateCreated { get; init; }
-        public DateTime DateModified { get; init; }
+        public TimeSpan PlayTime { get; private set; }
+        public string FileName { get; private set; }
+        public long FileSize { get; private set; }
+        public DateTime DateCreated { get; private set; }
+        public DateTime DateModified { get; private set; }
 
         private EpisodeFile() { }
 
@@ -33,6 +34,9 @@ namespace dataneo.TutorialLibs.Domain.ValueObjects
 
             if (string.IsNullOrWhiteSpace(fileName))
                 return FailureResult(Errors.FILENAME_INCORECT);
+
+            if (!HandledFormats.FileAreSupported(fileName))
+                return FailureResult(Errors.FILE_EXTENSION_NOT_SUPPORTED);
 
             return Result.Success(
                 new EpisodeFile
