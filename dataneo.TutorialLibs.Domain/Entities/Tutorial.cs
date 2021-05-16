@@ -1,10 +1,9 @@
 ﻿using dataneo.SharedKernel;
 using System;
 
-
 namespace dataneo.TutorialLibs.Domain.Entities
 {
-    public class Tutorial : BaseEntity, IAggregateRoot
+    public sealed class Tutorial : BaseEntity, IAggregateRoot
     {
         public string Name { get; set; }
         public string BasePath { get; set; }

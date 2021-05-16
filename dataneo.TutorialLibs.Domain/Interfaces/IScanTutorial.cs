@@ -3,7 +3,7 @@ using dataneo.TutorialLibs.Application.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace dataneo.TutorialLibs.Application.Interfaces
+namespace dataneo.TutorialLibs.Domain.Interfaces
 {
     public interface ITutorialScan
     {

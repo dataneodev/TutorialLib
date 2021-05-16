@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ExtensionsMethod\" />
-    <Folder Include="Interfaces\Respositories\" />
-    <Folder Include="Services\" />
-    <Folder Include="Specifications\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\dataneo.TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
   </ItemGroup>
 

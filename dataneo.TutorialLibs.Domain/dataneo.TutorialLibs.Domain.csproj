@@ -6,11 +6,17 @@
 
   <ItemGroup>
     <Folder Include="Constans\" />
+    <Folder Include="ExtensionsMethod\" />
+    <Folder Include="Interfaces\Respositories\" />
+    <Folder Include="Model\" />
+    <Folder Include="Services\" />
+    <Folder Include="Specifications\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpFunctionalExtensions" Version="2.15.2" />
-    <PackageReference Include="FluentValidation" Version="10.1.0" />
+    <ProjectReference Include="..\Nuget\CSharpFunctionalExtensions\CSharpFunctionalExtensions\CSharpFunctionalExtensions.csproj" />
+    <ProjectReference Include="..\Nuget\FluentValidation\src\FluentValidation\FluentValidation.csproj" />
+    <ProjectReference Include="..\Nuget\GuardClauses\src\GuardClauses\GuardClauses.csproj" />
   </ItemGroup>
 
 
