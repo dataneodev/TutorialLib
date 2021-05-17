@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentValidation", "Nuget\F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardClauses", "Nuget\GuardClauses\src\GuardClauses\GuardClauses.csproj", "{20ADDD7F-20D6-4C94-8DD3-94B73CB8B9F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dataneo.TutorialLibs.FileIO.Win", "dataneo.TutorialLibs.FileIO.Win\dataneo.TutorialLibs.FileIO.Win.csproj", "{908AF8C7-5CDF-47E0-812A-6D5432248A6E}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\dataneo\dataneo.Helpers\dataneo.Helpers.projitems*{4df445d2-6956-49c7-9b3a-4e7bec477ab5}*SharedItemsImports = 13
@@ -71,6 +73,10 @@ Global
 		{20ADDD7F-20D6-4C94-8DD3-94B73CB8B9F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20ADDD7F-20D6-4C94-8DD3-94B73CB8B9F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20ADDD7F-20D6-4C94-8DD3-94B73CB8B9F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{908AF8C7-5CDF-47E0-812A-6D5432248A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{908AF8C7-5CDF-47E0-812A-6D5432248A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{908AF8C7-5CDF-47E0-812A-6D5432248A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{908AF8C7-5CDF-47E0-812A-6D5432248A6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +91,7 @@ Global
 		{2265020A-7F2C-4D91-8B26-D7CC46939DCE} = {25C8D958-74B9-4DF6-BBE4-18EF6194110D}
 		{013F8793-9F8D-4E54-9EA7-87859414288B} = {25C8D958-74B9-4DF6-BBE4-18EF6194110D}
 		{20ADDD7F-20D6-4C94-8DD3-94B73CB8B9F3} = {25C8D958-74B9-4DF6-BBE4-18EF6194110D}
+		{908AF8C7-5CDF-47E0-812A-6D5432248A6E} = {DA9F6A3E-105E-46EB-B184-4305A5C7750E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1EA62500-7F24-4149-95E4-0BFB6D24497B}

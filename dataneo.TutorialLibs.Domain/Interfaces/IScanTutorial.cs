@@ -13,6 +13,6 @@ namespace dataneo.TutorialLibs.Domain.Interfaces
                         HashSet<string> handledExtensions,
                         CancellationToken cancellationToken);
 
-        Task<Result<EpisodeFile>> GetFileDetailsAsync(string filePath);
+        Task<Result<EpisodeFile>> GetFileDetailsAsync(string filePath, CancellationToken cancellationToken);
     }
 }
