@@ -1,5 +1,6 @@
 ﻿using dataneo.SharedKernel;
 using System;
+using System.Collections.Generic;
 
 namespace dataneo.TutorialLibs.Domain.Entities
 {
@@ -7,7 +8,7 @@ namespace dataneo.TutorialLibs.Domain.Entities
     {
         public string Name { get; set; }
         public string BasePath { get; set; }
-        public Episode[] Episodes { get; set; }
+        public IReadOnlyList<Episode> Episodes { get; set; }
         public DateTime AddDate { get; set; }
         public DateTime ModifiedTime { get; set; }
     }

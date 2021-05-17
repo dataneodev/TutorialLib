@@ -1,7 +1,9 @@
-﻿using dataneo.SharedKernel;
+﻿using Ardalis.GuardClauses;
+using dataneo.SharedKernel;
 using dataneo.TutorialLibs.Domain.Enums;
 using dataneo.TutorialLibs.Domain.ValueObjects;
 using System;
+using System.IO;
 
 namespace dataneo.TutorialLibs.Domain.Entities
 {
@@ -14,7 +16,6 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public short Order { get; set; }
         public string Name { get; set; }
         public EpisodeFile File { get; set; }
-
         public VideoWatchStatus Status { get; }
         public TimeSpan PlayedTime { get; set; }
         public DateTime DateAdd { get; set; }
@@ -32,6 +33,14 @@ namespace dataneo.TutorialLibs.Domain.Entities
                 return VideoWatchStatus.Watched;
 
             return VideoWatchStatus.InProgress;
+        }
+
+        public string GetFilePath(Tutorial tutorial, Folder folder)
+        {
+            Guard.Against.Null(tutorial, nameof(tutorial));
+            Guard.Against.Null(folder, nameof(folder));
+
+            return Path.Combine(tutorial.BasePath, folder.FolderName, this.File.FileName);
         }
     }
 }
