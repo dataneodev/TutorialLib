@@ -10,8 +10,7 @@ namespace dataneo.TutorialLibs.Domain.Interfaces
     {
         Task<Result<IReadOnlyList<string>>> GetFilesPathAsync(
                         string folderPath,
-                        HashSet<string> handledExtensions,
-                        CancellationToken cancellationToken);
+                        HashSet<string> handledExtensions);
 
         Task<Result<EpisodeFile>> GetFileDetailsAsync(string filePath, CancellationToken cancellationToken);
     }
