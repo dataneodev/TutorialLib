@@ -16,6 +16,25 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
         {
             Guard.Against.NullOrWhiteSpace(filePath, nameof(filePath));
 
+            if (!File.Exists(filePath))
+                return Task.FromResult(
+                        Result.Failure<EpisodeFile>($"File not exists: {filePath}"));
+
+            var res = Result.Success(filePath)
+                            .OnSuccessTry(filePath =>
+                            {
+                                using (var mediaInfo = new MediaInfo.DotNetWrapper.MediaInfo())
+                                {
+                                    mediaInfo.Open(filePath);
+
+
+                                }
+
+
+
+                            });
+
+
 
             return Task.FromResult(Result.Failure<EpisodeFile>("dsf "));
         }
