@@ -46,6 +46,12 @@ namespace dataneo.TutorialLibs.FileIO.WinTests
 
                     text += "\r\n\r\nGet with Stream=Audio and Parameter='StreamCount'\r\n";
                     text += mediaInfo.Get(StreamKind.Audio, 0, "StreamCount");
+
+                    text += "\r\n\r\nGK 1\r\n";
+                    text += mediaInfo.Get(StreamKind.General, 0, "FileSize");
+
+                    text += "\r\n\r\nGK 2\r\n";
+                    text += mediaInfo.Get(StreamKind.General, 0, "Duration");
                 }
 
             }

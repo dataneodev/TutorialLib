@@ -8,10 +8,8 @@ namespace dataneo.TutorialLibs.Domain.Interfaces
 {
     public interface ITutorialScaner
     {
-        Task<Result<IReadOnlyList<string>>> GetFilesPathAsync(
-                        string folderPath,
-                        HashSet<string> handledExtensions);
-
+        Task<Result<IReadOnlyList<string>>> GetFilesPathAsync(string folderPath, HashSet<string> handledExtensions);
         Task<Result<EpisodeFile>> GetFileDetailsAsync(string filePath, CancellationToken cancellationToken);
+        Task<Result<IReadOnlyList<Result<EpisodeFile>>>> GetFilesDetailsAsync(string[] filesPath, CancellationToken cancellationToken);
     }
 }
