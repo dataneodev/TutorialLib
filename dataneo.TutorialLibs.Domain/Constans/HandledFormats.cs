@@ -28,8 +28,8 @@ namespace dataneo.TutorialLibs.Domain.Constans
             if (string.IsNullOrWhiteSpace(fileName))
                 return false;
 
-            var fileExtension = Path.GetExtension(fileName);
-            return HandledFileExtensions.Contains(fileExtension);
+            var fileExtension = Path.GetExtension(fileName.AsSpan()).TrimStart('.');
+            return HandledFileExtensions.Contains(fileExtension.ToString());
         }
     }
 }

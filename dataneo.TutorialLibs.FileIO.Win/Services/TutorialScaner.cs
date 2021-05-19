@@ -32,7 +32,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                                         inputData.filesPath,
                                         mediaInfo,
                                         inputData.cancellationToken)
-                                     .ToArray(inputData.filesPath.Length) as IReadOnlyList<Result<EpisodeFile>);
+                                     .ToArray(inputData.filesPath.Length) as IReadOnlyList<Result<EpisodeFile>>);
 
                         if (inputData.cancellationToken.IsCancellationRequested)
                         {
@@ -138,9 +138,8 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
         {
             if (string.IsNullOrWhiteSpace(filePath))
                 return false;
-
-            var fileExtension = Path.GetExtension(filePath);
-            return handledExtensions.Contains(fileExtension);
+            var fileExtension = Path.GetExtension(filePath.AsSpan()).TrimStart('.');
+            return handledExtensions.Contains(fileExtension.ToString());
         }
     }
 }
