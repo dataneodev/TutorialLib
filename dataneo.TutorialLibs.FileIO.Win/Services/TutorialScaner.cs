@@ -1,5 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
+using dataneo.Extensions;
+using dataneo.Helpers;
 using dataneo.TutorialLibs.Domain.Interfaces;
 using dataneo.TutorialLibs.Domain.ValueObjects;
 using MediaInfo.DotNetWrapper.Enumerations;
@@ -25,7 +27,13 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 {
                     using (var mediaInfo = new MediaInfo.DotNetWrapper.MediaInfo())
                     {
-                        var data = await Task.Run(() => ProcessFiles(inputData.filesPath, mediaInfo, inputData.cancellationToken));
+                        var data = await Task.Run(() =>
+                                    GetEpisodesFileResult(
+                                        inputData.filesPath,
+                                        mediaInfo,
+                                        inputData.cancellationToken)
+                                     .ToArray(inputData.filesPath.Length) as IReadOnlyList<Result<EpisodeFile>);
+
                         if (inputData.cancellationToken.IsCancellationRequested)
                         {
                             return Result.Failure<IReadOnlyList<Result<EpisodeFile>>>("Canceled at the user's request");
@@ -37,33 +45,48 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 .Bind(b => b);
         }
 
-        private IReadOnlyList<Result<EpisodeFile>> ProcessFiles(
+        private IEnumerable<Result<EpisodeFile>> GetEpisodesFileResult(
                         string[] filesPath,
                         MediaInfo.DotNetWrapper.MediaInfo mediaInfo,
                         CancellationToken cancellationToken)
         {
-            var returnList = new List<Result<EpisodeFile>>(filesPath.Length);
-
             foreach (var filePath in filesPath)
             {
                 if (cancellationToken.IsCancellationRequested)
-                    return returnList;
+                    yield break;
 
                 mediaInfo.Open(filePath);
-
-                var fileSizeResult = GetFileSize(mediaInfo);
-                var fileDuration = GetDuration(mediaInfo);
-
-
+                yield return GetEpisodeFileResult(filePath, mediaInfo);
                 mediaInfo.Close();
             }
-            return returnList;
         }
 
-        public Task<Result<EpisodeFile>> GetFileDetailsAsync(string filePath, CancellationToken cancellationToken)
+        private Result<EpisodeFile> GetEpisodeFileResult(string filePath, MediaInfo.DotNetWrapper.MediaInfo mediaInfo)
+        {
+            var fileSizeResult = GetFileSize(mediaInfo);
+            if (fileSizeResult.IsFailure)
+                return fileSizeResult.ConvertFailure<EpisodeFile>();
+
+            var fileDuration = GetDuration(mediaInfo);
+            if (fileDuration.IsFailure)
+                return fileDuration.ConvertFailure<EpisodeFile>();
+
+            FileInfo fInfo = new FileInfo(filePath);
+
+            return EpisodeFile.Create(
+                fileDuration.Value,
+                Path.GetFileName(filePath),
+                fileSizeResult.Value,
+                fInfo.CreationTime,
+                fInfo.LastWriteTime);
+        }
+
+        public async Task<Result<EpisodeFile>> GetFileDetailsAsync(string filePath, CancellationToken cancellationToken)
         {
             Guard.Against.NullOrWhiteSpace(filePath, nameof(filePath));
-
+            return (await GetFilesDetailsAsync(ArrayHelper.SingleElementToArray(filePath), cancellationToken))
+                        .Ensure(data => data.Count > 0, "Brak wyników")
+                        .Bind(list => list.First());
         }
 
         private Result<long> GetFileSize(MediaInfo.DotNetWrapper.MediaInfo mediaInfo)
