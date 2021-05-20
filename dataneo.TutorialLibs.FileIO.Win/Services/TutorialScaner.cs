@@ -69,7 +69,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
 
                     var files = await Task.Run(() => Directory.GetFiles(fpath.folderPath, "*.*", option));
                     return (fpath.handledExtensions, files);
-                })
+                }, exception => exception.Message)
                 .Ensure(filesResult => filesResult.files is not null, "File list is null")
                 .Map(filesResult => filesResult.files.Where(w => FilterFilePath(w, filesResult.handledExtensions))
                                                      .ToArray() as IReadOnlyList<string>);
