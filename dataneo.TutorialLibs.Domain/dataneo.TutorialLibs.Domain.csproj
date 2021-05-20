@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="ExtensionsMethod\" />
-    <Folder Include="Interfaces\Respositories\" />
     <Folder Include="Model\" />
     <Folder Include="Services\" />
     <Folder Include="Specifications\" />

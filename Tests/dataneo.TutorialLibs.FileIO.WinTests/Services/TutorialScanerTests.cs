@@ -21,8 +21,10 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void GetFilesPathAsyncPathNullArguments()
         {
             var scanerEngine = new TutorialScaner();
+            var cts = new CancellationTokenSource();
+
             Func<Task<Result<IReadOnlyList<string>>>> act1 = async () =>
-                await scanerEngine.GetFilesPathAsync(null, HandledFormats.HandledFileExtensions);
+                await scanerEngine.GetFilesPathAsync(null, HandledFormats.HandledFileExtensions, cts.Token);
 
             act1.Should().Throw<ArgumentNullException>();
         }
@@ -31,8 +33,10 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void GetFilesPathAsyncPathEmptyArguments()
         {
             var scanerEngine = new TutorialScaner();
+            var cts = new CancellationTokenSource();
+
             Func<Task<Result<IReadOnlyList<string>>>> act1 = async () =>
-                await scanerEngine.GetFilesPathAsync(String.Empty, HandledFormats.HandledFileExtensions);
+                await scanerEngine.GetFilesPathAsync(String.Empty, HandledFormats.HandledFileExtensions, cts.Token);
 
             act1.Should().Throw<ArgumentException>();
         }
@@ -41,8 +45,10 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void GetFilesPathAsyncHandledFormatsNull()
         {
             var scanerEngine = new TutorialScaner();
+            var cts = new CancellationTokenSource();
+
             Func<Task<Result<IReadOnlyList<string>>>> act1 = async () =>
-                await scanerEngine.GetFilesPathAsync(@"C:\test.mp4", null);
+                await scanerEngine.GetFilesPathAsync(@"C:\test.mp4", null, cts.Token);
 
             act1.Should().Throw<ArgumentNullException>();
         }
@@ -51,7 +57,9 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void GetFilesPathAsyncFakePath()
         {
             var scanerEngine = new TutorialScaner();
-            var findResult = await scanerEngine.GetFilesPathAsync(@"C:\Test1234\Elo", HandledFormats.HandledFileExtensions);
+            var cts = new CancellationTokenSource();
+
+            var findResult = await scanerEngine.GetFilesPathAsync(@"C:\Test1234\Elo", HandledFormats.HandledFileExtensions, cts.Token);
 
             findResult.IsSuccess.Should().BeFalse();
         }
@@ -60,11 +68,12 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void FindSampleFile()
         {
             var mediaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MediaFolder);
+            var cts = new CancellationTokenSource();
 
             Directory.Exists(mediaPath).Should().BeTrue();
 
             var scanerEngine = new TutorialScaner();
-            var files = await scanerEngine.GetFilesPathAsync(mediaPath, HandledFormats.HandledFileExtensions);
+            var files = await scanerEngine.GetFilesPathAsync(mediaPath, HandledFormats.HandledFileExtensions, cts.Token);
             files.IsSuccess.Should().BeTrue();
             files.Value.Should().ContainMatch($"*{SampleMediaFile1}");
         }
@@ -73,18 +82,16 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void GetEpisodeFile()
         {
             var mediaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MediaFolder);
+            var cts = new CancellationTokenSource();
 
             Directory.Exists(mediaPath).Should().BeTrue();
 
             var scanerEngine = new TutorialScaner();
-            var files = await scanerEngine.GetFilesPathAsync(mediaPath, HandledFormats.HandledFileExtensions);
+            var files = await scanerEngine.GetFilesPathAsync(mediaPath, HandledFormats.HandledFileExtensions, cts.Token);
             files.IsSuccess.Should().BeTrue();
-
 
             var mediaFile = files.Value.FirstOrDefault(f => f.EndsWith(SampleMediaFile1));
             mediaFile.Should().NotBeNullOrEmpty();
-
-            var cts = new CancellationTokenSource();
 
             var result = await scanerEngine.GetFileDetailsAsync(mediaFile, cts.Token);
             result.IsSuccess.Should().BeTrue();
