@@ -1,10 +1,13 @@
-﻿using dataneo.TutorialLibs.Domain.Constans;
+﻿using CSharpFunctionalExtensions;
+using dataneo.TutorialLibs.Domain.Constans;
 using dataneo.TutorialLibs.FileIO.Win.Services;
 using FluentAssertions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace dataneo.TutorialLibs.FileIO.WinTests.Services
@@ -13,6 +16,45 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
     {
         private const string MediaFolder = "media";
         private const string SampleMediaFile1 = "file_example_MP4_640_3MG.mp4";
+
+        [Fact]
+        public async void GetFilesPathAsyncPathNullArguments()
+        {
+            var scanerEngine = new TutorialScaner();
+            Func<Task<Result<IReadOnlyList<string>>>> act1 = async () =>
+                await scanerEngine.GetFilesPathAsync(null, HandledFormats.HandledFileExtensions);
+
+            act1.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public async void GetFilesPathAsyncPathEmptyArguments()
+        {
+            var scanerEngine = new TutorialScaner();
+            Func<Task<Result<IReadOnlyList<string>>>> act1 = async () =>
+                await scanerEngine.GetFilesPathAsync(String.Empty, HandledFormats.HandledFileExtensions);
+
+            act1.Should().Throw<ArgumentException>();
+        }
+
+        [Fact]
+        public async void GetFilesPathAsyncHandledFormatsNull()
+        {
+            var scanerEngine = new TutorialScaner();
+            Func<Task<Result<IReadOnlyList<string>>>> act1 = async () =>
+                await scanerEngine.GetFilesPathAsync(@"C:\test.mp4", null);
+
+            act1.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public async void GetFilesPathAsyncFakePath()
+        {
+            var scanerEngine = new TutorialScaner();
+            var findResult = await scanerEngine.GetFilesPathAsync(@"C:\Test1234\Elo", HandledFormats.HandledFileExtensions);
+
+            findResult.IsSuccess.Should().BeFalse();
+        }
 
         [Fact]
         public async void FindSampleFile()
@@ -46,7 +88,6 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
 
             var result = await scanerEngine.GetFileDetailsAsync(mediaFile, cts.Token);
             result.IsSuccess.Should().BeTrue();
-
 
             result.Value.FileName.Should().Be(SampleMediaFile1);
             result.Value.FileSize.Should().Be(3114374);

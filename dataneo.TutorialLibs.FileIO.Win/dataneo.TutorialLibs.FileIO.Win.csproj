@@ -5,36 +5,22 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="NewFolder\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
-    <None Remove="NewFolder\**" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="dll\MediaInfo_x64.dll" />
-    <None Remove="dll\MediaInfo_x86.dll" />
-    <None Remove="MediaInfo.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="dll\MediaInfo_x64.dll">
+    <Content Include="MediaInfox64\MediaInfo.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="dll\MediaInfo_x86.dll">
+    <Content Include="MediaInfox86\MediaInfo.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="MediaInfo.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MediaInfo.DotNetWrapper" Version="1.0.7" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\dataneo.TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
+    <ProjectReference Include="..\MediaInfo.DotNetWrapper\MediaInfo.DotNetWrapper.csproj" />
   </ItemGroup>
 
 </Project>
