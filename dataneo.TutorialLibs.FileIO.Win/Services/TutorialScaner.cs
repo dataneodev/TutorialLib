@@ -16,7 +16,9 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
 {
     public class TutorialScaner : ITutorialScaner
     {
-        public async Task<Result<EpisodeFile>> GetFileDetailsAsync(string filePath, CancellationToken cancellationToken)
+        public async Task<Result<EpisodeFile>> GetFileDetailsAsync(
+            string filePath,
+            CancellationToken cancellationToken)
         {
             Guard.Against.NullOrWhiteSpace(filePath, nameof(filePath));
             return (await GetFilesDetailsAsync(ArrayHelper.SingleElementToArray(filePath), cancellationToken))
@@ -25,7 +27,8 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
         }
 
         public Task<Result<IReadOnlyList<Result<EpisodeFile>>>> GetFilesDetailsAsync(
-                string[] filesPath, CancellationToken cancellationToken)
+                string[] filesPath,
+                CancellationToken cancellationToken)
         {
             Guard.Against.Null(filesPath, nameof(filesPath));
 
@@ -50,13 +53,16 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 .Bind(b => b);
         }
 
-        public async Task<Result<IReadOnlyList<string>>> GetFilesPathAsync(string folderPath, HashSet<string> handledExtensions)
+        public async Task<Result<IReadOnlyList<string>>> GetFilesPathAsync(
+                        string folderPath,
+                        HashSet<string> handledExtensions,
+                        CancellationToken cancellationToken)
         {
             Guard.Against.NullOrWhiteSpace(folderPath, nameof(folderPath));
             Guard.Against.Null(handledExtensions, nameof(handledExtensions));
 
             return await Result
-                .Success((folderPath, handledExtensions))
+                .Success((folderPath, handledExtensions, cancellationToken))
                 .OnSuccessTry(async fpath =>
                 {
                     var option = new EnumerationOptions
@@ -67,9 +73,13 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                         RecurseSubdirectories = true,
                     };
 
-                    var files = await Task.Run(() => Directory.GetFiles(fpath.folderPath, "*.*", option));
-                    return (fpath.handledExtensions, files);
+                    var files = await Task.Run(
+                                    () => Directory.GetFiles(fpath.folderPath, "*.*", option),
+                                    fpath.cancellationToken);
+                    return (fpath.handledExtensions, files, cancellationToken);
                 }, exception => exception.Message)
+                .Ensure(fileResult => fileResult.cancellationToken.IsCancellationRequested == false,
+                                      "Canceled at the user's request")
                 .Ensure(filesResult => filesResult.files is not null, "File list is null")
                 .Map(filesResult => filesResult.files.Where(w => FilterFilePath(w, filesResult.handledExtensions))
                                                      .ToArray() as IReadOnlyList<string>);
