@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace dataneo.TutorialLibs.FileIO.Win.Services
 {
-    public class TutorialScaner : ITutorialScaner
+    public sealed class TutorialScaner : ITutorialScaner
     {
         public async Task<Result<EpisodeFile>> GetFileDetailsAsync(
             string filePath,

@@ -7,7 +7,6 @@
   <ItemGroup>
     <Folder Include="ExtensionsMethod\" />
     <Folder Include="Model\" />
-    <Folder Include="Services\" />
     <Folder Include="Specifications\" />
   </ItemGroup>
 

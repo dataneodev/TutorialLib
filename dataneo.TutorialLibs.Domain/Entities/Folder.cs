@@ -1,4 +1,5 @@
 ﻿using dataneo.SharedKernel;
+using System.Collections.Generic;
 
 namespace dataneo.TutorialLibs.Domain.Entities
 {
@@ -8,5 +9,6 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public short Order { get; set; }
         public string Name { get; set; }
         public string FolderName { get; set; }
+        public IReadOnlyList<Episode> Episodes { get; set; }
     }
 }

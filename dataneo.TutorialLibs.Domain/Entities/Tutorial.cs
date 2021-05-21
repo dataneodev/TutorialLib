@@ -8,7 +8,7 @@ namespace dataneo.TutorialLibs.Domain.Entities
     {
         public string Name { get; set; }
         public string BasePath { get; set; }
-        public IReadOnlyList<Episode> Episodes { get; set; }
+        public IReadOnlyList<Folder> Folders { get; set; }
         public DateTime AddDate { get; set; }
         public DateTime ModifiedTime { get; set; }
     }
