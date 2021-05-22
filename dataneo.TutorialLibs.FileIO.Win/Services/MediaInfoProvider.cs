@@ -1,6 +1,5 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
-using dataneo.Extensions;
 using dataneo.Helpers;
 using dataneo.TutorialLibs.Domain.Interfaces;
 using dataneo.TutorialLibs.Domain.ValueObjects;
@@ -15,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace dataneo.TutorialLibs.FileIO.Win.Services
 {
-    public sealed class TutorialScaner : ITutorialScaner
+    public sealed class MediaInfoProvider : IMediaInfoProvider
     {
         public async Task<Result<EpisodeFile>> GetFileDetailsAsync(
-            string filePath,
-            CancellationToken cancellationToken)
+                string filePath,
+                CancellationToken cancellationToken)
         {
             Guard.Against.NullOrWhiteSpace(filePath, nameof(filePath));
             return (await GetFilesDetailsAsync(ArrayHelper.SingleElementToArray(filePath), cancellationToken))
@@ -54,41 +53,10 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 .Bind(b => b);
         }
 
-        public async Task<Result<IReadOnlyList<string>>> GetFilesPathAsync(
-                        string folderPath,
-                        HashSet<string> handledExtensions,
-                        CancellationToken cancellationToken)
-        {
-            Guard.Against.NullOrWhiteSpace(folderPath, nameof(folderPath));
-            Guard.Against.Null(handledExtensions, nameof(handledExtensions));
-
-            return await Result
-                .Success((folderPath, handledExtensions, cancellationToken))
-                .OnSuccessTry(async fpath =>
-                {
-                    var option = new EnumerationOptions
-                    {
-                        IgnoreInaccessible = true,
-                        ReturnSpecialDirectories = false,
-                        MatchCasing = MatchCasing.CaseInsensitive,
-                        RecurseSubdirectories = true,
-                    };
-
-                    var files = await Task.Run(
-                                    () => Directory.GetFiles(fpath.folderPath, "*.*", option),
-                                    fpath.cancellationToken);
-                    return (fpath.handledExtensions, files, cancellationToken);
-                }, exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER)
-                .Ensure(fileResult => fileResult.cancellationToken.IsCancellationRequested == false,
-                                      Errors.CANCELED_BY_USER)
-                .Map(filesResult => filesResult.files.Where(w => FilterFilePath(w, filesResult.handledExtensions))
-                                                     .ToArray() as IReadOnlyList<string>);
-        }
-
         private IEnumerable<Result<EpisodeFile>> GetEpisodesFileResult(
-                        IEnumerable<string> filesPath,
-                        MediaInfo.DotNetWrapper.MediaInfo mediaInfo,
-                        CancellationToken cancellationToken)
+                    IEnumerable<string> filesPath,
+                    MediaInfo.DotNetWrapper.MediaInfo mediaInfo,
+                    CancellationToken cancellationToken)
         {
             foreach (var filePath in filesPath)
             {
@@ -138,14 +106,6 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 return TimeSpan.FromMilliseconds(fileDuration);
 
             return Result.Failure<TimeSpan>(Errors.ERROR_READING_VIDEO_DURATION);
-        }
-
-        private bool FilterFilePath(string filePath, HashSet<string> handledExtensions)
-        {
-            if (string.IsNullOrWhiteSpace(filePath))
-                return false;
-            var fileExtension = Path.GetExtension(filePath.AsSpan()).TrimStart('.');
-            return handledExtensions.Contains(fileExtension.ToString());
         }
     }
 }

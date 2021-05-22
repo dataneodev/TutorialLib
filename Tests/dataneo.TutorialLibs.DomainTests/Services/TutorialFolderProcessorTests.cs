@@ -13,7 +13,8 @@ namespace dataneo.TutorialLibs.DomainTests.Services
         {
             using var cts = new CancellationTokenSource();
             var folderProcessEngine = new TutorialFolderProcessor(
-                new TutorialScaner(),
+                new FileScanner(),
+                new MediaInfoProvider(),
                 new DateTimeProivder());
 
             var result = await folderProcessEngine.GetTutorialForFolderAsync(

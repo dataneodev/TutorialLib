@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace dataneo.TutorialLibs.Domain.Interfaces
 {
-    public interface ITutorialScaner
+    public interface IMediaInfoProvider
     {
-        Task<Result<IReadOnlyList<string>>> GetFilesPathAsync(
-            string folderPath,
-            HashSet<string> handledExtensions,
-            CancellationToken cancellationToken);
-
         Task<Result<EpisodeFile>> GetFileDetailsAsync(
             string filePath,
             CancellationToken cancellationToken);

@@ -17,21 +17,26 @@ namespace dataneo.TutorialLibs.Domain.Services
     {
         private const byte MaxSubFolderLevels = 1;
 
-        private readonly ITutorialScaner _tutorialScaner;
+        private readonly IFileScanner _fileScanner;
         private readonly IDateTimeProivder _dateTimeProivder;
+        private readonly IMediaInfoProvider _mediaInfoProvider;
 
-        public TutorialFolderProcessor(ITutorialScaner tutorialScaner, IDateTimeProivder dateTimeProivder)
+        public TutorialFolderProcessor(
+            IFileScanner fileScanner,
+            IMediaInfoProvider mediaInfoProvider,
+            IDateTimeProivder dateTimeProivder)
         {
-            this._tutorialScaner = Guard.Against.Null(tutorialScaner, nameof(tutorialScaner));
+            this._fileScanner = Guard.Against.Null(fileScanner, nameof(fileScanner));
             this._dateTimeProivder = Guard.Against.Null(dateTimeProivder, nameof(dateTimeProivder));
+            this._mediaInfoProvider = Guard.Against.Null(mediaInfoProvider, nameof(mediaInfoProvider));
         }
 
         public async Task<Result<Maybe<Tutorial>>> GetTutorialForFolderAsync(string path, CancellationToken cancelationToken)
         {
             Guard.Against.NullOrWhiteSpace(path, nameof(path));
-            return await _tutorialScaner.GetFilesPathAsync(
+            return await this._fileScanner.GetFilesFromPathAsync(
                                 folderPath: path,
-                                handledExtensions: HandledFormats.HandledFileExtensions,
+                                handledFileExtensions: HandledFormats.HandledFileExtensions,
                                 cancellationToken: cancelationToken)
                     .Bind(async files => await GetTutorialFromFilesAsync(path, files, cancelationToken));
         }
@@ -124,7 +129,7 @@ namespace dataneo.TutorialLibs.Domain.Services
                         string rootPath,
                         CancellationToken cancellationToken)
         {
-            var episodesFiles = await this._tutorialScaner.GetFilesDetailsAsync(
+            var episodesFiles = await this._mediaInfoProvider.GetFilesDetailsAsync(
                                         episodeFolderDeconstructions.Select(s => Path.Combine(rootPath, s.Folder, s.FilePath)),
                                         cancellationToken);
 
@@ -149,7 +154,8 @@ namespace dataneo.TutorialLibs.Domain.Services
 
         private struct EpisodeFolderDeconstruction
         {
-            public static Result<EpisodeFolderDeconstruction> Create(string[] rootPath, string[] episodePath)
+            public static Result<EpisodeFolderDeconstruction> Create(
+                            string[] rootPath, string[] episodePath)
             {
                 if (episodePath.Length < 2 || episodePath.Length < rootPath.Length)
                     return Result.Failure<EpisodeFolderDeconstruction>("Niepoprawna scieżka episodu");
@@ -169,7 +175,8 @@ namespace dataneo.TutorialLibs.Domain.Services
             public string FilePath;
         }
 
-        private IEnumerable<Result<EpisodeFolderDeconstruction>> GetDeconstructedFilesPath(string rootPath, IEnumerable<string> files)
+        private IEnumerable<Result<EpisodeFolderDeconstruction>> GetDeconstructedFilesPath(
+                    string rootPath, IEnumerable<string> files)
         {
             var rootSplit = rootPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
             return files.Select(filePath => GetDeconstructedFilePath(rootSplit, filePath));
