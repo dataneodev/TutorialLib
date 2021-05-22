@@ -30,14 +30,14 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
 
         public async Task<Result<IReadOnlyList<string>>> GetFilesFromPathAsync(
                 string folderPath,
-                HashSet<string> handledExtensions,
+                IHandledFileExtension handledFileExtension,
                 CancellationToken cancellationToken)
         {
             Guard.Against.NullOrWhiteSpace(folderPath, nameof(folderPath));
-            Guard.Against.Null(handledExtensions, nameof(handledExtensions));
+            Guard.Against.Null(handledFileExtension, nameof(handledFileExtension));
 
             return await Result
-                .Success((folderPath, handledExtensions, cancellationToken))
+                .Success((folderPath, handledFileExtension, cancellationToken))
                 .Ensure(data => Directory.Exists(data.folderPath), Errors.DIRECTORY_NOT_FOUND)
                 .OnSuccessTry(async fpath =>
                 {
@@ -52,20 +52,12 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                     var files = await Task.Run(
                                     () => Directory.GetFiles(fpath.folderPath, "*.*", option),
                                     fpath.cancellationToken);
-                    return (fpath.handledExtensions, files, cancellationToken);
+                    return (fpath.handledFileExtension, files, cancellationToken);
                 }, exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER)
                 .Ensure(fileResult => fileResult.cancellationToken.IsCancellationRequested == false,
                                       Errors.CANCELED_BY_USER)
-                .Map(filesResult => filesResult.files.Where(w => FilterFilePath(w, filesResult.handledExtensions))
+                .Map(filesResult => filesResult.files.Where(w => handledFileExtension.FileAreSupported(w))
                                                      .ToArray() as IReadOnlyList<string>);
-        }
-
-        private bool FilterFilePath(string filePath, HashSet<string> handledExtensions)
-        {
-            if (string.IsNullOrWhiteSpace(filePath))
-                return false;
-            var fileExtension = Path.GetExtension(filePath.AsSpan()).TrimStart('.');
-            return handledExtensions.Contains(fileExtension.ToString());
         }
     }
 }

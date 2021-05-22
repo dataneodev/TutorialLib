@@ -1,7 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using dataneo.Extensions;
-using dataneo.TutorialLibs.Domain.Constans;
 using dataneo.TutorialLibs.Domain.Entities;
 using dataneo.TutorialLibs.Domain.Interfaces;
 using System;
@@ -20,15 +19,18 @@ namespace dataneo.TutorialLibs.Domain.Services
         private readonly IFileScanner _fileScanner;
         private readonly IDateTimeProivder _dateTimeProivder;
         private readonly IMediaInfoProvider _mediaInfoProvider;
+        private readonly IHandledFileExtension _handledFileExtension;
 
         public TutorialFolderProcessor(
             IFileScanner fileScanner,
             IMediaInfoProvider mediaInfoProvider,
-            IDateTimeProivder dateTimeProivder)
+            IDateTimeProivder dateTimeProivder,
+            IHandledFileExtension handledFileExtension)
         {
             this._fileScanner = Guard.Against.Null(fileScanner, nameof(fileScanner));
             this._dateTimeProivder = Guard.Against.Null(dateTimeProivder, nameof(dateTimeProivder));
             this._mediaInfoProvider = Guard.Against.Null(mediaInfoProvider, nameof(mediaInfoProvider));
+            this._handledFileExtension = Guard.Against.Null(handledFileExtension, nameof(handledFileExtension));
         }
 
         public async Task<Result<Maybe<Tutorial>>> GetTutorialForFolderAsync(string path, CancellationToken cancelationToken)
@@ -36,7 +38,7 @@ namespace dataneo.TutorialLibs.Domain.Services
             Guard.Against.NullOrWhiteSpace(path, nameof(path));
             return await this._fileScanner.GetFilesFromPathAsync(
                                 folderPath: path,
-                                handledFileExtensions: HandledFormats.HandledFileExtensions,
+                                handledFileExtension: this._handledFileExtension,
                                 cancellationToken: cancelationToken)
                     .Bind(async files => await GetTutorialFromFilesAsync(path, files, cancelationToken));
         }

@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using dataneo.TutorialLibs.Domain.Constans;
 using dataneo.TutorialLibs.FileIO.Win.Services;
 using FluentAssertions;
 using System;
@@ -25,7 +24,7 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
             using var cts = new CancellationTokenSource();
 
             Func<Task<Result<IReadOnlyList<string>>>> act1 = async () =>
-                await scanerEngine.GetFilesFromPathAsync(null, HandledFormats.HandledFileExtensions, cts.Token);
+                await scanerEngine.GetFilesFromPathAsync(null, new HandledFileExtension(), cts.Token);
 
             act1.Should().Throw<ArgumentNullException>();
         }
@@ -37,7 +36,7 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
             using var cts = new CancellationTokenSource();
 
             Func<Task<Result<IReadOnlyList<string>>>> act1 = async () =>
-                await scanerEngine.GetFilesFromPathAsync(String.Empty, HandledFormats.HandledFileExtensions, cts.Token);
+                await scanerEngine.GetFilesFromPathAsync(String.Empty, new HandledFileExtension(), cts.Token);
 
             act1.Should().Throw<ArgumentException>();
         }
@@ -60,7 +59,10 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
             var scanerEngine = new FileScanner();
             using var cts = new CancellationTokenSource();
 
-            var findResult = await scanerEngine.GetFilesFromPathAsync(@"C:\Test1234\Elo", HandledFormats.HandledFileExtensions, cts.Token);
+            var findResult = await scanerEngine.GetFilesFromPathAsync(
+                @"C:\Test1234\Elo",
+                new HandledFileExtension(),
+                cts.Token);
 
             findResult.IsSuccess.Should().BeFalse();
         }
@@ -76,7 +78,7 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
             var scanerEngine = new FileScanner();
             var files = await scanerEngine.GetFilesFromPathAsync(
                 tuturialPath,
-                HandledFormats.HandledFileExtensions,
+                new HandledFileExtension(),
                 cts.Token);
             files.IsSuccess.Should().BeTrue();
             files.Value.Should().BeEmpty();
@@ -91,7 +93,10 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
             Directory.Exists(tuturialPath).Should().BeTrue();
 
             var scanerEngine = new FileScanner();
-            var files = await scanerEngine.GetFilesFromPathAsync(tuturialPath, HandledFormats.HandledFileExtensions, cts.Token);
+            var files = await scanerEngine.GetFilesFromPathAsync(
+                tuturialPath,
+                new HandledFileExtension(),
+                cts.Token);
             files.IsSuccess.Should().BeTrue();
             files.Value.Should().ContainMatch($"*{SampleMediaFile1}");
         }

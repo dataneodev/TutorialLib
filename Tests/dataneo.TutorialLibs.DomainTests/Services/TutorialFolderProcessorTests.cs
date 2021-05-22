@@ -15,7 +15,8 @@ namespace dataneo.TutorialLibs.DomainTests.Services
             var folderProcessEngine = new TutorialFolderProcessor(
                 new FileScanner(),
                 new MediaInfoProvider(),
-                new DateTimeProivder());
+                new DateTimeProivder(),
+                new HandledFileExtension());
 
             var result = await folderProcessEngine.GetTutorialForFolderAsync(
                                     @"f:\Filmy na dysku\",

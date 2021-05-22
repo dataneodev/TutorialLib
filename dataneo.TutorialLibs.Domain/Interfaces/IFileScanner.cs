@@ -13,7 +13,7 @@ namespace dataneo.TutorialLibs.Domain.Interfaces
 
         Task<Result<IReadOnlyList<string>>> GetFilesFromPathAsync(
             string folderPath,
-            HashSet<string> handledFileExtensions,
+            IHandledFileExtension handledFileExtension,
             CancellationToken cancellationToken);
     }
 }
