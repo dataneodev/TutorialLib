@@ -23,18 +23,9 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 .Success((folderPath, cancellationToken))
                 .Ensure(data => Directory.Exists(data.folderPath), Errors.DIRECTORY_NOT_FOUND)
                 .OnSuccessTry(async fpath =>
-                {
-                    var option = new EnumerationOptions
-                    {
-                        IgnoreInaccessible = true,
-                        ReturnSpecialDirectories = false,
-                        MatchCasing = MatchCasing.CaseInsensitive,
-                        RecurseSubdirectories = false,
-                    };
-
-                    return await Task.Run(() => Directory.GetFiles(fpath.folderPath, "*.*", option),
-                                            fpath.cancellationToken) as IReadOnlyList<string>;
-                }, exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER);
+                    await Task.Run(() => Directory.GetDirectories(fpath.folderPath, String.Empty, SearchOption.TopDirectoryOnly),
+                                         fpath.cancellationToken) as IReadOnlyList<string>
+                , exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER);
         }
 
         public async Task<Result<IReadOnlyList<string>>> GetFilesFromPathAsync(

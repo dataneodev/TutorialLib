@@ -1,5 +1,8 @@
-﻿using System;
+﻿using dataneo.TutorialLibs.FileIO.Win.Services;
+using FluentAssertions;
+using System;
 using System.IO;
+using System.Threading;
 using Xunit;
 
 namespace dataneo.TutorialLibs.FileIO.WinTests.Services
@@ -11,13 +14,19 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         private const string Tutorial_2 = "Tutorial_2_Empty";
 
         [Fact]
-        public void MedaiFolderTest()
+        public async void MedaiFolderTest()
         {
             var mediaFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MediaFolder);
 
+            using var cts = new CancellationTokenSource();
 
+            Directory.Exists(mediaFolderPath).Should().BeTrue();
 
-
+            var scanerEngine = new FileScanner();
+            var files = await scanerEngine.GetRootDirectoryFromPathAsync(mediaFolderPath, cts.Token);
+            files.IsSuccess.Should().BeTrue();
+            files.Value.Should().ContainMatch($"*{Tutorial_1}");
+            files.Value.Should().ContainMatch($"*{Tutorial_2}");
         }
     }
 }

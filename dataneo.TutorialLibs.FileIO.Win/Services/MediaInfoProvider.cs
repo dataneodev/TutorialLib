@@ -74,22 +74,22 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
         {
             mediaInfo.Open(filePath);
 
-            var fileSizeResult = GetFileSize(mediaInfo);
-            if (fileSizeResult.IsFailure)
-                return fileSizeResult.ConvertFailure<EpisodeFile>();
-
             var fileDuration = GetDuration(mediaInfo);
             if (fileDuration.IsFailure)
                 return fileDuration.ConvertFailure<EpisodeFile>();
 
+            var fileSizeResult = GetFileSize(mediaInfo);
+            if (fileSizeResult.IsFailure)
+                return fileSizeResult.ConvertFailure<EpisodeFile>();
+
             FileInfo fInfo = new FileInfo(filePath);
 
             return EpisodeFile.Create(
-                fileDuration.Value,
-                Path.GetFileName(filePath),
-                fileSizeResult.Value,
-                fInfo.CreationTime,
-                fInfo.LastWriteTime);
+                playTime: fileDuration.Value,
+                fileName: Path.GetFileName(filePath),
+                fileSize: fileSizeResult.Value,
+                dateCreated: fInfo.CreationTime,
+                dateModified: fInfo.LastWriteTime);
         }
 
         private Result<long> GetFileSize(MediaInfo.DotNetWrapper.MediaInfo mediaInfo)
