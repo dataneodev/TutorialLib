@@ -127,10 +127,10 @@
     <value>Błąd odczytu rozmiaru pliku</value>
   </data>
   <data name="ERROR_READING_VIDEO_DURATION" xml:space="preserve">
-    <value>Błąd odczytu długości  wideo</value>
+    <value>Błąd odczytu długości  wideo. Plik: {0}</value>
   </data>
   <data name="ERROR_SEARCHING_FILES_IN_FOLDER" xml:space="preserve">
-    <value>Bład wyszukiwania plików w folderze</value>
+    <value>Bład wyszukiwania plików w folderze. Plik: {0}</value>
   </data>
   <data name="FILE_NOT_FOUND" xml:space="preserve">
     <value>Nie znaleziono pliku</value>

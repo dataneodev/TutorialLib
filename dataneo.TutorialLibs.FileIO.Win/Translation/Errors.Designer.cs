@@ -88,7 +88,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Translation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error reading video length.
+        ///   Looks up a localized string similar to Error reading video length. File {0}.
         /// </summary>
         internal static string ERROR_READING_VIDEO_DURATION {
             get {
@@ -97,7 +97,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Translation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error searching for files in a folder.
+        ///   Looks up a localized string similar to Error searching for files in a folder. File: {0}.
         /// </summary>
         internal static string ERROR_SEARCHING_FILES_IN_FOLDER {
             get {

@@ -74,11 +74,11 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
         {
             mediaInfo.Open(filePath);
 
-            var fileDuration = GetDuration(mediaInfo);
+            var fileDuration = GetDuration(filePath, mediaInfo);
             if (fileDuration.IsFailure)
                 return fileDuration.ConvertFailure<EpisodeFile>();
 
-            var fileSizeResult = GetFileSize(mediaInfo);
+            var fileSizeResult = GetFileSize(filePath, mediaInfo);
             if (fileSizeResult.IsFailure)
                 return fileSizeResult.ConvertFailure<EpisodeFile>();
 
@@ -92,20 +92,20 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 dateModified: fInfo.LastWriteTime);
         }
 
-        private Result<long> GetFileSize(MediaInfo.DotNetWrapper.MediaInfo mediaInfo)
+        private Result<long> GetFileSize(string filePath, MediaInfo.DotNetWrapper.MediaInfo mediaInfo)
         {
             if (long.TryParse(mediaInfo.Get(StreamKind.General, 0, "FileSize"), out long fileSize))
                 return fileSize;
 
-            return Result.Failure<long>(Errors.ERROR_READING_FILE_LENGTH);
+            return Result.Failure<long>(String.Format(Errors.ERROR_READING_FILE_LENGTH, filePath));
         }
 
-        private Result<TimeSpan> GetDuration(MediaInfo.DotNetWrapper.MediaInfo mediaInfo)
+        private Result<TimeSpan> GetDuration(string filePath, MediaInfo.DotNetWrapper.MediaInfo mediaInfo)
         {
             if (int.TryParse(mediaInfo.Get(StreamKind.General, 0, "Duration"), out int fileDuration))
                 return TimeSpan.FromMilliseconds(fileDuration);
 
-            return Result.Failure<TimeSpan>(Errors.ERROR_READING_VIDEO_DURATION);
+            return Result.Failure<TimeSpan>(String.Format(Errors.ERROR_READING_VIDEO_DURATION, filePath));
         }
     }
 }

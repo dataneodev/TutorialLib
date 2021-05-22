@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using dataneo.TutorialLibs.Domain.Constans;
 using dataneo.TutorialLibs.Domain.Translation;
 using System;
 using System.Collections.Generic;
@@ -34,9 +33,6 @@ namespace dataneo.TutorialLibs.Domain.ValueObjects
 
             if (string.IsNullOrWhiteSpace(fileName))
                 return FailureResult(Errors.FILENAME_INCORECT);
-
-            if (!HandledFormats.FileAreSupported(fileName))
-                return FailureResult(Errors.FILE_EXTENSION_NOT_SUPPORTED);
 
             return Result.Success(
                 new EpisodeFile

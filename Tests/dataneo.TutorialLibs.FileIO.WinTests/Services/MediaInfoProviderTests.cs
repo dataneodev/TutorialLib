@@ -1,5 +1,4 @@
-﻿using dataneo.TutorialLibs.Domain.Constans;
-using dataneo.TutorialLibs.FileIO.Win.Services;
+﻿using dataneo.TutorialLibs.FileIO.Win.Services;
 using FluentAssertions;
 using System;
 using System.IO;
@@ -19,13 +18,20 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         [Fact]
         public async void GetSingleEpisodeFile()
         {
-            var mediaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MediaFolder, Tutorial_1);
+            var mediaPath = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                MediaFolder,
+                Tutorial_1);
             using var cts = new CancellationTokenSource();
 
             Directory.Exists(mediaPath).Should().BeTrue();
 
             var scanerEngine = new FileScanner();
-            var files = await scanerEngine.GetFilesFromPathAsync(mediaPath, HandledFormats.HandledFileExtensions, cts.Token);
+            var files = await scanerEngine.GetFilesFromPathAsync(
+                mediaPath,
+                new HandledFileExtension(),
+                cts.Token);
+
             files.IsSuccess.Should().BeTrue();
 
             var mediaFile = files.Value.FirstOrDefault(f => f.EndsWith(SampleMediaFile1));
@@ -44,13 +50,21 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         [Fact]
         public async void GetEpisodeFromTutotial_1()
         {
-            var mediaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MediaFolder, Tutorial_1);
+            var mediaPath = Path.Combine(AppDomain
+                .CurrentDomain
+                .BaseDirectory,
+                MediaFolder,
+                Tutorial_1);
             using var cts = new CancellationTokenSource();
 
             Directory.Exists(mediaPath).Should().BeTrue();
 
             var scanerEngine = new FileScanner();
-            var files = await scanerEngine.GetFilesFromPathAsync(mediaPath, HandledFormats.HandledFileExtensions, cts.Token);
+            var files = await scanerEngine.GetFilesFromPathAsync(
+                mediaPath,
+                new HandledFileExtension(),
+                cts.Token);
+
             files.IsSuccess.Should().BeTrue();
 
             var mediaInfoProvider = new MediaInfoProvider();
@@ -58,6 +72,7 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
             result.IsSuccess.Should().BeTrue();
 
             result.Value.Should().NotBeEmpty();
+
         }
     }
 }
