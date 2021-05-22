@@ -10,5 +10,6 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public string Name { get; set; }
         public string FolderName { get; set; }
         public IReadOnlyList<Episode> Episodes { get; set; }
+        public bool IsRootFolder => string.IsNullOrWhiteSpace(FolderName);
     }
 }

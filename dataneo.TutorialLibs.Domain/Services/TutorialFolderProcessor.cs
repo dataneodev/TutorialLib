@@ -80,15 +80,32 @@ namespace dataneo.TutorialLibs.Domain.Services
             var grupedFolders = episodeFolderStructures.GroupBy(g => g.Folder?.Trim() ?? String.Empty,
                                                                      StringComparer.InvariantCultureIgnoreCase);
             var folderList = new List<Folder>(256);
-
-            foreach (var directory in grupedFolders)
+            await foreach (var folderResult in GetFolderWithEpisodes(rootPath, grupedFolders, cancellationToken))
             {
+                if (folderResult.IsFailure)
+                    return folderResult.ConvertFailure<IReadOnlyList<Folder>>();
+
                 if (cancellationToken.IsCancellationRequested)
                     return Result.Failure<IReadOnlyList<Folder>>("Canceled by user");
 
+                folderList.Add(folderResult.Value);
+            }
+            return folderList;
+        }
+
+        private async IAsyncEnumerable<Result<Folder>> GetFolderWithEpisodes(
+                        string rootPath,
+                        IEnumerable<IGrouping<string, EpisodeFolderDeconstruction>> grupedFolders,
+                        CancellationToken cancellationToken)
+        {
+            foreach (var directory in grupedFolders)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    yield return Result.Failure<Folder>("Canceled by user");
+
                 var episodesResult = await GetEpisodesResult(directory, rootPath, cancellationToken);
                 if (episodesResult.IsFailure)
-                    return episodesResult.ConvertFailure<IReadOnlyList<Folder>>();
+                    yield return episodesResult.ConvertFailure<Folder>();
 
                 var folder = new Folder
                 {
@@ -98,10 +115,8 @@ namespace dataneo.TutorialLibs.Domain.Services
                     Episodes = episodesResult.Value
                 };
 
-                folderList.Add(folder);
+                yield return folder;
             }
-
-            return folderList;
         }
 
         private async Task<Result<IReadOnlyList<Episode>>> GetEpisodesResult(
