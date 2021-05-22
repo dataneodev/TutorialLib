@@ -108,7 +108,7 @@ namespace dataneo.TutorialLibs.Domain.Services
                 if (cancellationToken.IsCancellationRequested)
                     yield return Result.Failure<Folder>("Canceled by user");
 
-                var episodesResult = await GetEpisodesResult(directory, rootPath, cancellationToken);
+                var episodesResult = await GetEpisodesResult(rootPath, directory, cancellationToken);
                 if (episodesResult.IsFailure)
                     yield return episodesResult.ConvertFailure<Folder>();
 
@@ -125,8 +125,8 @@ namespace dataneo.TutorialLibs.Domain.Services
         }
 
         private async Task<Result<IReadOnlyList<Episode>>> GetEpisodesResult(
-                        IEnumerable<EpisodeFolderDeconstruction> episodeFolderDeconstructions,
                         string rootPath,
+                        IEnumerable<EpisodeFolderDeconstruction> episodeFolderDeconstructions,
                         CancellationToken cancellationToken)
         {
             var episodesFiles = await this._mediaInfoProvider.GetFilesDetailsAsync(
@@ -155,7 +155,8 @@ namespace dataneo.TutorialLibs.Domain.Services
         private struct EpisodeFolderDeconstruction
         {
             public static Result<EpisodeFolderDeconstruction> Create(
-                            string[] rootPath, string[] episodePath)
+                    string[] rootPath,
+                    string[] episodePath)
             {
                 if (episodePath.Length < 2 || episodePath.Length < rootPath.Length)
                     return Result.Failure<EpisodeFolderDeconstruction>("Niepoprawna scieżka episodu");

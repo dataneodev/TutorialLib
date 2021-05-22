@@ -70,6 +70,15 @@ namespace dataneo.TutorialLibs.FileIO.Win.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Directory not found.
+        /// </summary>
+        internal static string DIRECTORY_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("DIRECTORY_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error reading file length.
         /// </summary>
         internal static string ERROR_READING_FILE_LENGTH {

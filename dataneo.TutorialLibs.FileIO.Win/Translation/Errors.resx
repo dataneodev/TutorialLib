@@ -120,6 +120,9 @@
   <data name="CANCELED_BY_USER" xml:space="preserve">
     <value>Canceled at the request of the user</value>
   </data>
+  <data name="DIRECTORY_NOT_FOUND" xml:space="preserve">
+    <value>Directory not found</value>
+  </data>
   <data name="ERROR_READING_FILE_LENGTH" xml:space="preserve">
     <value>Error reading file length</value>
   </data>

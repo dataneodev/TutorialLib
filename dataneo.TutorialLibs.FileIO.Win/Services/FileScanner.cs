@@ -21,6 +21,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
             Guard.Against.NullOrWhiteSpace(folderPath, nameof(folderPath));
             return await Result
                 .Success((folderPath, cancellationToken))
+                .Ensure(data => Directory.Exists(data.folderPath), Errors.DIRECTORY_NOT_FOUND)
                 .OnSuccessTry(async fpath =>
                 {
                     var option = new EnumerationOptions
@@ -46,6 +47,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
 
             return await Result
                 .Success((folderPath, handledExtensions, cancellationToken))
+                .Ensure(data => Directory.Exists(data.folderPath), Errors.DIRECTORY_NOT_FOUND)
                 .OnSuccessTry(async fpath =>
                 {
                     var option = new EnumerationOptions
