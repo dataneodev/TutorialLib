@@ -12,7 +12,8 @@ namespace dataneo.TutorialLibs.Domain.Constans
             "avi",
             "mp4",
             "mkv",
-            "mov"
+            "mov",
+            "webm",
         };
 
         public static bool ExtensionAreSupported(string fileExtension)
