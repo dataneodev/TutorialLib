@@ -44,20 +44,24 @@ namespace dataneo.TutorialLibs.Domain.Services
             if (files.Count == 0)
                 return Maybe<Tutorial>.None;
 
-            var rootSplit = rootFolder.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
-            var episodeStructure = files.Select(s => GetFileStructure(rootSplit, s))
-                                        .ToArray();
+            var deconstructedPaths = GetDeconstructedFilesPath(rootFolder, files).ToArray(files.Count);
 
-            var allResult = Result.Combine(episodeStructure);
+            if (cancelationToken.IsCancellationRequested)
+                return Result.Failure<Maybe<Tutorial>>("Canceled by user");
+
+            var allResult = Result.Combine(deconstructedPaths);
 
             if (allResult.IsFailure)
                 return allResult.ConvertFailure<Maybe<Tutorial>>();
 
-            var folders = await GetFoldersWithEpisodesAsync(episodeStructure.Select(s => s.Value));
+            var folders = await GetFoldersWithEpisodesAsync(
+                            rootFolder,
+                            deconstructedPaths.Select(s => s.Value),
+                            cancelationToken);
 
             if (folders.IsFailure)
                 return folders.ConvertFailure<Maybe<Tutorial>>();
-                  .
+
             return Maybe<Tutorial>.From(new Tutorial
             {
                 BasePath = Path.GetFullPath(rootFolder),
@@ -68,55 +72,101 @@ namespace dataneo.TutorialLibs.Domain.Services
             });
         }
 
-        private Task<Result<IReadOnlyList<Folder>>> GetFoldersWithEpisodesAsync(IEnumerable<EpisodeFolderStructure> episodeFolderStructures)
+        private async Task<Result<IReadOnlyList<Folder>>> GetFoldersWithEpisodesAsync(
+                        string rootPath,
+                        IEnumerable<EpisodeFolderDeconstruction> episodeFolderStructures,
+                        CancellationToken cancellationToken)
         {
-            var grupedFolders = episodeFolderStructures.GroupBy(g => g.Folder, StringComparer.InvariantCultureIgnoreCase);
+            var grupedFolders = episodeFolderStructures.GroupBy(g => g.Folder?.Trim() ?? String.Empty,
+                                                                     StringComparer.InvariantCultureIgnoreCase);
+            var folderList = new List<Folder>(256);
+
             foreach (var directory in grupedFolders)
             {
+                if (cancellationToken.IsCancellationRequested)
+                    return Result.Failure<IReadOnlyList<Folder>>("Canceled by user");
 
+                var episodesResult = await GetEpisodesResult(directory, rootPath, cancellationToken);
+                if (episodesResult.IsFailure)
+                    return episodesResult.ConvertFailure<IReadOnlyList<Folder>>();
 
                 var folder = new Folder
                 {
-                    FolderName = directory.Key,
-                    Name = directory.Key,
+                    FolderName = directory.Key.Trim(),
+                    Name = String.IsNullOrWhiteSpace(directory.Key) ? String.Empty : directory.Key,
                     Order = 1,
+                    Episodes = episodesResult.Value
                 };
+
+                folderList.Add(folder);
             }
 
-            return Task.FromResult(Result.Failure<IReadOnlyList<Folder>>("Not finish"));
+            return folderList;
         }
 
-        private async IAsyncEnumerable<Result<Episode>> GetEpisodes()
+        private async Task<Result<IReadOnlyList<Episode>>> GetEpisodesResult(
+                        IEnumerable<EpisodeFolderDeconstruction> episodeFolderDeconstructions,
+                        string rootPath,
+                        CancellationToken cancellationToken)
         {
+            var episodesFiles = await this._tutorialScaner.GetFilesDetailsAsync(
+                                        episodeFolderDeconstructions.Select(s => Path.Combine(rootPath, s.Folder, s.FilePath)),
+                                        cancellationToken);
 
+            if (cancellationToken.IsCancellationRequested)
+                return Result.Failure<IReadOnlyList<Episode>>("Canceled by user");
 
-            yield break;
+            if (episodesFiles.IsFailure)
+                return episodesFiles.ConvertFailure<IReadOnlyList<Episode>>();
+
+            if (episodesFiles.Value.Any(a => a.IsFailure))
+                return Result.Combine(episodesFiles.Value.Where(a => a.IsFailure))
+                             .ConvertFailure<IReadOnlyList<Episode>>();
+
+            return episodesFiles.Value
+                .Select(s => new Episode
+                {
+                    DateAdd = this._dateTimeProivder.Now,
+                    File = s.Value,
+                    Name = Path.GetFileNameWithoutExtension(s.Value.FileName),
+                }).ToList();
         }
 
-        private struct EpisodeFolderStructure
+        private struct EpisodeFolderDeconstruction
         {
+            public static Result<EpisodeFolderDeconstruction> Create(string[] rootPath, string[] episodePath)
+            {
+                if (episodePath.Length < 2 || episodePath.Length < rootPath.Length)
+                    return Result.Failure<EpisodeFolderDeconstruction>("Niepoprawna scieżka episodu");
+
+                if (episodePath.Length > rootPath.Length + MaxSubFolderLevels + 1)
+                    return Result.Failure<EpisodeFolderDeconstruction>(
+                        $"Maksymalnie {MaxSubFolderLevels} zagłebienie folderu dozwolone w folderze tutorialu");
+
+                return new EpisodeFolderDeconstruction
+                {
+                    FilePath = episodePath[^1],
+                    Folder = episodePath.Length > rootPath.Length + 1 ?
+                                episodePath[^2] : String.Empty,
+                };
+            }
             public string Folder;
             public string FilePath;
         }
 
-        private Result<EpisodeFolderStructure> GetFileStructure(string[] rootSplit, string episodePath)
+        private IEnumerable<Result<EpisodeFolderDeconstruction>> GetDeconstructedFilesPath(string rootPath, IEnumerable<string> files)
+        {
+            var rootSplit = rootPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
+            return files.Select(filePath => GetDeconstructedFilePath(rootSplit, filePath));
+        }
+
+        private Result<EpisodeFolderDeconstruction> GetDeconstructedFilePath(string[] rootSplit, string episodePath)
         {
             var episodeSplit = episodePath.Split(
                     Path.DirectorySeparatorChar,
                     StringSplitOptions.RemoveEmptyEntries);
 
-            if (episodePath.Length < rootSplit.Length)
-                return Result.Failure<EpisodeFolderStructure>("Niepoprawna scieżka episodu");
-
-            if (episodePath.Length > rootSplit.Length + MaxSubFolderLevels + 1)
-                return Result.Failure<EpisodeFolderStructure>(
-                    $"Maksymalnie {MaxSubFolderLevels} zagłebienie folderu dozwolone w folderze tutorialu");
-
-            return new EpisodeFolderStructure
-            {
-                FilePath = episodeSplit[^0],
-                Folder = episodeSplit[^1],
-            };
+            return EpisodeFolderDeconstruction.Create(rootSplit, episodeSplit);
         }
     }
 }

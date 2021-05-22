@@ -27,7 +27,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
         }
 
         public Task<Result<IReadOnlyList<Result<EpisodeFile>>>> GetFilesDetailsAsync(
-                string[] filesPath,
+                IEnumerable<string> filesPath,
                 CancellationToken cancellationToken)
         {
             Guard.Against.Null(filesPath, nameof(filesPath));
@@ -43,7 +43,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                                     inputData.filesPath,
                                     mediaInfo,
                                     inputData.cancellationToken)
-                                 .ToArray(inputData.filesPath.Length) as IReadOnlyList<Result<EpisodeFile>>);
+                                 .ToArray() as IReadOnlyList<Result<EpisodeFile>>);
 
                     if (inputData.cancellationToken.IsCancellationRequested)
                         return Result.Failure<IReadOnlyList<Result<EpisodeFile>>>("Canceled at the user's request");
@@ -86,7 +86,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
         }
 
         private IEnumerable<Result<EpisodeFile>> GetEpisodesFileResult(
-                        string[] filesPath,
+                        IEnumerable<string> filesPath,
                         MediaInfo.DotNetWrapper.MediaInfo mediaInfo,
                         CancellationToken cancellationToken)
         {
@@ -95,14 +95,17 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 if (cancellationToken.IsCancellationRequested)
                     yield break;
 
-                mediaInfo.Open(filePath);
+                if (!File.Exists(filePath))
+                    yield return Result.Failure<EpisodeFile>("File not found");
+
                 yield return GetEpisodeFileResult(filePath, mediaInfo);
-                mediaInfo.Close();
             }
         }
 
         private Result<EpisodeFile> GetEpisodeFileResult(string filePath, MediaInfo.DotNetWrapper.MediaInfo mediaInfo)
         {
+            mediaInfo.Open(filePath);
+
             var fileSizeResult = GetFileSize(mediaInfo);
             if (fileSizeResult.IsFailure)
                 return fileSizeResult.ConvertFailure<EpisodeFile>();

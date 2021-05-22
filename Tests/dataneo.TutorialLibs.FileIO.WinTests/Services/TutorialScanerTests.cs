@@ -21,7 +21,7 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void GetFilesPathAsyncPathNullArguments()
         {
             var scanerEngine = new TutorialScaner();
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
 
             Func<Task<Result<IReadOnlyList<string>>>> act1 = async () =>
                 await scanerEngine.GetFilesPathAsync(null, HandledFormats.HandledFileExtensions, cts.Token);
@@ -33,7 +33,7 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void GetFilesPathAsyncPathEmptyArguments()
         {
             var scanerEngine = new TutorialScaner();
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
 
             Func<Task<Result<IReadOnlyList<string>>>> act1 = async () =>
                 await scanerEngine.GetFilesPathAsync(String.Empty, HandledFormats.HandledFileExtensions, cts.Token);
@@ -45,7 +45,7 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void GetFilesPathAsyncHandledFormatsNull()
         {
             var scanerEngine = new TutorialScaner();
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
 
             Func<Task<Result<IReadOnlyList<string>>>> act1 = async () =>
                 await scanerEngine.GetFilesPathAsync(@"C:\test.mp4", null, cts.Token);
@@ -57,7 +57,7 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void GetFilesPathAsyncFakePath()
         {
             var scanerEngine = new TutorialScaner();
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
 
             var findResult = await scanerEngine.GetFilesPathAsync(@"C:\Test1234\Elo", HandledFormats.HandledFileExtensions, cts.Token);
 
@@ -68,7 +68,7 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void FindSampleFile()
         {
             var mediaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MediaFolder);
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
 
             Directory.Exists(mediaPath).Should().BeTrue();
 
@@ -82,7 +82,7 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
         public async void GetEpisodeFile()
         {
             var mediaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MediaFolder);
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
 
             Directory.Exists(mediaPath).Should().BeTrue();
 

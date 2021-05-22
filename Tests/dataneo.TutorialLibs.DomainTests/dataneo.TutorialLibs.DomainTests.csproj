@@ -19,4 +19,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\dataneo.TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
+    <ProjectReference Include="..\..\dataneo.TutorialLibs.FileIO.Win\dataneo.TutorialLibs.FileIO.Win.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -18,7 +18,7 @@ namespace dataneo.TutorialLibs.Domain.Interfaces
             CancellationToken cancellationToken);
 
         Task<Result<IReadOnlyList<Result<EpisodeFile>>>> GetFilesDetailsAsync(
-            string[] filesPath,
+            IEnumerable<string> filesPath,
             CancellationToken cancellationToken);
     }
 }
