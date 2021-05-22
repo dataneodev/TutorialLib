@@ -4,6 +4,7 @@ using dataneo.Extensions;
 using dataneo.Helpers;
 using dataneo.TutorialLibs.Domain.Interfaces;
 using dataneo.TutorialLibs.Domain.ValueObjects;
+using dataneo.TutorialLibs.FileIO.Win.Translation;
 using MediaInfo.DotNetWrapper.Enumerations;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
         {
             Guard.Against.NullOrWhiteSpace(filePath, nameof(filePath));
             return (await GetFilesDetailsAsync(ArrayHelper.SingleElementToArray(filePath), cancellationToken))
-                        .Ensure(data => data.Count > 0, "Brak wyników")
+                        .Ensure(data => data.Count > 0, "No result")
                         .Bind(list => list.First());
         }
 
@@ -46,7 +47,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                                  .ToArray() as IReadOnlyList<Result<EpisodeFile>>);
 
                     if (inputData.cancellationToken.IsCancellationRequested)
-                        return Result.Failure<IReadOnlyList<Result<EpisodeFile>>>("Canceled at the user's request");
+                        return Result.Failure<IReadOnlyList<Result<EpisodeFile>>>(Errors.CANCELED_BY_USER);
 
                     return Result.Success(data);
                 }, exception => exception.Message)
@@ -77,10 +78,9 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                                     () => Directory.GetFiles(fpath.folderPath, "*.*", option),
                                     fpath.cancellationToken);
                     return (fpath.handledExtensions, files, cancellationToken);
-                }, exception => exception.Message)
+                }, exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER)
                 .Ensure(fileResult => fileResult.cancellationToken.IsCancellationRequested == false,
-                                      "Canceled at the user's request")
-                .Ensure(filesResult => filesResult.files is not null, "File list is null")
+                                      Errors.CANCELED_BY_USER)
                 .Map(filesResult => filesResult.files.Where(w => FilterFilePath(w, filesResult.handledExtensions))
                                                      .ToArray() as IReadOnlyList<string>);
         }
@@ -96,7 +96,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                     yield break;
 
                 if (!File.Exists(filePath))
-                    yield return Result.Failure<EpisodeFile>("File not found");
+                    yield return Result.Failure<EpisodeFile>(Errors.FILE_NOT_FOUND);
 
                 yield return GetEpisodeFileResult(filePath, mediaInfo);
             }
@@ -129,7 +129,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
             if (long.TryParse(mediaInfo.Get(StreamKind.General, 0, "FileSize"), out long fileSize))
                 return fileSize;
 
-            return Result.Failure<long>("Error reading file size");
+            return Result.Failure<long>(Errors.ERROR_READING_FILE_LENGTH);
         }
 
         private Result<TimeSpan> GetDuration(MediaInfo.DotNetWrapper.MediaInfo mediaInfo)
@@ -137,7 +137,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
             if (int.TryParse(mediaInfo.Get(StreamKind.General, 0, "Duration"), out int fileDuration))
                 return TimeSpan.FromMilliseconds(fileDuration);
 
-            return Result.Failure<TimeSpan>("Error reading file length");
+            return Result.Failure<TimeSpan>(Errors.ERROR_READING_VIDEO_DURATION);
         }
 
         private bool FilterFilePath(string filePath, HashSet<string> handledExtensions)
