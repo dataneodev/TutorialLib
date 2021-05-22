@@ -12,10 +12,26 @@
 
   <ItemGroup>
     <None Remove="media\file_example_MP4_640_3MG.mp4" />
+    <None Remove="media\Tutorial_1\EmptyFile.mp4" />
+    <None Remove="media\Tutorial_1\sample-webm-file.webm" />
+    <None Remove="media\Tutorial_1\UnhandledExtension.txt" />
+    <None Remove="media\Tutorial_2_Empty\Empty.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="media\file_example_MP4_640_3MG.mp4">
+    <Content Include="media\Tutorial_1\EmptyFile.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\Tutorial_1\file_example_MP4_640_3MG.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\Tutorial_1\sample-webm-file.webm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\Tutorial_1\UnhandledExtension.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\Tutorial_2_Empty\Empty.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
