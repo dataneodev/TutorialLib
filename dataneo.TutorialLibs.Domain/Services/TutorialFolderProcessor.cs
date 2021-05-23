@@ -3,6 +3,7 @@ using CSharpFunctionalExtensions;
 using dataneo.Extensions;
 using dataneo.TutorialLibs.Domain.Entities;
 using dataneo.TutorialLibs.Domain.Interfaces;
+using dataneo.TutorialLibs.Domain.Translation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,7 +34,8 @@ namespace dataneo.TutorialLibs.Domain.Services
             this._handledFileExtension = Guard.Against.Null(handledFileExtension, nameof(handledFileExtension));
         }
 
-        public async Task<Result<Maybe<Tutorial>>> GetTutorialForFolderAsync(string path, CancellationToken cancelationToken)
+        public async Task<Result<Maybe<Tutorial>>> GetTutorialForFolderAsync(
+            string path, CancellationToken cancelationToken)
         {
             Guard.Against.NullOrWhiteSpace(path, nameof(path));
             return await this._fileScanner.GetFilesFromPathAsync(
@@ -51,15 +53,15 @@ namespace dataneo.TutorialLibs.Domain.Services
             if (files.Count == 0)
                 return Maybe<Tutorial>.None;
 
-            var deconstructedPaths = GetDeconstructedFilesPath(rootFolder, files).ToArray(files.Count);
+            var deconstructedPaths = GetDeconstructedFilesPath(rootFolder, files)
+                                        .ToArray(files.Count);
 
             if (cancelationToken.IsCancellationRequested)
-                return Result.Failure<Maybe<Tutorial>>("Canceled by user");
+                return Result.Failure<Maybe<Tutorial>>(Errors.CANCELED_BY_USER);
 
-            var allResult = Result.Combine(deconstructedPaths);
-
-            if (allResult.IsFailure)
-                return allResult.ConvertFailure<Maybe<Tutorial>>();
+            if (deconstructedPaths.Any(a => a.IsFailure))
+                return Result.Combine(deconstructedPaths)
+                             .ConvertFailure<Maybe<Tutorial>>();
 
             var folders = await GetFoldersWithEpisodesAsync(
                             rootFolder,
@@ -68,6 +70,12 @@ namespace dataneo.TutorialLibs.Domain.Services
 
             if (folders.IsFailure)
                 return folders.ConvertFailure<Maybe<Tutorial>>();
+
+            if (cancelationToken.IsCancellationRequested)
+                return Result.Failure<Maybe<Tutorial>>(Errors.CANCELED_BY_USER);
+
+            if (folders.Value.Count == 0)
+                return Maybe<Tutorial>.None;
 
             return Maybe<Tutorial>.From(new Tutorial
             {
@@ -84,8 +92,9 @@ namespace dataneo.TutorialLibs.Domain.Services
                         IEnumerable<EpisodeFolderDeconstruction> episodeFolderStructures,
                         CancellationToken cancellationToken)
         {
-            var grupedFolders = episodeFolderStructures.GroupBy(g => g.Folder?.Trim() ?? String.Empty,
-                                                                     StringComparer.InvariantCultureIgnoreCase);
+            var grupedFolders = episodeFolderStructures
+                                    .GroupBy(g => g.Folder?.Trim() ?? String.Empty,
+                                                  StringComparer.InvariantCultureIgnoreCase);
             var folderList = new List<Folder>(256);
             await foreach (var folderResult in GetFolderWithEpisodes(rootPath, grupedFolders, cancellationToken))
             {
@@ -93,7 +102,7 @@ namespace dataneo.TutorialLibs.Domain.Services
                     return folderResult.ConvertFailure<IReadOnlyList<Folder>>();
 
                 if (cancellationToken.IsCancellationRequested)
-                    return Result.Failure<IReadOnlyList<Folder>>("Canceled by user");
+                    return Result.Failure<IReadOnlyList<Folder>>(Errors.CANCELED_BY_USER);
 
                 folderList.Add(folderResult.Value);
             }
@@ -108,21 +117,23 @@ namespace dataneo.TutorialLibs.Domain.Services
             foreach (var directory in grupedFolders)
             {
                 if (cancellationToken.IsCancellationRequested)
-                    yield return Result.Failure<Folder>("Canceled by user");
+                    yield break;
 
                 var episodesResult = await GetEpisodesResult(rootPath, directory, cancellationToken);
+
                 if (episodesResult.IsFailure)
                     yield return episodesResult.ConvertFailure<Folder>();
 
-                var folder = new Folder
+                if (episodesResult.Value.Count == 0)
+                    continue;
+
+                yield return new Folder
                 {
                     FolderName = directory.Key.Trim(),
                     Name = String.IsNullOrWhiteSpace(directory.Key) ? String.Empty : directory.Key,
                     Order = 1,
                     Episodes = episodesResult.Value
                 };
-
-                yield return folder;
             }
         }
 
@@ -132,11 +143,11 @@ namespace dataneo.TutorialLibs.Domain.Services
                         CancellationToken cancellationToken)
         {
             var episodesFiles = await this._mediaInfoProvider.GetFilesDetailsAsync(
-                                        episodeFolderDeconstructions.Select(s => Path.Combine(rootPath, s.Folder, s.FilePath)),
-                                        cancellationToken);
+                     episodeFolderDeconstructions.Select(s => Path.Combine(rootPath, s.Folder, s.FilePath)),
+                     cancellationToken);
 
             if (cancellationToken.IsCancellationRequested)
-                return Result.Failure<IReadOnlyList<Episode>>("Canceled by user");
+                return Result.Failure<IReadOnlyList<Episode>>(Errors.CANCELED_BY_USER);
 
             if (episodesFiles.IsFailure)
                 return episodesFiles.ConvertFailure<IReadOnlyList<Episode>>();
@@ -161,11 +172,10 @@ namespace dataneo.TutorialLibs.Domain.Services
                     string[] episodePath)
             {
                 if (episodePath.Length < 2 || episodePath.Length < rootPath.Length)
-                    return Result.Failure<EpisodeFolderDeconstruction>("Niepoprawna scieżka episodu");
+                    return Result.Failure<EpisodeFolderDeconstruction>(Errors.INVALID_FILE_PATH);
 
                 if (episodePath.Length > rootPath.Length + MaxSubFolderLevels + 1)
-                    return Result.Failure<EpisodeFolderDeconstruction>(
-                        $"Maksymalnie {MaxSubFolderLevels} zagłebienie folderu dozwolone w folderze tutorialu");
+                    return Result.Failure<EpisodeFolderDeconstruction>(Errors.TOO_MANY_DIRECTORY_LEVELS);
 
                 return new EpisodeFolderDeconstruction
                 {

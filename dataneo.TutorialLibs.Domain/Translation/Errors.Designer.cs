@@ -61,6 +61,15 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Canceled at the request of the user.
+        /// </summary>
+        public static string CANCELED_BY_USER {
+            get {
+                return ResourceManager.GetString("CANCELED_BY_USER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The episode length is too short.
         /// </summary>
         public static string EPISODE_TO_SHORT {
@@ -93,6 +102,24 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         public static string FILENAME_INCORECT {
             get {
                 return ResourceManager.GetString("FILENAME_INCORECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid file path.
+        /// </summary>
+        public static string INVALID_FILE_PATH {
+            get {
+                return ResourceManager.GetString("INVALID_FILE_PATH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many directory levels.
+        /// </summary>
+        public static string TOO_MANY_DIRECTORY_LEVELS {
+            get {
+                return ResourceManager.GetString("TOO_MANY_DIRECTORY_LEVELS", resourceCulture);
             }
         }
     }

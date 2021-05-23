@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CANCELED_BY_USER" xml:space="preserve">
+    <value>Canceled at the request of the user</value>
+  </data>
   <data name="EPISODE_TO_SHORT" xml:space="preserve">
     <value>The episode length is too short</value>
   </data>
@@ -128,5 +131,11 @@
   </data>
   <data name="FILE_SIZE_TO_SMALL" xml:space="preserve">
     <value>File size to small</value>
+  </data>
+  <data name="INVALID_FILE_PATH" xml:space="preserve">
+    <value>Invalid file path</value>
+  </data>
+  <data name="TOO_MANY_DIRECTORY_LEVELS" xml:space="preserve">
+    <value>Too many directory levels</value>
   </data>
 </root>

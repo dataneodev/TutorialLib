@@ -72,7 +72,7 @@ namespace dataneo.TutorialLibs.FileIO.WinTests.Services
             result.IsSuccess.Should().BeTrue();
 
             result.Value.Should().NotBeEmpty();
-
+            result.Value.Any(a => a.IsFailure).Should().BeFalse();
         }
     }
 }

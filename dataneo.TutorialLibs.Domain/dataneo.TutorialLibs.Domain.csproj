@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog" Version="2.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Nuget\CSharpFunctionalExtensions\CSharpFunctionalExtensions\CSharpFunctionalExtensions.csproj" />
     <ProjectReference Include="..\Nuget\FluentValidation\src\FluentValidation\FluentValidation.csproj" />
     <ProjectReference Include="..\Nuget\GuardClauses\src\GuardClauses\GuardClauses.csproj" />
