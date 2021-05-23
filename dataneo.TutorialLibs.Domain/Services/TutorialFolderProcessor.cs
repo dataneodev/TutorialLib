@@ -63,8 +63,10 @@ namespace dataneo.TutorialLibs.Domain.Services
                 return Result.Combine(deconstructedPaths)
                              .ConvertFailure<Maybe<Tutorial>>();
 
+            var tutorial = new Tutorial();
             var folders = await GetFoldersWithEpisodesAsync(
                             rootFolder,
+                            tutorial.Id,
                             deconstructedPaths.Select(s => s.Value),
                             cancelationToken);
 
@@ -77,18 +79,21 @@ namespace dataneo.TutorialLibs.Domain.Services
             if (folders.Value.Count == 0)
                 return Maybe<Tutorial>.None;
 
-            return Maybe<Tutorial>.From(new Tutorial
-            {
-                BasePath = Path.GetFullPath(rootFolder),
-                Name = Path.GetDirectoryName(rootFolder),
-                Folders = folders.Value,
-                AddDate = this._dateTimeProivder.Now,
-                ModifiedTime = this._dateTimeProivder.Now,
-            });
+            tutorial.BasePath = Path.GetFullPath(rootFolder);
+            tutorial.Name = Path.GetDirectoryName(rootFolder);
+            tutorial.Folders = folders.Value;
+            tutorial.AddDate = this._dateTimeProivder.Now;
+            tutorial.ModifiedTime = this._dateTimeProivder.Now;
+
+            var orderEngine = new OrderTutorialDefault();
+            orderEngine.OrderFoldersAndEpisodesByName(tutorial);
+
+            return Maybe<Tutorial>.From(tutorial);
         }
 
         private async Task<Result<IReadOnlyList<Folder>>> GetFoldersWithEpisodesAsync(
                         string rootPath,
+                        Guid parentTutorialId,
                         IEnumerable<EpisodeFolderDeconstruction> episodeFolderStructures,
                         CancellationToken cancellationToken)
         {
@@ -96,7 +101,11 @@ namespace dataneo.TutorialLibs.Domain.Services
                                     .GroupBy(g => g.Folder?.Trim() ?? String.Empty,
                                                   StringComparer.InvariantCultureIgnoreCase);
             var folderList = new List<Folder>(256);
-            await foreach (var folderResult in GetFolderWithEpisodes(rootPath, grupedFolders, cancellationToken))
+            await foreach (var folderResult in GetFolderWithEpisodes(
+                                                rootPath,
+                                                parentTutorialId,
+                                                grupedFolders,
+                                                cancellationToken))
             {
                 if (folderResult.IsFailure)
                     return folderResult.ConvertFailure<IReadOnlyList<Folder>>();
@@ -111,6 +120,7 @@ namespace dataneo.TutorialLibs.Domain.Services
 
         private async IAsyncEnumerable<Result<Folder>> GetFolderWithEpisodes(
                         string rootPath,
+                        Guid parentTutorialId,
                         IEnumerable<IGrouping<string, EpisodeFolderDeconstruction>> grupedFolders,
                         CancellationToken cancellationToken)
         {
@@ -119,7 +129,16 @@ namespace dataneo.TutorialLibs.Domain.Services
                 if (cancellationToken.IsCancellationRequested)
                     yield break;
 
-                var episodesResult = await GetEpisodesResult(rootPath, directory, cancellationToken);
+                var folder = Folder.Create(parentTutorialId, directory.Key.Trim());
+
+                if (folder.IsFailure)
+                    continue;
+
+                var episodesResult = await GetEpisodesResult(
+                    rootPath,
+                    parentTutorialId,
+                    directory,
+                    cancellationToken);
 
                 if (episodesResult.IsFailure)
                     yield return episodesResult.ConvertFailure<Folder>();
@@ -127,18 +146,15 @@ namespace dataneo.TutorialLibs.Domain.Services
                 if (episodesResult.Value.Count == 0)
                     continue;
 
-                yield return new Folder
-                {
-                    FolderName = directory.Key.Trim(),
-                    Name = String.IsNullOrWhiteSpace(directory.Key) ? String.Empty : directory.Key,
-                    Order = 1,
-                    Episodes = episodesResult.Value
-                };
+                folder.Value.Name = String.IsNullOrWhiteSpace(directory.Key) ? String.Empty : directory.Key;
+                folder.Value.Episodes = episodesResult.Value;
+                yield return folder;
             }
         }
 
         private async Task<Result<IReadOnlyList<Episode>>> GetEpisodesResult(
                         string rootPath,
+                        Guid parentFolderId,
                         IEnumerable<EpisodeFolderDeconstruction> episodeFolderDeconstructions,
                         CancellationToken cancellationToken)
         {
@@ -156,13 +172,27 @@ namespace dataneo.TutorialLibs.Domain.Services
                 return Result.Combine(episodesFiles.Value.Where(a => a.IsFailure))
                              .ConvertFailure<IReadOnlyList<Episode>>();
 
-            return episodesFiles.Value
-                .Select(s => new Episode
-                {
-                    DateAdd = this._dateTimeProivder.Now,
-                    File = s.Value,
-                    Name = Path.GetFileNameWithoutExtension(s.Value.FileName),
-                }).ToList();
+            var episodes = episodesFiles.Value
+                                .Select(epFile => Episode.Create(
+                                                    parentFolderId,
+                                                    epFile.Value,
+                                                    this._dateTimeProivder.Now))
+                                .ToArray(episodesFiles.Value.Count);
+
+            if (episodes.Any(a => a.IsFailure))
+                return Result.Combine(episodes.Where(a => a.IsFailure))
+                             .ConvertFailure<IReadOnlyList<Episode>>();
+
+            return episodes.Select(FillEpisodeNameAndGetEpisode)
+                           .ToArray(episodes.Length);
+        }
+
+        private Episode FillEpisodeNameAndGetEpisode(Result<Episode> result)
+        {
+            if (result.IsFailure)
+                throw new InvalidOperationException();
+            result.Value.Name = Path.GetFileNameWithoutExtension(result.Value.File.FileName);
+            return result.Value;
         }
 
         private struct EpisodeFolderDeconstruction

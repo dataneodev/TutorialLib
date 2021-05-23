@@ -26,7 +26,6 @@ namespace dataneo.TutorialLibs.DomainTests.Services
                                     cts.Token);
             result.IsSuccess.Should().BeTrue();
 
-
         }
 
         private TutorialFolderProcessor GetDefaultEngine()

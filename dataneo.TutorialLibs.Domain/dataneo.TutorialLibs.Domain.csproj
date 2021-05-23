@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Constans\" />
     <Folder Include="ExtensionsMethod\" />
     <Folder Include="Model\" />
     <Folder Include="Specifications\" />

@@ -120,6 +120,12 @@
   <data name="CANCELED_BY_USER" xml:space="preserve">
     <value>Canceled at the request of the user</value>
   </data>
+  <data name="EMPTY_PARENT_FOLDER_ID" xml:space="preserve">
+    <value>Empty parent folder id</value>
+  </data>
+  <data name="EMPTY_PARENT_TUTORIAL_ID" xml:space="preserve">
+    <value>Empty parent tutorial id</value>
+  </data>
   <data name="EPISODE_TO_SHORT" xml:space="preserve">
     <value>The episode length is too short</value>
   </data>

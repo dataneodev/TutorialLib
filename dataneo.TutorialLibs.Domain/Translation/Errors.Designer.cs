@@ -70,6 +70,24 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty parent folder id.
+        /// </summary>
+        public static string EMPTY_PARENT_FOLDER_ID {
+            get {
+                return ResourceManager.GetString("EMPTY_PARENT_FOLDER_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty parent tutorial id.
+        /// </summary>
+        public static string EMPTY_PARENT_TUTORIAL_ID {
+            get {
+                return ResourceManager.GetString("EMPTY_PARENT_TUTORIAL_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The episode length is too short.
         /// </summary>
         public static string EPISODE_TO_SHORT {
