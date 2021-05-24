@@ -5,7 +5,7 @@ namespace dataneo.TutorialLibs.Domain.Entities
 {
     public class Configuration : BaseEntity
     {
-        private Configuration() { } //orm
+        private Configuration() { }
 
         public Configuration(string name, string value)
         {

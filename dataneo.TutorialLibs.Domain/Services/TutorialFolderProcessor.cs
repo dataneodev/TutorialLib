@@ -85,10 +85,15 @@ namespace dataneo.TutorialLibs.Domain.Services
             tutorial.AddDate = this._dateTimeProivder.Now;
             tutorial.ModifiedTime = this._dateTimeProivder.Now;
 
-            var orderEngine = new OrderTutorialDefault();
-            orderEngine.OrderFoldersAndEpisodesByName(tutorial);
+            OrderTutorial(tutorial);
 
             return Maybe<Tutorial>.From(tutorial);
+        }
+
+        private void OrderTutorial(Tutorial tutorial)
+        {
+            var orderEngine = new OrderTutorialDefault();
+            orderEngine.OrderFoldersAndEpisodesByName(tutorial);
         }
 
         private async Task<Result<IReadOnlyList<Folder>>> GetFoldersWithEpisodesAsync(
