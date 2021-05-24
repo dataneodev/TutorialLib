@@ -1,9 +1,9 @@
-﻿<Application x:Class="TutorialsLib.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TutorialsLib"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+﻿<Application
+    x:Class="TutorialsLib.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TutorialsLib"
+    xmlns:ui="clr-namespace:TutorialsLib.UI"
+    StartupUri="UI/Selector/TutorialSelector.xaml">
+    <Application.Resources />
 </Application>

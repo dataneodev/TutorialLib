@@ -8,6 +8,7 @@
     Title="TutorialSelector"
     Width="800"
     Height="450"
+    Background="#1A1A17"
     mc:Ignorable="d">
     <Grid />
 </Window>
