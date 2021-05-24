@@ -5,10 +5,32 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:dataneo.TutorialsLib.WPF.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="tutorialSelectorWindow"
     Title="TutorialSelector"
     Width="800"
     Height="450"
     Background="#1A1A17"
     mc:Ignorable="d">
-    <Grid />
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+
+        <Menu
+            Grid.Row="0"
+            Grid.Column="0"
+            Background="{Binding ElementName=tutorialSelectorWindow, Path=Background}"
+            Foreground="AntiqueWhite">
+            <MenuItem Header="Tutorial" />
+            <MenuItem Header="Sortuj" />
+            <MenuItem Header="Ustawienia" />
+
+        </Menu>
+    </Grid>
 </Window>
