@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Translation\" />
     <Folder Include="Services\" />
     <Folder Include="UI\About\" />
     <Folder Include="UI\Dialogs\" />
