@@ -1,13 +1,13 @@
 ﻿using System.Windows;
 
-namespace dataneo.TutorialsLib.WPF.UI
+namespace dataneo.TutorialsLib.WPF.UI.Main
 {
     /// <summary>
     /// Interaction logic for TutorialSelector.xaml
     /// </summary>
-    public partial class TutorialSelector : Window
+    public partial class MainWindow : Window
     {
-        public TutorialSelector()
+        public MainWindow()
         {
             InitializeComponent();
         }

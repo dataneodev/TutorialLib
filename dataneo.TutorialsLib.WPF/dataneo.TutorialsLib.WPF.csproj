@@ -19,6 +19,9 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
+    <Folder Include="UI\About\" />
+    <Folder Include="UI\Dialogs\" />
+    <Folder Include="UI\Setting\" />
   </ItemGroup>
 
 </Project>

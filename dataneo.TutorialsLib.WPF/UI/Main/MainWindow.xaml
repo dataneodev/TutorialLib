@@ -1,9 +1,9 @@
 ﻿<Window
-    x:Class="dataneo.TutorialsLib.WPF.UI.TutorialSelector"
+    x:Class="dataneo.TutorialsLib.WPF.UI.Main.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:dataneo.TutorialsLib.WPF.UI"
+    xmlns:local="clr-namespace:dataneo.TutorialsLib.WPF.UI.Main"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="tutorialSelectorWindow"
     Title="TutorialSelector"
@@ -158,11 +158,31 @@
                 <MenuItem Header="Szukaj nowych tutoriali" />
             </MenuItem>
             <MenuItem Header="Sortuj" Style="{StaticResource menuItemColors}">
-                <MenuItem Header="Sortuj liste wg daty dodania" Style="{StaticResource menuItemColors}" />
+                <MenuItem
+                    Header="Sortuj liste wg daty dodania"
+                    IsCheckable="True"
+                    IsChecked="True"
+                    Style="{StaticResource menuItemColors}" />
                 <MenuItem Header="Sortuj liste wg ostatniej wizyty" Style="{StaticResource menuItemColors}" />
                 <MenuItem Header="Oceny" />
             </MenuItem>
             <MenuItem Header="Ustawienia" Style="{StaticResource menuItemColors}" />
         </Menu>
+
+        <ListView
+            Grid.Row="1"
+            Grid.Column="0"
+            Background="{StaticResource backGround}"
+            BorderThickness="0">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
+            <ListView.ItemTemplate>
+                <DataTemplate />
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Window>
