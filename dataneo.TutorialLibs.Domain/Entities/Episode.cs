@@ -20,6 +20,7 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public EpisodeFile File { get; private set; }
         public VideoWatchStatus Status { get; }
         public TimeSpan PlayedTime { get; set; }
+        public DateTime LastPlayedDate { get; private set; }
         public DateTime DateAdd { get; private set; }
 
         private Episode() { }

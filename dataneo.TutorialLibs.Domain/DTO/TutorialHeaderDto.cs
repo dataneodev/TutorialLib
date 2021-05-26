@@ -10,6 +10,7 @@ namespace dataneo.TutorialLibs.Domain.DTO
         public TimeSpan TimePlayed { get; set; }
         public short PlayedEpisodes { get; set; }
         public short TotalEpisodes { get; set; }
+        public DateTime LastPlayedDate { get; set; }
         public DateTime DateAdd { get; set; }
         public float TotalSizeMB { get; set; }
     }

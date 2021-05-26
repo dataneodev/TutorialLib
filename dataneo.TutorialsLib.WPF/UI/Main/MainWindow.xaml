@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="tutorialSelectorWindow"
     Title="TutorialSelector"
-    Width="800"
-    Height="450"
+    Width="1200"
+    Height="800"
     Background="#1A1A17"
     Foreground="#B2B1B0"
     mc:Ignorable="d">
@@ -172,12 +172,14 @@
         <ListView
             Grid.Row="1"
             Grid.Column="0"
+            HorizontalAlignment="Stretch"
             Background="{StaticResource backGround}"
             BorderThickness="0"
-            ItemsSource="{Binding Path=Tutorials, Mode=OneTime}">
+            ItemsSource="{Binding Path=Tutorials, Mode=OneTime}"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
+                    <WrapPanel FlowDirection="LeftToRight" Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
 
@@ -186,7 +188,8 @@
                     <Grid
                         Width="240"
                         Height="160"
-                        Background="#202020">
+                        Margin="0,4,0,4"
+                        Background="#2F2F2F">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -203,10 +206,10 @@
 
                         <TextBlock
                             x:Name="tbTitle"
-                            Grid.Row="0"
+                            Grid.Row="1"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
-                            Margin="4"
+                            Margin="4,4,4,4"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Bottom"
                             FontSize="16"
@@ -215,26 +218,132 @@
                             TextWrapping="Wrap" />
 
                         <TextBlock
-                            Grid.Row="1"
+                            Grid.Row="2"
                             Grid.Column="0"
-                            Margin="4,0,0,0"
+                            Margin="4,0,0,2"
                             FontSize="14"
-                            Foreground="{StaticResource foreGround}"
-                            Text="Kategoria:" />
-
-
-
+                            Foreground="{StaticResource foreGround}">
+                            <Run Text="Category:" />
+                            <Run Text="DDD" />
+                        </TextBlock>
 
                         <Button
                             Grid.Row="3"
                             Grid.Column="0"
+                            Height="36"
+                            Margin="4,2,2,2"
+                            Background="#353535"
+                            Cursor="Hand"
+                            Opacity="1">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border
+                                                    x:Name="Border"
+                                                    Background="{TemplateBinding Background}"
+                                                    BorderBrush="Black"
+                                                    BorderThickness="1"
+                                                    CornerRadius="2"
+                                                    TextBlock.Foreground="{TemplateBinding Foreground}">
+                                                    <ContentPresenter
+                                                        Margin="2"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        RecognizesAccessKey="True" />
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#ff3c8f" />
+                                                        <Setter Property="BorderBrush" Value="#254c8e" />
+                                                        <Setter Property="Foreground" Value="White" />
+                                                    </Trigger>
+
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter Property="Background" Value="#ed0d6c" />
+                                                        <Setter Property="Foreground" Value="White" />
+                                                    </Trigger>
+
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                            </Button.Style>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Image
+                                    Width="24"
+                                    Height="24"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Source="/dataneo.TutorialsLib.WPF;component/Image/play.png" />
+                                <TextBlock
+                                    Margin="8,2,2,2"
+                                    FontSize="14"
+                                    Foreground="{StaticResource foreGround}"
+                                    Text="Odtwórz" />
+                            </StackPanel>
+                        </Button>
+                        <StackPanel
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Orientation="Horizontal">
+
+                            <Image
+                                Width="16"
+                                Height="16"
+                                Source="/dataneo.TutorialsLib.WPF;component/Image/star.png" />
+                            <TextBlock
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Foreground="{StaticResource foreGround}"
+                                Text="{Binding Path=LastPlayedDate, Mode=OneTime, StringFormat={}{0:HH:mm dd.MM.yyyy}}" />
+
+                        </StackPanel>
+
+
+
+                        <ProgressBar
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Height="16"
                             Margin="4"
-                            Content="Odtwórz" />
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Maximum="10"
+                            Minimum="0"
+                            Value="5" />
 
                         <TextBlock
                             Grid.Row="4"
                             Grid.Column="0"
-                            Margin="4"
+                            Grid.ColumnSpan="2"
+                            Margin="4,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="Black">
+                            <Run Text="{Binding Path=TimePlayed, Mode=OneTime}" />
+                            <Run Text="/" />
+                            <Run Text="{Binding TotalTime}" />
+                            <Run Text="(" />
+                            <Run Text="{Binding Path=PlayedEpisodes, Mode=OneTime}" />
+                            <Run Text="/" />
+                            <Run Text="{Binding Path=TotalEpisodes, Mode=OneTime}" />
+                            <Run Text=")" />
+                        </TextBlock>
+
+                        <TextBlock
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            Margin="4,0,2,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Bottom"
                             FontSize="16"
@@ -242,9 +351,9 @@
                             Text="{Binding DateAdd, Mode=OneTime, StringFormat={}{0:dd.MM.yyyy}}" />
 
                         <TextBlock
-                            Grid.Row="4"
+                            Grid.Row="5"
                             Grid.Column="1"
-                            Margin="4"
+                            Margin="4,0,4,2"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
                             FontSize="16"
