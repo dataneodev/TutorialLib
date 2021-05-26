@@ -10,6 +10,7 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new MainWindowVM();
         }
     }
 }

@@ -8,7 +8,6 @@ namespace dataneo.TutorialLibs.Domain.DTO
         public string Name { get; set; }
         public TimeSpan TotalTime { get; set; }
         public TimeSpan TimePlayed { get; set; }
-        public short Episodes { get; set; }
         public short PlayedEpisodes { get; set; }
         public short TotalEpisodes { get; set; }
         public DateTime DateAdd { get; set; }

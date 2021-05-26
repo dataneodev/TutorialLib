@@ -173,7 +173,8 @@
             Grid.Row="1"
             Grid.Column="0"
             Background="{StaticResource backGround}"
-            BorderThickness="0">
+            BorderThickness="0"
+            ItemsSource="{Binding Path=Tutorials, Mode=OneTime}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal" />
@@ -181,7 +182,79 @@
             </ListView.ItemsPanel>
 
             <ListView.ItemTemplate>
-                <DataTemplate />
+                <DataTemplate>
+                    <Grid
+                        Width="240"
+                        Height="160"
+                        Background="#202020">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            x:Name="tbTitle"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Margin="4"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            FontSize="16"
+                            Foreground="White"
+                            Text="{Binding Path=Name, Mode=OneTime}"
+                            TextWrapping="Wrap" />
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="4,0,0,0"
+                            FontSize="14"
+                            Foreground="{StaticResource foreGround}"
+                            Text="Kategoria:" />
+
+
+
+
+                        <Button
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="4"
+                            Content="Odtwórz" />
+
+                        <TextBlock
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Margin="4"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            FontSize="16"
+                            Foreground="{StaticResource foreGround}"
+                            Text="{Binding DateAdd, Mode=OneTime, StringFormat={}{0:dd.MM.yyyy}}" />
+
+                        <TextBlock
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Margin="4"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            FontSize="16"
+                            Foreground="{StaticResource foreGround}">
+                            <Run Text="{Binding Path=TotalSizeMB, Mode=OneTime, StringFormat={}{0:##.#}}" />
+                            <Run Text="MB" />
+                        </TextBlock>
+
+                    </Grid>
+                </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
     </Grid>
