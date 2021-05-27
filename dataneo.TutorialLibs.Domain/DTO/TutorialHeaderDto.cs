@@ -1,17 +1,19 @@
-﻿using System;
+﻿using dataneo.TutorialLibs.Domain.Enums;
+using System;
 
 namespace dataneo.TutorialLibs.Domain.DTO
 {
     public sealed class TutorialHeaderDto
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public TimeSpan TotalTime { get; set; }
-        public TimeSpan TimePlayed { get; set; }
-        public short PlayedEpisodes { get; set; }
-        public short TotalEpisodes { get; set; }
-        public DateTime LastPlayedDate { get; set; }
-        public DateTime DateAdd { get; set; }
-        public float TotalSizeMB { get; set; }
+        public Guid Id { get; init; }
+        public string Name { get; init; }
+        public TimeSpan TotalTime { get; init; }
+        public TimeSpan TimePlayed { get; init; }
+        public short PlayedEpisodes { get; init; }
+        public short TotalEpisodes { get; init; }
+        public DateTime LastPlayedDate { get; init; }
+        public DateTime DateAdd { get; init; }
+        public RatingStars Rating { get; init; }
+        public float TotalSizeMB { get; init; }
     }
 }
