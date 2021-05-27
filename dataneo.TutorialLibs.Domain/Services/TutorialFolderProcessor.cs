@@ -188,16 +188,8 @@ namespace dataneo.TutorialLibs.Domain.Services
                 return Result.Combine(episodes.Where(a => a.IsFailure))
                              .ConvertFailure<IReadOnlyList<Episode>>();
 
-            return episodes.Select(FillEpisodeNameAndGetEpisode)
-                           .ToArray(episodes.Length);
-        }
-
-        private Episode FillEpisodeNameAndGetEpisode(Result<Episode> result)
-        {
-            if (result.IsFailure)
-                throw new InvalidOperationException();
-            result.Value.Name = Path.GetFileNameWithoutExtension(result.Value.File.FileName);
-            return result.Value;
+            return Result.Success(episodes.Select(s => s.Value)
+                                          .ToArray() as IReadOnlyList<Episode>);
         }
 
         private struct EpisodeFolderDeconstruction

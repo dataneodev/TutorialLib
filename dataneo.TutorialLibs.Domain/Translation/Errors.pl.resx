@@ -126,6 +126,12 @@
   <data name="EMPTY_PARENT_TUTORIAL_ID" xml:space="preserve">
     <value>Brak id tuturoialu</value>
   </data>
+  <data name="EPISODE_NAME_EMPTY" xml:space="preserve">
+    <value>Nazwa odcinka jest pusta</value>
+  </data>
+  <data name="EPISODE_NAME_TO_SHORT" xml:space="preserve">
+    <value>Nazwa odcinka jest za krótka</value>
+  </data>
   <data name="EPISODE_TO_SHORT" xml:space="preserve">
     <value>Za mała długość epizodu</value>
   </data>

@@ -126,6 +126,12 @@
   <data name="EMPTY_PARENT_TUTORIAL_ID" xml:space="preserve">
     <value>Empty parent tutorial id</value>
   </data>
+  <data name="EPISODE_NAME_EMPTY" xml:space="preserve">
+    <value>Empty episode name</value>
+  </data>
+  <data name="EPISODE_NAME_TO_SHORT" xml:space="preserve">
+    <value>Episode name too short</value>
+  </data>
   <data name="EPISODE_TO_SHORT" xml:space="preserve">
     <value>The episode length is too short</value>
   </data>

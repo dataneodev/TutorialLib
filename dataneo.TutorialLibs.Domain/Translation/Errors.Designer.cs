@@ -88,6 +88,24 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty episode name.
+        /// </summary>
+        public static string EPISODE_NAME_EMPTY {
+            get {
+                return ResourceManager.GetString("EPISODE_NAME_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode name too short.
+        /// </summary>
+        public static string EPISODE_NAME_TO_SHORT {
+            get {
+                return ResourceManager.GetString("EPISODE_NAME_TO_SHORT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The episode length is too short.
         /// </summary>
         public static string EPISODE_TO_SHORT {

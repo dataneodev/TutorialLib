@@ -11,17 +11,20 @@ namespace dataneo.TutorialLibs.Domain.Entities
 {
     public sealed class Episode : BaseEntity
     {
+        public const byte EpisonNameMinLength = 2;
         public const byte UnWatchPercentage = 8;
         public const byte WatchPercentage = 92;
 
         public Guid ParentFolderId { get; private set; }
         public short Order { get; set; }
-        public string Name { get; set; }
+        public string Name { get; private set; }
         public EpisodeFile File { get; private set; }
-        public VideoWatchStatus Status { get; }
         public TimeSpan PlayedTime { get; set; }
         public DateTime LastPlayedDate { get; private set; }
         public DateTime DateAdd { get; private set; }
+
+
+        public VideoWatchStatus Status => GetWatchStatus();
 
         private Episode() { }
 
@@ -33,13 +36,14 @@ namespace dataneo.TutorialLibs.Domain.Entities
 
             return new Episode
             {
+                Name = Path.GetFileNameWithoutExtension(episodeFile.FileName),
                 DateAdd = dateAdd,
                 ParentFolderId = parentFolderId,
                 File = episodeFile
             };
         }
 
-        public VideoWatchStatus GetWatchStatus()
+        private VideoWatchStatus GetWatchStatus()
         {
             if (this.File == null)
                 throw new NullReferenceException(nameof(File));
@@ -60,6 +64,32 @@ namespace dataneo.TutorialLibs.Domain.Entities
             Guard.Against.Null(folder, nameof(folder));
 
             return Path.Combine(tutorial.BasePath, folder.FolderName, this.File.FileName);
+        }
+
+        public void SetPlayedTime(TimeSpan playedTime)
+        {
+            if (playedTime < TimeSpan.Zero)
+                throw new InvalidOperationException();
+
+            if (playedTime > this.File.PlayTime)
+                throw new InvalidOperationException();
+
+            this.PlayedTime = playedTime;
+        }
+
+        public Result SetNewName(string newName)
+        {
+            if (string.IsNullOrWhiteSpace(newName))
+                return Result.Failure(Errors.EPISODE_NAME_EMPTY);
+
+            var newnameTrimed = newName.Trim();
+
+            if (newnameTrimed.Length < EpisonNameMinLength)
+                return Result.Failure(Errors.EPISODE_NAME_TO_SHORT);
+
+            this.Name = newnameTrimed;
+
+            return Result.Success();
         }
     }
 }
