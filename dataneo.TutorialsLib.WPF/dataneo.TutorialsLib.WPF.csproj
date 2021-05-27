@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <None Remove="Image\play.png" />
-    <None Remove="Image\star.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +31,6 @@
 
   <ItemGroup>
     <Resource Include="Image\play.png" />
-    <Resource Include="Image\star.png" />
   </ItemGroup>
 
 </Project>
