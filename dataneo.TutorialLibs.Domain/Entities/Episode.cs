@@ -23,7 +23,6 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public DateTime LastPlayedDate { get; private set; }
         public DateTime DateAdd { get; private set; }
 
-
         public VideoWatchStatus Status => GetWatchStatus();
 
         private Episode() { }

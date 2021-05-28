@@ -13,7 +13,7 @@ namespace dataneo.TutorialLibs.Domain.Services
             OrderFolders(tutorial.Folders);
         }
 
-        private void OrderFolders(IReadOnlyList<Folder> folders)
+        private static void OrderFolders(IReadOnlyList<Folder> folders)
         {
             short orderFolder = 1;
             foreach (var folder in folders.OrderBy(o => o.IsRootFolder)
@@ -24,7 +24,7 @@ namespace dataneo.TutorialLibs.Domain.Services
             }
         }
 
-        private void OrderEpisodes(IReadOnlyList<Episode> episodes)
+        private static void OrderEpisodes(IReadOnlyList<Episode> episodes)
         {
             short orderEpisode = 1;
             foreach (var episode in episodes.OrderBy(o => o.Name))

@@ -90,7 +90,7 @@ namespace dataneo.TutorialLibs.Domain.Services
             return Maybe<Tutorial>.From(tutorial);
         }
 
-        private void OrderTutorial(Tutorial tutorial)
+        private static void OrderTutorial(Tutorial tutorial)
         {
             var orderEngine = new OrderTutorialDefault();
             orderEngine.OrderFoldersAndEpisodesByName(tutorial);
