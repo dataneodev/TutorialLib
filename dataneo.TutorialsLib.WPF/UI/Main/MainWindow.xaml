@@ -298,7 +298,7 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
                             Orientation="Vertical">
-                            <local:RatingStars
+                            <local:RatingControl
                                 Margin="2"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"

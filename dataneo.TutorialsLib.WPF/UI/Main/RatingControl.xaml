@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="dataneo.TutorialsLib.WPF.UI.Main.RatingStars"
+    x:Class="dataneo.TutorialsLib.WPF.UI.Main.RatingControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,25 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <StackPanel Orientation="Horizontal">
-
-        <local:StarControl />
+        <local:StarControl
+            x:Name="scStar1"
+            MouseEnter="scStar1_MouseEnter"
+            MouseLeave="scStar_MouseLeave" />
+        <local:StarControl
+            x:Name="scStar2"
+            MouseEnter="scStar2_MouseEnter"
+            MouseLeave="scStar_MouseLeave" />
+        <local:StarControl
+            x:Name="scStar3"
+            MouseEnter="scStar3_MouseEnter"
+            MouseLeave="scStar_MouseLeave" />
+        <local:StarControl
+            x:Name="scStar4"
+            MouseEnter="scStar4_MouseEnter"
+            MouseLeave="scStar_MouseLeave" />
+        <local:StarControl
+            x:Name="scStar5"
+            MouseEnter="scStar5_MouseEnter"
+            MouseLeave="scStar_MouseLeave" />
     </StackPanel>
 </UserControl>
