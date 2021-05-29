@@ -7,8 +7,6 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
     /// </summary>
     public partial class StarControl : UserControl
     {
-
-
         public StarControl()
         {
             InitializeComponent();

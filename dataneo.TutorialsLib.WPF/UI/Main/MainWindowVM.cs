@@ -1,6 +1,8 @@
 ﻿using dataneo.TutorialLibs.Domain.DTO;
+using dataneo.TutorialLibs.Domain.Enums;
 using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace dataneo.TutorialsLib.WPF.UI.Main
 {
@@ -8,6 +10,19 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
     {
         public IEnumerable<TutorialHeaderDto> Tutorials => GetFakeTutorials();
 
+        public ICommand RatingChangedCommand { get; }
+
+        public MainWindowVM()
+        {
+            RatingChangedCommand = new Command<ValueTuple<Guid, RatingStars>>(RatingChangedCommandImpl);
+        }
+
+        private void RatingChangedCommandImpl(ValueTuple<Guid, RatingStars> tutorialIdAndRating)
+        {
+
+
+
+        }
 
         private IEnumerable<TutorialHeaderDto> GetFakeTutorials()
         {
@@ -22,6 +37,7 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
                 TotalSizeMB = 632.3f,
                 TotalTime = TimeSpan.FromMinutes(362),
                 LastPlayedDate = DateTime.Now,
+                Rating = RatingStars.NotRated
             };
 
             yield return new TutorialHeaderDto
@@ -35,6 +51,7 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
                 TotalSizeMB = 632.3f,
                 TotalTime = TimeSpan.FromMinutes(362),
                 LastPlayedDate = DateTime.Now,
+                Rating = RatingStars.FiveStars
             };
 
             yield return new TutorialHeaderDto
@@ -48,6 +65,7 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
                 TotalSizeMB = 632.3f,
                 TotalTime = TimeSpan.FromMinutes(362),
                 LastPlayedDate = DateTime.Now,
+                Rating = RatingStars.ThreeStart
             };
 
             yield return new TutorialHeaderDto

@@ -1,6 +1,8 @@
 ﻿using dataneo.TutorialLibs.Domain.Enums;
+using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace dataneo.TutorialsLib.WPF.UI.Main
@@ -10,29 +12,87 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
     /// </summary>
     public partial class RatingControl : UserControl
     {
-        private static Brush Star = Brushes.Yellow;
+        private static Brush Star = Brushes.Gold;
         private static Brush StarEmpty = Brushes.Gray;
 
-        public static readonly DependencyProperty RatingProperty =
-         DependencyProperty.Register("Rating", typeof(RatingStars), typeof(StarControl), new
-            PropertyMetadata("", new PropertyChangedCallback(OnStarredChanged)));
+        public static readonly DependencyProperty RatingStarProperty =
+         DependencyProperty.Register(
+             nameof(RatingStarValue),
+             typeof(RatingStars),
+             typeof(RatingControl),
+             new PropertyMetadata(
+                 RatingStars.NotRated,
+                 new PropertyChangedCallback(OnStarredChanged)));
 
-        public RatingStars Rating
+        public RatingStars RatingStarValue
         {
-            get { return (RatingStars)GetValue(RatingProperty); }
-            set { SetValue(RatingProperty, value); }
+            get { return (RatingStars)GetValue(RatingStarProperty); }
+            set { SetValue(RatingStarProperty, value); }
         }
 
         private static void OnStarredChanged(DependencyObject d,
            DependencyPropertyChangedEventArgs e)
         {
-            RatingControl UserControl1Control = d as RatingControl;
-            UserControl1Control.OnSetTextChanged(e);
+            var ratingControl = d as RatingControl;
+            ratingControl.OnSetRatingChanged(e);
         }
 
-        private void OnSetTextChanged(DependencyPropertyChangedEventArgs e)
+        private void OnSetRatingChanged(DependencyPropertyChangedEventArgs e)
         {
+            this.RatingStarValue = (RatingStars)e.NewValue;
+            SetRatingStatus(this.RatingStarValue);
+        }
 
+        public static readonly DependencyProperty TutorialGuidProperty =
+        DependencyProperty.Register(
+            nameof(TutorialGuid),
+            typeof(Guid),
+            typeof(RatingControl),
+            new PropertyMetadata(
+                Guid.Empty,
+                new PropertyChangedCallback(OnTutorialGuidChanged)));
+
+        public Guid TutorialGuid
+        {
+            get { return (Guid)GetValue(TutorialGuidProperty); }
+            set { SetValue(TutorialGuidProperty, value); }
+        }
+
+        private static void OnTutorialGuidChanged(DependencyObject d,
+           DependencyPropertyChangedEventArgs e)
+        {
+            var ratingControl = d as RatingControl;
+            ratingControl.OnSetTutorialGuidChanged(e);
+        }
+
+        private void OnSetTutorialGuidChanged(DependencyPropertyChangedEventArgs e)
+        {
+            this.TutorialGuid = (Guid)e.NewValue;
+        }
+
+        public static readonly DependencyProperty RatingStarChangedProperty =
+         DependencyProperty.Register(
+             nameof(RatingStarChanged),
+             typeof(ICommand),
+             typeof(RatingControl),
+              new PropertyMetadata(null, new PropertyChangedCallback(OnRatingStarChangedChanged)));
+
+        private static void OnRatingStarChangedChanged(DependencyObject d,
+           DependencyPropertyChangedEventArgs e)
+        {
+            var ratingControl = d as RatingControl;
+            ratingControl.OnSetRatingStarChangedChanged(e);
+        }
+
+        private void OnSetRatingStarChangedChanged(DependencyPropertyChangedEventArgs e)
+        {
+            this.RatingStarChanged = (ICommand)e.NewValue;
+        }
+
+        public ICommand RatingStarChanged
+        {
+            get { return (ICommand)GetValue(RatingStarChangedProperty); }
+            set { SetValue(RatingStarChangedProperty, value); }
         }
 
         public RatingControl()
@@ -70,11 +130,22 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
                 scStar5.pathStart.Fill = StarEmpty;
         }
 
+        private void SetAndInvokeRatingStarChanged(RatingStars ratingStars)
+        {
+            this.RatingStarValue = ratingStars;
+            var value = new ValueTuple<Guid, RatingStars>(
+                        this.TutorialGuid,
+                        this.RatingStarValue);
+
+            if (this.RatingStarChanged?.CanExecute(value) ?? false)
+                this.RatingStarChanged.Execute(value);
+        }
+
         private void scStar1_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
             => this.SetRatingStatus(RatingStars.OneStar);
 
         private void scStar_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-            => this.SetRatingStatus(this.Rating);
+            => this.SetRatingStatus(this.RatingStarValue);
 
         private void scStar2_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
             => this.SetRatingStatus(RatingStars.TwoStars);
@@ -87,5 +158,20 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
 
         private void scStar5_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
             => this.SetRatingStatus(RatingStars.FiveStars);
+
+        private void scStar1_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+            => SetAndInvokeRatingStarChanged(RatingStars.OneStar);
+
+        private void scStar2_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+            => SetAndInvokeRatingStarChanged(RatingStars.TwoStars);
+
+        private void scStar3_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+            => SetAndInvokeRatingStarChanged(RatingStars.ThreeStart);
+
+        private void scStar4_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+            => SetAndInvokeRatingStarChanged(RatingStars.FourStars);
+
+        private void scStar5_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+            => SetAndInvokeRatingStarChanged(RatingStars.FiveStars);
     }
 }

@@ -302,7 +302,10 @@
                                 Margin="2"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
-                                Cursor="Hand" />
+                                Cursor="Hand"
+                                RatingStarChanged="{Binding ElementName=tutorialSelectorWindow, Path=DataContext.RatingChangedCommand, Mode=OneTime}"
+                                RatingStarValue="{Binding Path=Rating, Mode=OneTime}"
+                                TutorialGuid="{Binding Path=Id, Mode=OneTime}" />
                             <TextBlock
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"

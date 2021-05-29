@@ -11,22 +11,27 @@
     <StackPanel Orientation="Horizontal">
         <local:StarControl
             x:Name="scStar1"
+            MouseDown="scStar1_MouseDown"
             MouseEnter="scStar1_MouseEnter"
             MouseLeave="scStar_MouseLeave" />
         <local:StarControl
             x:Name="scStar2"
+            MouseDown="scStar2_MouseDown"
             MouseEnter="scStar2_MouseEnter"
             MouseLeave="scStar_MouseLeave" />
         <local:StarControl
             x:Name="scStar3"
+            MouseDown="scStar3_MouseDown"
             MouseEnter="scStar3_MouseEnter"
             MouseLeave="scStar_MouseLeave" />
         <local:StarControl
             x:Name="scStar4"
+            MouseDown="scStar4_MouseDown"
             MouseEnter="scStar4_MouseEnter"
             MouseLeave="scStar_MouseLeave" />
         <local:StarControl
             x:Name="scStar5"
+            MouseDown="scStar5_MouseDown"
             MouseEnter="scStar5_MouseEnter"
             MouseLeave="scStar_MouseLeave" />
     </StackPanel>
