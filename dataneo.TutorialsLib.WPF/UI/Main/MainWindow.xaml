@@ -187,6 +187,12 @@
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
 
+            <!--<ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Zmień kategorie" Style="{StaticResource menuItemColors}" />
+                    <MenuItem Header="Skanuj w poszukiwaniu nowych odcinków" Style="{StaticResource menuItemColors}" />
+                </ContextMenu>
+            </ListView.ContextMenu>-->
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid
@@ -237,39 +243,28 @@
                             Height="36"
                             Margin="4,2,2,2"
                             Background="#353535"
+                            Command="{Binding ElementName=tutorialSelectorWindow, Path=DataContext.PlayTutorialCommand, Mode=OneTime}"
+                            CommandParameter="{Binding Path=Id, Mode=OneTime}"
                             Cursor="Hand"
                             Opacity="1">
                             <Button.Style>
-                                <Style TargetType="Button">
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Background" Value="LightBlue" />
                                     <Setter Property="Template">
-
                                         <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
+                                            <ControlTemplate TargetType="{x:Type Button}">
                                                 <Border
                                                     x:Name="Border"
                                                     Background="{TemplateBinding Background}"
                                                     BorderBrush="Black"
                                                     BorderThickness="1"
-                                                    CornerRadius="2"
-                                                    TextBlock.Foreground="{TemplateBinding Foreground}">
-                                                    <ContentPresenter
-                                                        Margin="2"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"
-                                                        RecognizesAccessKey="True" />
+                                                    CornerRadius="2">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Background" Value="#ff3c8f" />
-                                                        <Setter Property="BorderBrush" Value="#254c8e" />
-                                                        <Setter Property="Foreground" Value="White" />
+                                                        <Setter TargetName="Border" Property="Background" Value="#2A2A2A" />
                                                     </Trigger>
-
-                                                    <Trigger Property="IsPressed" Value="True">
-                                                        <Setter Property="Background" Value="#ed0d6c" />
-                                                        <Setter Property="Foreground" Value="White" />
-                                                    </Trigger>
-
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
                                         </Setter.Value>
@@ -279,12 +274,22 @@
                             </Button.Style>
 
                             <StackPanel Orientation="Horizontal">
-                                <Image
-                                    Width="24"
-                                    Height="24"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Source="/dataneo.TutorialsLib.WPF;component/Image/play.png" />
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Name="phCircle"
+                                        Canvas.Left="9"
+                                        Canvas.Top="5.8"
+                                        Data="M 0,0 L 0,12 L 8, 6 L 0, 0"
+                                        Stroke="#1E1A1A"
+                                        StrokeThickness="2" />
+                                    <Ellipse
+                                        Canvas.Left="0"
+                                        Canvas.Top="0"
+                                        Width="24"
+                                        Height="24"
+                                        Stroke="#1E1A1A"
+                                        StrokeThickness="2" />
+                                </Canvas>
                                 <TextBlock
                                     Margin="8,2,2,2"
                                     FontSize="14"

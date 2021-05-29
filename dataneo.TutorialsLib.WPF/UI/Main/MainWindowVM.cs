@@ -11,16 +11,21 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
         public IEnumerable<TutorialHeaderDto> Tutorials => GetFakeTutorials();
 
         public ICommand RatingChangedCommand { get; }
+        public ICommand PlayTutorialCommand { get; }
 
         public MainWindowVM()
         {
-            RatingChangedCommand = new Command<ValueTuple<Guid, RatingStars>>(RatingChangedCommandImpl);
+            this.RatingChangedCommand = new Command<ValueTuple<Guid, RatingStars>>(RatingChangedCommandImpl);
+            this.PlayTutorialCommand = new Command<Guid>(PlayTutorialCommandImpl);
+        }
+
+        private void PlayTutorialCommandImpl(Guid tutorialId)
+        {
+
         }
 
         private void RatingChangedCommandImpl(ValueTuple<Guid, RatingStars> tutorialIdAndRating)
         {
-
-
 
         }
 
@@ -172,6 +177,5 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
                 LastPlayedDate = DateTime.Now,
             };
         }
-
     }
 }
