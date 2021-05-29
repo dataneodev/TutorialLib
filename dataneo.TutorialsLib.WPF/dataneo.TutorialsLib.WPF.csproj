@@ -24,6 +24,7 @@
     <Folder Include="Translation\" />
     <Folder Include="UI\About\" />
     <Folder Include="UI\Dialogs\" />
+    <Folder Include="UI\Player\Services\" />
   </ItemGroup>
 
 </Project>

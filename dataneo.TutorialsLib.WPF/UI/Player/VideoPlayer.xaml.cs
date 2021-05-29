@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LibVLCSharp.Shared;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TutorialsLib.UI
 {
@@ -20,9 +10,49 @@ namespace TutorialsLib.UI
     /// </summary>
     public partial class VideoPlayer : UserControl
     {
+        //readonly PlayerWindow parent;
+        LibVLC _libVLC;
+        MediaPlayer _mediaPlayer;
+
         public VideoPlayer()
         {
+
             InitializeComponent();
+            Loaded += VideoView_Loaded;
+            PlayButton.Click += PlayButton_Click;
+            StopButton.Click += StopButton_Click;
+            Unloaded += Controls_Unloaded;
+        }
+
+        private void Controls_Unloaded(object sender, RoutedEventArgs e)
+        {
+            _mediaPlayer.Stop();
+            _mediaPlayer.Dispose();
+            _libVLC.Dispose();
+        }
+
+        private void VideoView_Loaded(object sender, RoutedEventArgs e)
+        {
+            _libVLC = new LibVLC(enableDebugLogs: true);
+            _mediaPlayer = new MediaPlayer(_libVLC);
+            videoView.MediaPlayer = _mediaPlayer;
+        }
+
+        void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_mediaPlayer.IsPlaying)
+            {
+                _mediaPlayer.Stop();
+            }
+        }
+
+        void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_mediaPlayer.IsPlaying)
+            {
+                using (var media = new Media(_libVLC, new Uri(@"F:\Teledyski\Karolina Stanisławczyk - Cliché (official music video) (1080p_25fps_AV1-128kbit_AAC)_KjQYmiGcBKA.mp4")))
+                    _mediaPlayer.Play(media);
+            }
         }
     }
 }

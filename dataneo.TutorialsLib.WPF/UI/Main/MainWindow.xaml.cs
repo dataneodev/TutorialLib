@@ -9,6 +9,7 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
     {
         public MainWindow()
         {
+            LibVLCSharp.Shared.Core.Initialize();
             InitializeComponent();
             var vm = new MainWindowVM();
             vm.SetWindowVisibility = SetWindowVisibility;

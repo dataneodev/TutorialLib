@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:TutorialsLib"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:player="clr-namespace:TutorialsLib.UI"
-    xmlns:uc="clr-namespace:LibVLCSharp.WPF;assembly=LibVLCSharp.WPF"
+   
     x:Name="playeWindow"
     Title="{Binding Path=Caption}"
     Width="800"
@@ -20,10 +20,10 @@
             <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="*" MinWidth="220" />
         </Grid.ColumnDefinitions>
-        <uc:VideoView
-            x:Name="VideoView"
+        <player:VideoPlayer
+            x:Name="videoView"
             Grid.Column="0"
-            Visibility="Collapsed" />
+            Visibility="Visible" />
         <player:VideoList Grid.Column="1" ItemSource="{Binding Path=VideoItems}" />
     </Grid>
 </Window>

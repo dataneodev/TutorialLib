@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace TutorialsLib
 {
@@ -13,6 +14,9 @@ namespace TutorialsLib
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public IList<object> VideoItems { get; set; } = new List<object>();
+
+
+        public ICommand ClickedOnEpisodeOrFolder;
 
         public PlayerWindowVM(Guid playedTutorialId)
         {
