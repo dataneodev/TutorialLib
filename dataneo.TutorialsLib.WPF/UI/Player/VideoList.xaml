@@ -9,6 +9,7 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <SolidColorBrush x:Key="grayColor">#929290</SolidColorBrush>
         <DataTemplate x:Key="VideoItemTemplate">
             <Grid MinWidth="200" Margin="8,0,4,0">
                 <Grid.ColumnDefinitions>
@@ -22,19 +23,15 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Line
+                <Rectangle
                     Grid.Row="0"
                     Grid.Column="0"
-                    Margin="0"
-                    HorizontalAlignment="Center"
-                    Stroke="DarkSlateGray"
-                    StrokeThickness="2"
-                    X1="1"
-                    X2="1"
-                    Y1="0"
-                    Y2="8">
-                    <Line.Style>
-                        <Style TargetType="Line">
+                    Width="2"
+                    Margin="0,0,0,-3"
+                    HorizontalAlignment="Stretch"
+                    Stroke="DarkSlateGray">
+                    <Rectangle.Style>
+                        <Style TargetType="Rectangle">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding LocationOnList}" Value="FirstElement">
@@ -42,13 +39,14 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Line.Style>
-                </Line>
+                    </Rectangle.Style>
+                </Rectangle>
                 <Ellipse
                     Grid.Row="1"
                     Grid.Column="0"
                     Width="12"
                     Height="12"
+                    Margin="0"
                     HorizontalAlignment="Center">
                     <Ellipse.Style>
                         <Style TargetType="Ellipse">
@@ -85,18 +83,15 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <Line
+                <Rectangle
                     Grid.Row="2"
                     Grid.Column="0"
-                    HorizontalAlignment="Center"
-                    Stroke="DarkSlateGray"
-                    StrokeThickness="2"
-                    X1="1"
-                    X2="1"
-                    Y1="0"
-                    Y2="8">
-                    <Line.Style>
-                        <Style TargetType="Line">
+                    Width="2"
+                    Margin="0,-3,0,0"
+                    HorizontalAlignment="Stretch"
+                    Stroke="DarkSlateGray">
+                    <Rectangle.Style>
+                        <Style TargetType="Rectangle">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding LocationOnList}" Value="LastElement">
@@ -104,18 +99,28 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Line.Style>
-                </Line>
+                    </Rectangle.Style>
+                </Rectangle>
 
-                <TextBlock
+                <StackPanel
                     Grid.Row="0"
                     Grid.RowSpan="3"
                     Grid.Column="1"
-                    Margin="10,0,0,0"
-                    VerticalAlignment="Center"
-                    FontSize="13"
-                    Foreground="White"
-                    Text="{Binding Name}" />
+                    Margin="12,0,0,0"
+                    Orientation="Vertical">
+                    <TextBlock
+                        VerticalAlignment="Top"
+                        FontSize="13"
+                        Foreground="White"
+                        Text="{Binding Name}" />
+
+                    <TextBlock
+                        Margin="0,-3,0,2"
+                        VerticalAlignment="Top"
+                        FontSize="11"
+                        Foreground="{StaticResource grayColor}"
+                        Text="{Binding EpisodePlayTime}" />
+                </StackPanel>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="FolderItemTemplate">
@@ -174,8 +179,8 @@
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="10,2,0,0"
-                    VerticalAlignment="Center"
+                    Margin="6,0,0,0"
+                    VerticalAlignment="Bottom"
                     FontSize="15"
                     FontWeight="Bold"
                     Foreground="White"
@@ -183,9 +188,9 @@
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="1"
-                    Margin="10,0,0,2"
-                    VerticalAlignment="Center"
-                    Foreground="Gray"
+                    Margin="6,-2,0,2"
+                    VerticalAlignment="Top"
+                    Foreground="{StaticResource grayColor}"
                     Text="{Binding FolderPlayTime}" />
             </Grid>
         </DataTemplate>
@@ -197,7 +202,7 @@
     <ListView
         x:Name="tvVideoList"
         Padding="0"
-        Background="Black"
+        Background="#222222"
         ItemTemplateSelector="{StaticResource ListItemDataTemplateSelector}">
         <ListView.ItemContainerStyle>
             <Style TargetType="ListViewItem">

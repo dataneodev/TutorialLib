@@ -11,11 +11,11 @@ namespace TutorialsLib
     /// </summary>
     public partial class Controls : UserControl
     {
-        readonly MainWindow parent;
+        readonly PlayerWindow parent;
         LibVLC _libVLC;
         MediaPlayer _mediaPlayer;
 
-        public Controls(MainWindow Parent)
+        public Controls(PlayerWindow Parent)
         {
             parent = Parent;
 
@@ -55,7 +55,7 @@ namespace TutorialsLib
         {
             if (!parent.VideoView.MediaPlayer.IsPlaying)
             {
-                using (var media = new Media(_libVLC, new Uri("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")))
+                using (var media = new Media(_libVLC, new Uri(@"F:\Teledyski\Karolina Stanisławczyk - Cliché (official music video) (1080p_25fps_AV1-128kbit_AAC)_KjQYmiGcBKA.mp4")))
                     parent.VideoView.MediaPlayer.Play(media);
             }
         }

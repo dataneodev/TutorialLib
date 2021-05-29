@@ -1,11 +1,12 @@
 ﻿using dataneo.TutorialLibs.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace TutorialsLib
 {
-    internal class MainWindowVM : INotifyPropertyChanged
+    internal class PlayerWindowVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
@@ -13,7 +14,7 @@ namespace TutorialsLib
 
         public IList<object> VideoItems { get; set; } = new List<object>();
 
-        public MainWindowVM()
+        public PlayerWindowVM(Guid playedTutorialId)
         {
             VideoItems.Add(new FolderItem
             {

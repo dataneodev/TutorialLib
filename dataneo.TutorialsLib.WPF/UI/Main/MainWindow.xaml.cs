@@ -10,7 +10,21 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainWindowVM();
+            var vm = new MainWindowVM();
+            vm.SetWindowVisibility = SetWindowVisibility;
+            this.DataContext = vm;
+        }
+
+        private void SetWindowVisibility(bool visible)
+        {
+            if (visible)
+            {
+                this.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                this.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

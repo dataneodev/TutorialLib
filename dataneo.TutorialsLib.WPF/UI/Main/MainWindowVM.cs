@@ -3,13 +3,15 @@ using dataneo.TutorialLibs.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using TutorialsLib;
 
 namespace dataneo.TutorialsLib.WPF.UI.Main
 {
     internal sealed class MainWindowVM : BaseViewModel
     {
-        public IEnumerable<TutorialHeaderDto> Tutorials => GetFakeTutorials();
+        public Action<bool> SetWindowVisibility;
 
+        public IEnumerable<TutorialHeaderDto> Tutorials => GetFakeTutorials();
         public ICommand RatingChangedCommand { get; }
         public ICommand PlayTutorialCommand { get; }
 
@@ -21,12 +23,18 @@ namespace dataneo.TutorialsLib.WPF.UI.Main
 
         private void PlayTutorialCommandImpl(Guid tutorialId)
         {
-
+            this.SetWindowVisibility?.Invoke(false);
+            var playeWindow = new PlayerWindow(tutorialId, () => ClosePlayerWindow(tutorialId));
         }
 
         private void RatingChangedCommandImpl(ValueTuple<Guid, RatingStars> tutorialIdAndRating)
         {
 
+        }
+
+        private void ClosePlayerWindow(Guid playedTutorialId)
+        {
+            this.SetWindowVisibility?.Invoke(true);
         }
 
         private IEnumerable<TutorialHeaderDto> GetFakeTutorials()
