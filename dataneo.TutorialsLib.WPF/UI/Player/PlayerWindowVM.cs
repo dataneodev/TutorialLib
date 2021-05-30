@@ -7,19 +7,49 @@ namespace dataneo.TutorialsLib.WPF.UI
 {
     internal class PlayerWindowVM : BaseViewModel
     {
+        private readonly Guid _tutorialPlayerId;
+
         public IList<object> VideoItems { get; set; } = new List<object>();
 
+        public ICommand ClickedOnEpisodeOrFolderCommand { get; }
+        public ICommand CurrentVideoEndedCommand { get; }
 
-        public ICommand ClickedOnEpisodeOrFolder;
-
-        private string currentMediaPath = @"F:\Teledyski\Karolina Stanisławczyk - Cliché (official music video) (1080p_25fps_AV1-128kbit_AAC)_KjQYmiGcBKA.mp4";
+        private string currentMediaPath;
         public string CurrentMediaPath
         {
             get { return currentMediaPath; }
-            set { currentMediaPath = value; Notify(); }
+            set
+            {
+                currentMediaPath = value;
+                Notify(nameof(CurrentMediaPath));
+            }
         }
 
-        public PlayerWindowVM(Guid playedTutorialId)
+        public PlayerWindowVM(Guid tutorialPlayerId)
+        {
+            this._tutorialPlayerId = tutorialPlayerId;
+            this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);
+            this.ClickedOnEpisodeOrFolderCommand = new Command(ClickedOnEpisodeOrFolderCommandImpl);
+        }
+
+        private void CurrentVideoEndedCommandImpl()
+        {
+            this.CurrentMediaPath = @"Z:\District 9 2009 ITA-ENG BRRip 720p x264-HD4ME\District.9.2009.ITA-ENG.BRRip.720p.x264-HD4ME.mkv";
+        }
+
+        private void ClickedOnEpisodeOrFolderCommandImpl()
+        {
+
+        }
+
+        public void Load()
+        {
+            NewMethod();
+
+            Test();
+        }
+
+        private void NewMethod()
         {
             VideoItems.Add(new FolderItem
             {
@@ -79,8 +109,6 @@ namespace dataneo.TutorialsLib.WPF.UI
                 Name = "Folder test",
                 WatchStatus = VideoWatchStatus.NotWatched
             });
-
-
         }
 
         public void Test()

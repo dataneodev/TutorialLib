@@ -10,16 +10,20 @@ namespace dataneo.TutorialsLib.WPF.UI
     public partial class PlayerWindow : Window
     {
         private readonly Action _onClose;
+        private readonly PlayerWindowVM _VM;
 
         public PlayerWindow(Guid playedTutorialId, Action onClose)
         {
             this._onClose = Guard.Against.Null(onClose, nameof(onClose));
-
             InitializeComponent();
-            var vm = new PlayerWindowVM(playedTutorialId);
-            this.DataContext = vm;
-            vm.Test();
-            this.ShowDialog();
+            this._VM = new PlayerWindowVM(playedTutorialId);
+            this.DataContext = _VM;
+        }
+
+        public void Load()
+        {
+            this.Show();
+            this._VM.Load();
         }
 
         private void playeWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

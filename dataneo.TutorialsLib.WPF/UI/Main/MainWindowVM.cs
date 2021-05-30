@@ -23,7 +23,9 @@ namespace dataneo.TutorialsLib.WPF.UI
         private void PlayTutorialCommandImpl(Guid tutorialId)
         {
             this.SetWindowVisibility?.Invoke(false);
-            var playeWindow = new PlayerWindow(tutorialId, () => ClosePlayerWindow(tutorialId));
+            var playerWindow = new PlayerWindow(tutorialId, () => ClosePlayerWindow(tutorialId));
+            playerWindow.Load();
+
         }
 
         private void RatingChangedCommandImpl(ValueTuple<Guid, RatingStars> tutorialIdAndRating)

@@ -165,7 +165,7 @@
                 Maximum="100"
                 Minimum="0"
                 MouseDown="pbVideoProgress_MouseDown"
-                Value="{Binding Path=MediaPlayerAdp.Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Value="{Binding Path=Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <Button
                 x:Name="btnPreview"
@@ -217,7 +217,7 @@
                             </Setter.Value>
                         </Setter>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=MediaPlayerAdp.PlayedStatus}" Value="Play">
+                            <DataTrigger Binding="{Binding Path=PlayedStatus}" Value="Play">
                                 <Setter Property="Content">
                                     <Setter.Value>
                                         <Grid Margin="0">
@@ -273,7 +273,7 @@
                 Maximum="100"
                 Minimum="0"
                 Style="{StaticResource Horizontal_Slider}"
-                Value="{Binding Path=MediaPlayerAdp.Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Value="{Binding Path=Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </Grid>
 </UserControl>
