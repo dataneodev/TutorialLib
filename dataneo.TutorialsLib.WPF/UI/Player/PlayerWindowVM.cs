@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace TutorialsLib
+namespace dataneo.TutorialsLib.WPF.UI
 {
     internal class PlayerWindowVM : INotifyPropertyChanged
     {

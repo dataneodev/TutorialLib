@@ -3,9 +3,8 @@ using dataneo.TutorialLibs.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using TutorialsLib;
 
-namespace dataneo.TutorialsLib.WPF.UI.Main
+namespace dataneo.TutorialsLib.WPF.UI
 {
     internal sealed class MainWindowVM : BaseViewModel
     {

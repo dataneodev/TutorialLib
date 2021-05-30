@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace dataneo.TutorialsLib.WPF.UI.Main
+namespace dataneo.TutorialsLib.WPF.UI
 {
     /// <summary>
     /// Interaction logic for TutorialSelector.xaml

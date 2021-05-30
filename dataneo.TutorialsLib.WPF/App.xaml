@@ -1,9 +1,9 @@
 ﻿<Application
-    x:Class="TutorialsLib.App"
+    x:Class="dataneo.TutorialsLib.WPF.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:TutorialsLib"
-    xmlns:ui="clr-namespace:TutorialsLib.UI"
+    xmlns:ui="clr-namespace:dataneo.TutorialsLib.WPF"
     StartupUri="UI/Main/MainWindow.xaml">
     <Application.Resources />
 </Application>

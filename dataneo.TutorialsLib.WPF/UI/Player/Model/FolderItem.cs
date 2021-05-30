@@ -1,7 +1,7 @@
 ﻿using dataneo.TutorialLibs.Domain.Enums;
 using System;
 
-namespace TutorialsLib
+namespace dataneo.TutorialsLib.WPF.UI
 {
     public class FolderItem
     {

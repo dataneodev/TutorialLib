@@ -2,7 +2,7 @@
 using System;
 using System.Windows;
 
-namespace TutorialsLib
+namespace dataneo.TutorialsLib.WPF.UI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
