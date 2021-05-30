@@ -33,6 +33,31 @@ namespace dataneo.TutorialsLib.WPF.UI
             }
         }
 
+        private PlayStatus playedStatus = PlayStatus.Stop;
+        public PlayStatus PlayedStatus
+        {
+            get { return playedStatus; }
+            set
+            {
+                switch (value)
+                {
+                    case PlayStatus.Play:
+                        this._mediaPlayer.Play();
+                        break;
+
+                    case PlayStatus.Pause:
+                        this._mediaPlayer.Pause();
+                        break;
+
+                    case PlayStatus.Stop:
+                        this._mediaPlayer.Stop();
+                        break;
+                }
+
+                playedStatus = value;
+                OnPropertyChanged();
+            }
+        }
 
         public MediaPlayerAdapter(MediaPlayer mediaPlayer)
         {
@@ -43,21 +68,30 @@ namespace dataneo.TutorialsLib.WPF.UI
             this._mediaPlayer.Stopped += _mediaPlayer_Stopped;
             this._mediaPlayer.Paused += _mediaPlayer_Paused;
             this._mediaPlayer.Playing += _mediaPlayer_Playing;
+            this._mediaPlayer.EndReached += _mediaPlayer_EndReached;
+        }
+
+        private void _mediaPlayer_EndReached(object sender, System.EventArgs e)
+        {
+
         }
 
         private void _mediaPlayer_Playing(object sender, System.EventArgs e)
         {
-
+            this.playedStatus = PlayStatus.Play;
+            OnPropertyChanged(nameof(PlayedStatus));
         }
 
         private void _mediaPlayer_Paused(object sender, System.EventArgs e)
         {
-
+            this.playedStatus = PlayStatus.Pause;
+            OnPropertyChanged(nameof(PlayedStatus));
         }
 
         private void _mediaPlayer_Stopped(object sender, System.EventArgs e)
         {
-
+            this.playedStatus = PlayStatus.Stop;
+            OnPropertyChanged(nameof(PlayedStatus));
         }
 
         private void _mediaPlayer_VolumeChanged(object sender, MediaPlayerVolumeChangedEventArgs e)

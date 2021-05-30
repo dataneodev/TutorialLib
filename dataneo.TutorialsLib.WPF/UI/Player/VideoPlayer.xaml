@@ -19,13 +19,12 @@
         <uc:VideoView
             x:Name="videoView"
             Grid.Row="0"
-            Panel.ZIndex="5"
             Visibility="Visible" />
-
 
         <Grid Grid.Row="1" Background="#191919">
             <Grid.Resources>
                 <ResourceDictionary>
+                    <SolidColorBrush x:Key="btnNavColot" Color="#464646" />
                     <Style x:Key="btnControlStyle" TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="LightBlue" />
                         <Setter Property="Template">
@@ -180,14 +179,14 @@
                 <Grid>
                     <Path
                         Data="M 0,-2 L 0,14"
-                        Fill="#464646"
-                        Stroke="#464646"
+                        Fill="{StaticResource btnNavColot}"
+                        Stroke="{StaticResource btnNavColot}"
                         StrokeThickness="2" />
                     <Path
                         Name="phPrev"
                         Data="M 10,0 L 10,12 L 2, 6 Z"
-                        Fill="#464646"
-                        Stroke="#464646"
+                        Fill="{StaticResource btnNavColot}"
+                        Stroke="{StaticResource btnNavColot}"
                         StrokeThickness="2" />
                 </Grid>
             </Button>
@@ -200,16 +199,45 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Click="btnPlayPause_Click"
-                Cursor="Hand"
-                Style="{StaticResource btnControlStyle}">
-                <Path
-                    Name="phPlay"
-                    Canvas.Left="9"
-                    Canvas.Top="5.8"
-                    Data="M 0,0 L 0,12 L 8, 6 Z"
-                    Fill="#464646"
-                    Stroke="#464646"
-                    StrokeThickness="2" />
+                Cursor="Hand">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource btnControlStyle}" TargetType="Button">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Grid>
+                                    <Path
+                                        Name="phPlay"
+                                        Canvas.Left="9"
+                                        Canvas.Top="5.8"
+                                        Data="M 0,0 L 0,12 L 8, 6 Z"
+                                        Fill="{StaticResource btnNavColot}"
+                                        Stroke="{StaticResource btnNavColot}"
+                                        StrokeThickness="2" />
+                                </Grid>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=MediaPlayerAdp.PlayedStatus}" Value="Play">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Grid Margin="0">
+                                            <Path
+                                                Data="M 0,0 L 0, 14"
+                                                Fill="{StaticResource btnNavColot}"
+                                                Stroke="{StaticResource btnNavColot}"
+                                                StrokeThickness="3" />
+                                            <Path
+                                                Data="M 8,0 L 8, 14"
+                                                Fill="{StaticResource btnNavColot}"
+                                                Stroke="{StaticResource btnNavColot}"
+                                                StrokeThickness="3" />
+                                        </Grid>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
             </Button>
 
             <Button
@@ -224,13 +252,13 @@
                 <Grid>
                     <Path
                         Data="M 10,-2 L 10,14"
-                        Fill="#464646"
-                        Stroke="#464646"
+                        Fill="{StaticResource btnNavColot}"
+                        Stroke="{StaticResource btnNavColot}"
                         StrokeThickness="2" />
                     <Path
                         Data="M 0,0 L 0,12 L 8, 6 Z"
-                        Fill="#464646"
-                        Stroke="#464646"
+                        Fill="{StaticResource btnNavColot}"
+                        Stroke="{StaticResource btnNavColot}"
                         StrokeThickness="2" />
                 </Grid>
             </Button>
@@ -244,7 +272,6 @@
                 Cursor="Hand"
                 Maximum="100"
                 Minimum="0"
-                MouseDown="sVolume_MouseDown"
                 Style="{StaticResource Horizontal_Slider}"
                 Value="{Binding Path=MediaPlayerAdp.Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>

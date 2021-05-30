@@ -22,7 +22,7 @@
         <player:VideoPlayer
             x:Name="videoView"
             Grid.Column="0"
-            Visibility="Visible" />
+            MediaPath="{Binding Path=CurrentMediaPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <player:VideoList Grid.Column="1" ItemSource="{Binding Path=VideoItems}" />
     </Grid>
 </Window>

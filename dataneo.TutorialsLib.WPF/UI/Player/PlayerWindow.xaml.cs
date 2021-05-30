@@ -16,8 +16,9 @@ namespace dataneo.TutorialsLib.WPF.UI
             this._onClose = Guard.Against.Null(onClose, nameof(onClose));
 
             InitializeComponent();
-            this.DataContext = new PlayerWindowVM(playedTutorialId);
-
+            var vm = new PlayerWindowVM(playedTutorialId);
+            this.DataContext = vm;
+            vm.Test();
             this.ShowDialog();
         }
 

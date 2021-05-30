@@ -1,22 +1,23 @@
 ﻿using dataneo.TutorialLibs.Domain.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace dataneo.TutorialsLib.WPF.UI
 {
-    internal class PlayerWindowVM : INotifyPropertyChanged
+    internal class PlayerWindowVM : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
         public IList<object> VideoItems { get; set; } = new List<object>();
 
 
         public ICommand ClickedOnEpisodeOrFolder;
+
+        private string currentMediaPath = @"F:\Teledyski\Karolina Stanisławczyk - Cliché (official music video) (1080p_25fps_AV1-128kbit_AAC)_KjQYmiGcBKA.mp4";
+        public string CurrentMediaPath
+        {
+            get { return currentMediaPath; }
+            set { currentMediaPath = value; Notify(); }
+        }
 
         public PlayerWindowVM(Guid playedTutorialId)
         {
@@ -78,6 +79,14 @@ namespace dataneo.TutorialsLib.WPF.UI
                 Name = "Folder test",
                 WatchStatus = VideoWatchStatus.NotWatched
             });
+
+
+        }
+
+        public void Test()
+        {
+            this.CurrentMediaPath = @"F:\Teledyski\Karolina Stanisławczyk - Cliché (official music video) (1080p_25fps_AV1-128kbit_AAC)_KjQYmiGcBKA.mp4";
+
         }
     }
 }
