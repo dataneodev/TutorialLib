@@ -1,7 +1,6 @@
 ﻿using dataneo.TutorialLibs.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
 
 namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
 {
@@ -9,7 +8,30 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
     {
         public void Configure(EntityTypeBuilder<Tutorial> builder)
         {
-            throw new NotImplementedException();
+            builder.HasKey(k => k.Id);
+            builder.Property(p => p.Name)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+            builder.Property(p => p.BasePath)
+                .IsRequired()
+                .HasMaxLength(255);
+
+            builder.Property(p => p.AddDate)
+                    .IsRequired()
+                    .ValueGeneratedOnAdd();
+
+            builder.Property(p => p.ModifiedTime)
+                    .IsRequired()
+                    .ValueGeneratedOnAddOrUpdate();
+
+            builder.Property(p => p.Rating)
+                    .IsRequired();
+
+            builder.HasMany(m => m.Folders)
+                   .WithOne()
+                   .HasForeignKey(f => f.ParentTutorialId)
+                   .IsRequired();
         }
     }
 }
