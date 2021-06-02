@@ -142,6 +142,15 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid directory path.
+        /// </summary>
+        public static string INVALID_DIRECTORY {
+            get {
+                return ResourceManager.GetString("INVALID_DIRECTORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid file path.
         /// </summary>
         public static string INVALID_FILE_PATH {

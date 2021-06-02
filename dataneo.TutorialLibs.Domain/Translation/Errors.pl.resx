@@ -144,6 +144,9 @@
   <data name="FILE_SIZE_TO_SMALL" xml:space="preserve">
     <value>Za mała wielkość pliku</value>
   </data>
+  <data name="INVALID_DIRECTORY" xml:space="preserve">
+    <value>Niepoprawna ścieżka katalogu</value>
+  </data>
   <data name="INVALID_FILE_PATH" xml:space="preserve">
     <value>Niepoprawna ściezka do pliku</value>
   </data>

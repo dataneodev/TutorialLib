@@ -144,6 +144,9 @@
   <data name="FILE_SIZE_TO_SMALL" xml:space="preserve">
     <value>File size to small</value>
   </data>
+  <data name="INVALID_DIRECTORY" xml:space="preserve">
+    <value>Invalid directory path</value>
+  </data>
   <data name="INVALID_FILE_PATH" xml:space="preserve">
     <value>Invalid file path</value>
   </data>
