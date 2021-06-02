@@ -13,9 +13,10 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                     .IsRequired()
                     .HasMaxLength(255);
 
-            builder.Property(p => p.BasePath)
-                .IsRequired()
-                .HasMaxLength(255);
+            builder.OwnsOne(o => o.BasePath,
+                            b => b.Property(p => p.Source)
+                                    .IsRequired()
+                                    .HasMaxLength(255));
 
             builder.Property(p => p.AddDate)
                     .IsRequired()

@@ -26,6 +26,5 @@ namespace dataneo.TutorialLibs.Domain.ValueObjects
                 Source = path.Trim()
             };
         }
-
     }
 }
