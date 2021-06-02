@@ -2,13 +2,15 @@
 using dataneo.TutorialLibs.Domain.Translation;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace dataneo.TutorialLibs.Domain.ValueObjects
 {
     public class EpisodeFile : ValueObject
     {
         public const short MinPlayTimeInSeconds = 1;
-        public const short MinFileSizeInBytes = 1024;
+        public const short MinFileSizeInBytes = 128;
 
         public TimeSpan PlayTime { get; private set; }
         public string FileName { get; private set; }
@@ -32,6 +34,10 @@ namespace dataneo.TutorialLibs.Domain.ValueObjects
                 return FailureResult(Errors.FILE_SIZE_TO_SMALL);
 
             if (string.IsNullOrWhiteSpace(fileName))
+                return FailureResult(Errors.FILENAME_INCORECT);
+
+            var invalidChars = Path.GetInvalidFileNameChars();
+            if (invalidChars.Any(a => fileName.Contains(a)))
                 return FailureResult(Errors.FILENAME_INCORECT);
 
             return Result.Success(
