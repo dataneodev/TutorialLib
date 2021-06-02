@@ -18,7 +18,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                     .HasMaxLength(255);
 
             builder.Property(p => p.Order)
-                .IsRequired();
+                    .IsRequired();
 
             builder.HasMany(m => m.Episodes)
                     .WithOne()
