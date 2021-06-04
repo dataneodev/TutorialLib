@@ -1,6 +1,7 @@
 ﻿using dataneo.TutorialLibs.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
 {
@@ -17,7 +18,10 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                     .HasMaxLength(255);
 
             builder.Property(p => p.PlayedTime)
-                    .IsRequired();
+                    .IsRequired()
+                    .HasConversion(
+                        f => f.Ticks,
+                        r => TimeSpan.FromTicks(r));
 
             builder.Property(p => p.LastPlayedDate)
                     .IsRequired();
@@ -46,7 +50,10 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                     .IsRequired();
 
                     b.Property(p => p.PlayTime)
-                    .IsRequired();
+                     .HasConversion(
+                        f => f.Ticks,
+                        r => TimeSpan.FromTicks(r))
+                     .IsRequired();
                 });
         }
     }
