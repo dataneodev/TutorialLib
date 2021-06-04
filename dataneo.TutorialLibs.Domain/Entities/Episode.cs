@@ -16,10 +16,10 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public const byte WatchPercentage = 92;
 
         public Guid ParentFolderId { get; private set; }
-        public short Order { get; set; }
+        public short Order { get; private set; }
         public string Name { get; private set; }
         public EpisodeFile File { get; private set; }
-        public TimeSpan PlayedTime { get; set; }
+        public TimeSpan PlayedTime { get; private set; }
         public DateTime LastPlayedDate { get; private set; }
         public DateTime DateAdd { get; private set; }
 
