@@ -4,6 +4,7 @@ using dataneo.Extensions;
 using dataneo.TutorialLibs.Domain.Entities;
 using dataneo.TutorialLibs.Domain.Interfaces;
 using dataneo.TutorialLibs.Domain.Translation;
+using dataneo.TutorialLibs.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -63,10 +64,10 @@ namespace dataneo.TutorialLibs.Domain.Services
                 return Result.Combine(deconstructedPaths)
                              .ConvertFailure<Maybe<Tutorial>>();
 
-            var tutorial = new Tutorial();
+            var tutorialId = Guid.NewGuid();
             var folders = await GetFoldersWithEpisodesAsync(
                             rootFolder,
-                            tutorial.Id,
+                            tutorialId,
                             deconstructedPaths.Select(s => s.Value),
                             cancelationToken);
 
@@ -79,15 +80,23 @@ namespace dataneo.TutorialLibs.Domain.Services
             if (folders.Value.Count == 0)
                 return Maybe<Tutorial>.None;
 
-            tutorial.BasePath = Path.GetFullPath(rootFolder);
-            tutorial.Name = Path.GetDirectoryName(rootFolder);
-            tutorial.Folders = folders.Value;
-            tutorial.AddDate = this._dateTimeProivder.Now;
-            tutorial.ModifiedTime = this._dateTimeProivder.Now;
+            var basePath = DirectoryPath.Create(Path.GetFullPath(rootFolder));
+            if (basePath.IsFailure)
+                return basePath.ConvertFailure<Maybe<Tutorial>>();
 
-            OrderTutorial(tutorial);
+            var tutorial = Tutorial.Create(
+                tutorialId,
+                 Path.GetDirectoryName(rootFolder),
+                 basePath.Value,
+                 folders.Value,
+                 this._dateTimeProivder.Now);
 
-            return Maybe<Tutorial>.From(tutorial);
+            if (tutorial.IsFailure)
+                return tutorial.ConvertFailure<Maybe<Tutorial>>();
+
+            OrderTutorial(tutorial.Value);
+
+            return Maybe<Tutorial>.From(tutorial.Value);
         }
 
         private static void OrderTutorial(Tutorial tutorial)

@@ -62,7 +62,7 @@ namespace dataneo.TutorialLibs.Domain.Entities
             Guard.Against.Null(tutorial, nameof(tutorial));
             Guard.Against.Null(folder, nameof(folder));
 
-            return Path.Combine(tutorial.BasePath, folder.FolderName, this.File.FileName);
+            return Path.Combine(tutorial.BasePath.Source, folder.FolderPath, this.File.FileName);
         }
 
         public void SetPlayedTime(TimeSpan playedTime)
@@ -89,6 +89,13 @@ namespace dataneo.TutorialLibs.Domain.Entities
             this.Name = newnameTrimed;
 
             return Result.Success();
+        }
+
+        public void SetOrder(short order)
+        {
+            if (order < 0)
+                throw new ArgumentException(nameof(order));
+            Order = order;
         }
     }
 }

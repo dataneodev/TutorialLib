@@ -1,6 +1,7 @@
 ﻿using dataneo.TutorialLibs.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 
 namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
@@ -9,6 +10,10 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
     {
         public void Configure(EntityTypeBuilder<Episode> builder)
         {
+            var timeSpanConverter = new ValueConverter<TimeSpan, long>(
+               v => v.Ticks,
+               v => TimeSpan.FromTicks(v));
+
             builder.HasKey(k => k.Id);
             builder.Property(p => p.Order)
                     .IsRequired();
@@ -19,9 +24,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
 
             builder.Property(p => p.PlayedTime)
                     .IsRequired()
-                    .HasConversion(
-                        f => f.Ticks,
-                        r => TimeSpan.FromTicks(r));
+                    .HasConversion(timeSpanConverter);
 
             builder.Property(p => p.LastPlayedDate)
                     .IsRequired();
@@ -50,9 +53,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                     .IsRequired();
 
                     b.Property(p => p.PlayTime)
-                     .HasConversion(
-                        f => f.Ticks,
-                        r => TimeSpan.FromTicks(r))
+                     .HasConversion(timeSpanConverter)
                      .IsRequired();
                 });
         }

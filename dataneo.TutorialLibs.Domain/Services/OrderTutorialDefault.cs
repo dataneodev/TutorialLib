@@ -17,7 +17,7 @@ namespace dataneo.TutorialLibs.Domain.Services
         {
             short orderFolder = 1;
             foreach (var folder in folders.OrderBy(o => o.IsRootFolder)
-                                          .ThenBy(o => o.FolderName))
+                                          .ThenBy(o => o.FolderPath))
             {
                 folder.Order = orderFolder++;
                 OrderEpisodes(folder.Episodes);
@@ -29,7 +29,7 @@ namespace dataneo.TutorialLibs.Domain.Services
             short orderEpisode = 1;
             foreach (var episode in episodes.OrderBy(o => o.Name))
             {
-                episode.Order = orderEpisode++;
+                episode.Se = orderEpisode++;
             }
         }
     }

@@ -120,6 +120,9 @@
   <data name="CANCELED_BY_USER" xml:space="preserve">
     <value>Anulowano na żadanie użytkownika</value>
   </data>
+  <data name="EMPTY_GUID" xml:space="preserve">
+    <value>Pusty GUID</value>
+  </data>
   <data name="EMPTY_PARENT_FOLDER_ID" xml:space="preserve">
     <value>Brak id folder</value>
   </data>
@@ -150,7 +153,13 @@
   <data name="INVALID_FILE_PATH" xml:space="preserve">
     <value>Niepoprawna ściezka do pliku</value>
   </data>
+  <data name="NO_FOLDERS" xml:space="preserve">
+    <value>Brak rodziałów</value>
+  </data>
   <data name="TOO_MANY_DIRECTORY_LEVELS" xml:space="preserve">
     <value>Za dużo poziomów katalogów.</value>
+  </data>
+  <data name="TUTORIAL_NAME_INCORECT" xml:space="preserve">
+    <value>Niepoprawna nazwa tutorialu</value>
   </data>
 </root>

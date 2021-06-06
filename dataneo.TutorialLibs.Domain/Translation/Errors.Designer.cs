@@ -70,6 +70,15 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty GUID.
+        /// </summary>
+        public static string EMPTY_GUID {
+            get {
+                return ResourceManager.GetString("EMPTY_GUID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Empty parent folder id.
         /// </summary>
         public static string EMPTY_PARENT_FOLDER_ID {
@@ -160,11 +169,29 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No child folders.
+        /// </summary>
+        public static string NO_FOLDERS {
+            get {
+                return ResourceManager.GetString("NO_FOLDERS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Too many directory levels.
         /// </summary>
         public static string TOO_MANY_DIRECTORY_LEVELS {
             get {
                 return ResourceManager.GetString("TOO_MANY_DIRECTORY_LEVELS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tutorial name incorrent.
+        /// </summary>
+        public static string TUTORIAL_NAME_INCORECT {
+            get {
+                return ResourceManager.GetString("TUTORIAL_NAME_INCORECT", resourceCulture);
             }
         }
     }

@@ -120,6 +120,9 @@
   <data name="CANCELED_BY_USER" xml:space="preserve">
     <value>Canceled at the request of the user</value>
   </data>
+  <data name="EMPTY_GUID" xml:space="preserve">
+    <value>Empty GUID</value>
+  </data>
   <data name="EMPTY_PARENT_FOLDER_ID" xml:space="preserve">
     <value>Empty parent folder id</value>
   </data>
@@ -150,7 +153,13 @@
   <data name="INVALID_FILE_PATH" xml:space="preserve">
     <value>Invalid file path</value>
   </data>
+  <data name="NO_FOLDERS" xml:space="preserve">
+    <value>No child folders</value>
+  </data>
   <data name="TOO_MANY_DIRECTORY_LEVELS" xml:space="preserve">
     <value>Too many directory levels</value>
+  </data>
+  <data name="TUTORIAL_NAME_INCORECT" xml:space="preserve">
+    <value>Tutorial name incorrent</value>
   </data>
 </root>

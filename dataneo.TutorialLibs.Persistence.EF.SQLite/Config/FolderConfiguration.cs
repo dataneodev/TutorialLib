@@ -13,7 +13,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                     .IsRequired()
                     .HasMaxLength(255);
 
-            builder.Property(p => p.FolderName)
+            builder.Property(p => p.FolderPath)
                     .IsRequired()
                     .HasMaxLength(255);
 
