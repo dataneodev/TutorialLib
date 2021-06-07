@@ -33,6 +33,9 @@ namespace dataneo.TutorialLibs.Domain.Entities
             if (parentFolderId == Guid.Empty)
                 return Result.Failure<Episode>(Errors.EMPTY_PARENT_FOLDER_ID);
 
+            if (dateAdd == DateTime.MinValue)
+                return Result.Failure<Episode>(Errors.INVALID_DATE);
+
             return new Episode
             {
                 Name = Path.GetFileNameWithoutExtension(episodeFile.FileName),

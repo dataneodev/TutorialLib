@@ -151,6 +151,15 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid date.
+        /// </summary>
+        public static string INVALID_DATE {
+            get {
+                return ResourceManager.GetString("INVALID_DATE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid directory path.
         /// </summary>
         public static string INVALID_DIRECTORY {

@@ -34,11 +34,15 @@ namespace dataneo.TutorialLibs.Domain.Entities
             if ((episodes?.Count ?? 0) < 1)
                 return Result.Failure<Folder>(Errors.NO_EPISODE);
 
-            if (String.IsNullOrWhiteSpace(folderPath))
+            var folderPathTrimmed = folderPath?.Trim();
+
+            if (String.IsNullOrWhiteSpace(folderPathTrimmed))
+                return Result.Failure<Folder>(Errors.INVALID_DIRECTORY);
+
+            if (folderPathTrimmed.Length < MinFolderName)
                 return Result.Failure<Folder>(Errors.INVALID_DIRECTORY);
 
             var invalidChars = Path.GetInvalidPathChars();
-
             if (invalidChars.Any(c => folderPath.Contains(c)))
                 return Result.Failure<Folder>(Errors.INVALID_DIRECTORY);
 
@@ -47,7 +51,7 @@ namespace dataneo.TutorialLibs.Domain.Entities
                 Id = id,
                 ParentTutorialId = parentTutorialId,
                 FolderPath = folderPath,
-                Name = folderPath.Trim(),
+                Name = folderPathTrimmed,
                 Episodes = episodes,
             };
         }

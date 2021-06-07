@@ -85,7 +85,7 @@ namespace dataneo.TutorialLibs.Domain.Services
                 return basePath.ConvertFailure<Maybe<Tutorial>>();
 
             var tutorial = Tutorial.Create(
-                tutorialId,
+                 tutorialId,
                  Path.GetDirectoryName(rootFolder),
                  basePath.Value,
                  folders.Value,
@@ -143,14 +143,11 @@ namespace dataneo.TutorialLibs.Domain.Services
                 if (cancellationToken.IsCancellationRequested)
                     yield break;
 
-                var folder = Folder.Create(parentTutorialId, directory.Key.Trim());
-
-                if (folder.IsFailure)
-                    continue;
+                var newFolderId = Guid.NewGuid();
 
                 var episodesResult = await GetEpisodesResult(
                     rootPath,
-                    parentTutorialId,
+                    newFolderId,
                     directory,
                     cancellationToken);
 
@@ -160,8 +157,15 @@ namespace dataneo.TutorialLibs.Domain.Services
                 if (episodesResult.Value.Count == 0)
                     continue;
 
-                folder.Value.Name = String.IsNullOrWhiteSpace(directory.Key) ? String.Empty : directory.Key;
-                folder.Value.Episodes = episodesResult.Value;
+                var folder = Folder.Create(
+                    newFolderId,
+                    parentTutorialId,
+                    directory.Key.Trim(),
+                    episodesResult.Value);
+
+                if (folder.IsFailure)
+                    continue;
+
                 yield return folder;
             }
         }

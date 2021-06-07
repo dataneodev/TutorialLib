@@ -41,6 +41,9 @@ namespace dataneo.TutorialLibs.Domain.Entities
             if ((folders?.Count ?? 0) == 0)
                 return Result.Failure<Tutorial>(Errors.NO_FOLDERS);
 
+            if (dateTimeNow == DateTime.MinValue)
+                return Result.Failure<Tutorial>(Errors.INVALID_DATE);
+
             return new Tutorial
             {
                 Id = id,
