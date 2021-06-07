@@ -153,6 +153,9 @@
   <data name="INVALID_FILE_PATH" xml:space="preserve">
     <value>Invalid file path</value>
   </data>
+  <data name="NO_EPISODE" xml:space="preserve">
+    <value>No episode</value>
+  </data>
   <data name="NO_FOLDERS" xml:space="preserve">
     <value>No child folders</value>
   </data>

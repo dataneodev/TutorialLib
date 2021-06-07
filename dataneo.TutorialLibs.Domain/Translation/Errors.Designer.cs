@@ -169,6 +169,15 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No episode.
+        /// </summary>
+        public static string NO_EPISODE {
+            get {
+                return ResourceManager.GetString("NO_EPISODE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No child folders.
         /// </summary>
         public static string NO_FOLDERS {

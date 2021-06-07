@@ -3,6 +3,8 @@ using dataneo.SharedKernel;
 using dataneo.TutorialLibs.Domain.Translation;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace dataneo.TutorialLibs.Domain.Entities
 {
@@ -21,7 +23,6 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public static Result<Folder> Create(Guid id,
                                             Guid parentTutorialId,
                                             string folderPath,
-                                            string name,
                                             IReadOnlyList<Episode> episodes)
         {
             if (parentTutorialId == Guid.Empty)
@@ -30,16 +31,23 @@ namespace dataneo.TutorialLibs.Domain.Entities
             if (id == Guid.Empty)
                 return Result.Failure<Folder>(Errors.EMPTY_GUID);
 
+            if ((episodes?.Count ?? 0) < 1)
+                return Result.Failure<Folder>(Errors.NO_EPISODE);
 
-            var nameTrimed = name.Trim();
+            if (String.IsNullOrWhiteSpace(folderPath))
+                return Result.Failure<Folder>(Errors.INVALID_DIRECTORY);
 
+            var invalidChars = Path.GetInvalidPathChars();
+
+            if (invalidChars.Any(c => folderPath.Contains(c)))
+                return Result.Failure<Folder>(Errors.INVALID_DIRECTORY);
 
             return new Folder
             {
                 Id = id,
                 ParentTutorialId = parentTutorialId,
                 FolderPath = folderPath,
-                Name = name,
+                Name = folderPath.Trim(),
                 Episodes = episodes,
             };
         }
