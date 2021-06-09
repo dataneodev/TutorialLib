@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace dataneo.TutorialLibs.Domain.Services
 {
-    public sealed class TutorialFolderProcessor
+    internal sealed class TutorialFolderProcessor
     {
         private const byte MaxSubFolderLevels = 1;
 

@@ -41,5 +41,18 @@ namespace dataneo.TutorialLibs.DomainTests.Services
                                         @"dataneo.TutorialLibs.DomainTests",
                                         @"dataneo.TutorialLibs.FileIO.WinTests"),
                             MediaFolder, Tutorial_1);
+
+        [Fact]
+        public async void Test11()
+        {
+            var processorEngine = GetDefaultEngine();
+            using var cts = new CancellationTokenSource();
+
+            var result = await processorEngine.GetTutorialForFolderAsync(
+                                    @"n:\Tutoriale\PluralsightDecrypted\Applying Functional Principles in C#\",
+                                    cts.Token);
+            result.IsSuccess.Should().BeTrue();
+
+        }
     }
 }
