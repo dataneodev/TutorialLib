@@ -43,7 +43,7 @@ namespace dataneo.TutorialLibs.Domain.Services
                                 folderPath: path,
                                 handledFileExtension: this._handledFileExtension,
                                 cancellationToken: cancelationToken)
-                    .Bind(async files => await GetTutorialFromFilesAsync(path, files, cancelationToken));
+                    .Bind(async files => await GetTutorialFromFilesAsync(path, files, cancelationToken).ConfigureAwait(false));
         }
 
         private async Task<Result<Maybe<Tutorial>>> GetTutorialFromFilesAsync(
@@ -69,7 +69,7 @@ namespace dataneo.TutorialLibs.Domain.Services
                             rootFolder,
                             tutorialId,
                             deconstructedPaths.Select(s => s.Value),
-                            cancelationToken);
+                            cancelationToken).ConfigureAwait(false);
 
             if (folders.IsFailure)
                 return folders.ConvertFailure<Maybe<Tutorial>>();
@@ -177,8 +177,9 @@ namespace dataneo.TutorialLibs.Domain.Services
                         CancellationToken cancellationToken)
         {
             var episodesFiles = await this._mediaInfoProvider.GetFilesDetailsAsync(
-                     episodeFolderDeconstructions.Select(s => Path.Combine(rootPath, s.Folder, s.FilePath)),
-                     cancellationToken);
+                                         episodeFolderDeconstructions.Select(s => Path.Combine(rootPath, s.Folder, s.FilePath)),
+                                         cancellationToken)
+                                      .ConfigureAwait(false);
 
             if (cancellationToken.IsCancellationRequested)
                 return Result.Failure<IReadOnlyList<Episode>>(Errors.CANCELED_BY_USER);

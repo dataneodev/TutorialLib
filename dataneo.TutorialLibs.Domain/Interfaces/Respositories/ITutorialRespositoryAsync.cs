@@ -1,4 +1,5 @@
-﻿using dataneo.SharedKernel;
+﻿using CSharpFunctionalExtensions;
+using dataneo.SharedKernel;
 using dataneo.TutorialLibs.Domain.DTO;
 using dataneo.TutorialLibs.Domain.Entities;
 using System.Threading;
@@ -8,6 +9,6 @@ namespace dataneo.TutorialLibs.Domain.Interfaces.Respositories
 {
     public interface ITutorialRespositoryAsync : IAsyncRepository<Tutorial>
     {
-        Task<TutorialHeaderDto> GetTutorialHeaderDtoByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<Maybe<TutorialHeaderDto>> GetTutorialHeaderDtoByIdAsync(int id, CancellationToken cancellationToken = default);
     }
 }

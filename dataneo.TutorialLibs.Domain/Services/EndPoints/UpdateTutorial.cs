@@ -36,7 +36,7 @@ namespace dataneo.TutorialLibs.Domain.Services
         {
 
 
-
+            return Result.Failure<Tutorial>("Not implement");
         }
     }
 }

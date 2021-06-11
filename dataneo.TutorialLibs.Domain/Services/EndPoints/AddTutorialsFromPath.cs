@@ -33,9 +33,9 @@ namespace dataneo.TutorialLibs.Domain.Services
 
         public async Task<Result> AddTutorialsAsync(DirectoryPath directoryPath, CancellationToken cancelationToken = default)
         {
+            Guard.Against.Null(directoryPath, nameof(directoryPath));
 
-
-
+            return Result.Failure("NotImplement");
         }
     }
 }

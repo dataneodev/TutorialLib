@@ -24,7 +24,8 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 .Ensure(data => Directory.Exists(data.folderPath), Errors.DIRECTORY_NOT_FOUND)
                 .OnSuccessTry(async fpath =>
                     await Task.Run(() => Directory.GetDirectories(fpath.folderPath, String.Empty, SearchOption.TopDirectoryOnly),
-                                         fpath.cancellationToken) as IReadOnlyList<string>
+                                         fpath.cancellationToken)
+                              .ConfigureAwait(false) as IReadOnlyList<string>
                 , exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER);
         }
 

@@ -23,7 +23,7 @@ namespace dataneo.TutorialLibs.Domain.ValueObjects
 
             return new DirectoryPath
             {
-                Source = path.Trim()
+                Source = Path.GetFullPath(path),
             };
         }
     }
