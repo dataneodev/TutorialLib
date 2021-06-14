@@ -16,7 +16,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
     {
         public async Task<Result<IReadOnlyList<string>>> GetRootDirectoryFromPathAsync(
                 string folderPath,
-                CancellationToken cancellationToken)
+                CancellationToken cancellationToken = default)
         {
             Guard.Against.NullOrWhiteSpace(folderPath, nameof(folderPath));
             return await Result
@@ -26,7 +26,8 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                     await Task.Run(() => Directory.GetDirectories(fpath.folderPath, String.Empty, SearchOption.TopDirectoryOnly),
                                          fpath.cancellationToken)
                               .ConfigureAwait(false) as IReadOnlyList<string>
-                , exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER);
+                               , exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER)
+                .ConfigureAwait(false);
         }
 
         public async Task<Result<IReadOnlyList<string>>> GetFilesFromPathAsync(
@@ -58,7 +59,8 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 .Ensure(fileResult => fileResult.cancellationToken.IsCancellationRequested == false,
                                       Errors.CANCELED_BY_USER)
                 .Map(filesResult => filesResult.files.Where(w => handledFileExtension.FileAreSupported(w))
-                                                     .ToArray() as IReadOnlyList<string>);
+                                                     .ToArray() as IReadOnlyList<string>)
+                .ConfigureAwait(false);
         }
     }
 }

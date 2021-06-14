@@ -36,7 +36,7 @@ namespace dataneo.TutorialLibs.Domain.Services
         }
 
         public async Task<Result<Maybe<Tutorial>>> GetTutorialForFolderAsync(
-            string path, CancellationToken cancelationToken)
+            string path, CancellationToken cancelationToken = default)
         {
             Guard.Against.NullOrWhiteSpace(path, nameof(path));
             return await this._fileScanner.GetFilesFromPathAsync(

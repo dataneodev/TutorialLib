@@ -18,17 +18,17 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
     {
         public async Task<Result<EpisodeFile>> GetFileDetailsAsync(
                 string filePath,
-                CancellationToken cancellationToken)
+                CancellationToken cancellationToken = default)
         {
             Guard.Against.NullOrWhiteSpace(filePath, nameof(filePath));
-            return (await GetFilesDetailsAsync(ArrayHelper.SingleElementToArray(filePath), cancellationToken))
+            return (await GetFilesDetailsAsync(ArrayHelper.SingleElementToArray(filePath), cancellationToken).ConfigureAwait(false))
                         .Ensure(data => data.Count > 0, "No result")
                         .Bind(list => list.First());
         }
 
         public Task<Result<IReadOnlyList<Result<EpisodeFile>>>> GetFilesDetailsAsync(
                 IEnumerable<string> filesPath,
-                CancellationToken cancellationToken)
+                CancellationToken cancellationToken = default)
         {
             Guard.Against.Null(filesPath, nameof(filesPath));
 
@@ -37,17 +37,14 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 .OnSuccessTry(async inputData =>
                 {
                     using var mediaInfo = new MediaInfo.DotNetWrapper.MediaInfo();
-
-                    var data = await Task.Run(() =>
-                                GetEpisodesFileResult(
-                                    inputData.filesPath,
-                                    mediaInfo,
-                                    inputData.cancellationToken)
-                                 .ToArray() as IReadOnlyList<Result<EpisodeFile>>);
+                    var data = await Task.Run(() => GetEpisodesFileResult(
+                                                        inputData.filesPath,
+                                                        mediaInfo,
+                                                        inputData.cancellationToken).ToArray() as IReadOnlyList<Result<EpisodeFile>>)
+                                         .ConfigureAwait(false);
 
                     if (inputData.cancellationToken.IsCancellationRequested)
                         return Result.Failure<IReadOnlyList<Result<EpisodeFile>>>(Errors.CANCELED_BY_USER);
-
                     return Result.Success(data);
                 }, exception => exception.Message)
                 .Bind(b => b);
