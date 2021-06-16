@@ -16,11 +16,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dataneo.TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
+    <ProjectReference Include="..\dataneo.TutorialLibs.Persistence.EF.SQLite\dataneo.TutorialLibs.Persistence.EF.SQLite.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="Services\" />
     <Folder Include="Translation\" />
     <Folder Include="UI\About\" />
     <Folder Include="UI\Dialogs\" />

@@ -23,10 +23,15 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 .Success((folderPath, cancellationToken))
                 .Ensure(data => Directory.Exists(data.folderPath), Errors.DIRECTORY_NOT_FOUND)
                 .OnSuccessTry(async fpath =>
-                    await Task.Run(() => Directory.GetDirectories(fpath.folderPath, String.Empty, SearchOption.TopDirectoryOnly),
-                                         fpath.cancellationToken)
-                              .ConfigureAwait(false) as IReadOnlyList<string>
-                               , exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER)
+                {
+                    return await Task.Run(() => Directory.GetDirectories(
+                                                    fpath.folderPath,
+                                                    String.Empty,
+                                                    SearchOption.TopDirectoryOnly),
+                                                fpath.cancellationToken)
+                                     .ConfigureAwait(false) as IReadOnlyList<string>;
+                }
+                , exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER)
                 .ConfigureAwait(false);
         }
 
@@ -51,9 +56,8 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                         RecurseSubdirectories = true,
                     };
 
-                    var files = await Task.Run(
-                                    () => Directory.GetFiles(fpath.folderPath, "*.*", option),
-                                    fpath.cancellationToken);
+                    var files = await Task.Run(() => Directory.GetFiles(fpath.folderPath, "*.*", option),
+                                               fpath.cancellationToken);
                     return (fpath.handledFileExtension, files, cancellationToken);
                 }, exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER)
                 .Ensure(fileResult => fileResult.cancellationToken.IsCancellationRequested == false,

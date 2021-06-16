@@ -11,7 +11,6 @@
   <ItemGroup>
     <Folder Include="ExtensionsMethod\" />
     <Folder Include="Model\" />
-    <Folder Include="Specifications\" />
   </ItemGroup>
 
   <ItemGroup>

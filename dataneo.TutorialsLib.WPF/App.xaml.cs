@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
+using System.Windows;
 
 namespace dataneo.TutorialsLib.WPF
 {
@@ -7,6 +8,11 @@ namespace dataneo.TutorialsLib.WPF
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            using var dbContext = new ApplicationDbContext();
+            dbContext.Database.EnsureCreated();
+        }
 
     }
 }

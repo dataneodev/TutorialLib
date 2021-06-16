@@ -160,7 +160,7 @@
             </Menu.Style>
             <MenuItem Header="Tutorial" Style="{StaticResource menuItemColors}">
                 <MenuItem Header="Dodaj tutorial ze sciezki" />
-                <MenuItem Header="Aktualizuj tutoriale w poszukiwaniu nowych odcinków" />
+                <MenuItem Header="Szukaj nowych odcinków tutorialach" />
                 <MenuItem Header="Szukaj nowych tutoriali" />
             </MenuItem>
             <MenuItem Header="Sortuj" Style="{StaticResource menuItemColors}">

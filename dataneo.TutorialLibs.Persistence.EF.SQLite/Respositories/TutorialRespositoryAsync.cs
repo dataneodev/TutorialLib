@@ -15,7 +15,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
 
         public Task<Maybe<TutorialHeaderDto>> GetTutorialHeaderDtoByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return Maybe<TutorialHeaderDto>.None;
+            return Task.FromResult(Maybe<TutorialHeaderDto>.None);
         }
     }
 }
