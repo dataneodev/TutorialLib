@@ -159,9 +159,9 @@
                 </Style>
             </Menu.Style>
             <MenuItem Header="Tutorial" Style="{StaticResource menuItemColors}">
-                <MenuItem Header="Dodaj tutorial ze sciezki" />
-                <MenuItem Header="Szukaj nowych odcinków tutorialach" />
-                <MenuItem Header="Szukaj nowych tutoriali" />
+                <MenuItem Command="{Binding Path=AddTutorialCommand, Mode=OneTime}" Header="Dodaj tutorial ze sciezki" />
+                <MenuItem Command="{Binding Path=SearchForUpdateCommand, Mode=OneTime}" Header="Szukaj nowych odcinków tutorialach" />
+                <MenuItem Command="{Binding Path=SearchForNewTutorialsCommand, Mode=OneTime}" Header="Szukaj nowych tutoriali" />
             </MenuItem>
             <MenuItem Header="Sortuj" Style="{StaticResource menuItemColors}">
                 <MenuItem
