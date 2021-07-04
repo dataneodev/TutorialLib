@@ -16,7 +16,7 @@ namespace dataneo.TutorialsLib.WPF.UI
     {
         public Action<bool> SetWindowVisibility;
 
-        public ObservableCollection<TutorialHeaderDto> Tutorials = new ObservableCollection<TutorialHeaderDto>();
+        public ObservableCollection<TutorialHeaderDto> Tutorials { get; } = new ObservableCollection<TutorialHeaderDto>();
 
         public ICommand RatingChangedCommand { get; }
         public ICommand PlayTutorialCommand { get; }
@@ -58,8 +58,17 @@ namespace dataneo.TutorialsLib.WPF.UI
         public async Task LoadAtStartupAsync()
         {
             using var repo = new TutorialRespositoryAsync();
-            var tutorialHeaders = await repo.GetTutorialHeadersDtoByIdAsync();
-            SetNewTutorialsHeader(tutorialHeaders);
+            try
+            {
+                var tutorialHeaders = await repo.GetTutorialHeadersDtoByIdAsync();
+                SetNewTutorialsHeader(tutorialHeaders);
+            }
+            catch (Exception e)
+            {
+
+            }
+
+
         }
 
         private void SetNewTutorialsHeader(IReadOnlyList<TutorialHeaderDto> tutorialHeaders)

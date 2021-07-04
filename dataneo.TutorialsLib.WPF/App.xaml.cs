@@ -17,7 +17,8 @@ namespace dataneo.TutorialsLib.WPF
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-
+            System.Windows.MessageBox.Show(string.Format("An error occured: {0}", e.Exception.Message), "Error");
+            e.Handled = true;
         }
     }
 }

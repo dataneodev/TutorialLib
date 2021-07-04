@@ -91,7 +91,8 @@ namespace dataneo.TutorialLibs.Domain.Services
 
             var tutorial = Tutorial.Create(
                  tutorialId,
-                 Path.GetDirectoryName(rootFolder),
+                 rootFolder.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries)
+                           .LastOrDefault(),
                  basePath.Value,
                  folders.Value,
                  this._dateTimeProivder.Now);

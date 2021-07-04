@@ -14,6 +14,10 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                v => v.Ticks,
                v => TimeSpan.FromTicks(v));
 
+            var dateTimeConverter = new ValueConverter<DateTime, long>(
+               v => v.ToBinary(),
+               v => DateTime.FromBinary(v));
+
             builder.HasKey(k => k.Id);
             builder.Property(p => p.Order)
                     .IsRequired();
@@ -31,7 +35,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
 
             builder.Property(p => p.DateAdd)
                     .IsRequired()
-                    .ValueGeneratedOnAdd();
+                    .HasConversion(dateTimeConverter);
 
             builder.OwnsOne(o =>
                 o.File,
@@ -43,11 +47,11 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
 
                     b.Property(p => p.DateCreated)
                     .IsRequired()
-                    .ValueGeneratedOnAdd();
+                    .HasConversion(dateTimeConverter);
 
                     b.Property(p => p.DateModified)
                     .IsRequired()
-                    .ValueGeneratedOnAddOrUpdate();
+                    .HasConversion(dateTimeConverter);
 
                     b.Property(p => p.FileSize)
                     .IsRequired();
