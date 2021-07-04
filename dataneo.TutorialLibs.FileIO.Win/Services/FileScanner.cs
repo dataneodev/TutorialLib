@@ -2,6 +2,7 @@
 using CSharpFunctionalExtensions;
 using dataneo.Extensions;
 using dataneo.TutorialLibs.Domain.Interfaces;
+using dataneo.TutorialLibs.Domain.ValueObjects;
 using dataneo.TutorialLibs.FileIO.Win.Translation;
 using System;
 using System.Collections.Generic;
@@ -15,17 +16,17 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
     public sealed class FileScanner : IFileScanner
     {
         public async Task<Result<IReadOnlyList<string>>> GetRootDirectoryFromPathAsync(
-                string folderPath,
-                CancellationToken cancellationToken = default)
+                 DirectoryPath folderPath,
+                 CancellationToken cancellationToken = default)
         {
-            Guard.Against.NullOrWhiteSpace(folderPath, nameof(folderPath));
+            Guard.Against.Null(folderPath, nameof(folderPath));
             return await Result
                 .Success((folderPath, cancellationToken))
-                .Ensure(data => Directory.Exists(data.folderPath), Errors.DIRECTORY_NOT_FOUND)
+                .Ensure(data => Directory.Exists(data.folderPath.Source), Errors.DIRECTORY_NOT_FOUND)
                 .OnSuccessTry(async fpath =>
                 {
                     return await Task.Run(() => Directory.GetDirectories(
-                                                    fpath.folderPath,
+                                                    fpath.folderPath.Source,
                                                     String.Empty,
                                                     SearchOption.TopDirectoryOnly),
                                                 fpath.cancellationToken)
@@ -36,16 +37,16 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
         }
 
         public async Task<Result<IReadOnlyList<string>>> GetFilesFromPathAsync(
-                string folderPath,
+                DirectoryPath folderPath,
                 IHandledFileExtension handledFileExtension,
                 CancellationToken cancellationToken)
         {
-            Guard.Against.NullOrWhiteSpace(folderPath, nameof(folderPath));
+            Guard.Against.Null(folderPath, nameof(folderPath));
             Guard.Against.Null(handledFileExtension, nameof(handledFileExtension));
 
             return await Result
                 .Success((folderPath, handledFileExtension, cancellationToken))
-                .Ensure(data => Directory.Exists(data.folderPath), Errors.DIRECTORY_NOT_FOUND)
+                .Ensure(data => Directory.Exists(data.folderPath.Source), Errors.DIRECTORY_NOT_FOUND)
                 .OnSuccessTry(async fpath =>
                 {
                     var option = new EnumerationOptions
@@ -56,8 +57,9 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                         RecurseSubdirectories = true,
                     };
 
-                    var files = await Task.Run(() => Directory.GetFiles(fpath.folderPath, "*.*", option),
-                                               fpath.cancellationToken);
+                    var files = await Task.Run(() => Directory.GetFiles(fpath.folderPath.Source, "*.*", option),
+                                               fpath.cancellationToken)
+                                           .ConfigureAwait(false);
                     return (fpath.handledFileExtension, files, cancellationToken);
                 }, exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER)
                 .Ensure(fileResult => fileResult.cancellationToken.IsCancellationRequested == false,

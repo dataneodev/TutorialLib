@@ -1,10 +1,13 @@
-﻿using dataneo.TutorialLibs.Domain.DTO;
+﻿using CSharpFunctionalExtensions;
+using dataneo.TutorialLibs.Domain.DTO;
 using dataneo.TutorialLibs.Domain.Enums;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
+using dataneo.TutorialsLib.WPF.Actions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace dataneo.TutorialsLib.WPF.UI
@@ -25,13 +28,15 @@ namespace dataneo.TutorialsLib.WPF.UI
         {
             this.RatingChangedCommand = new Command<ValueTuple<Guid, RatingStars>>(RatingChangedCommandImpl);
             this.PlayTutorialCommand = new Command<Guid>(PlayTutorialCommandImpl);
-            this.AddTutorialCommand = new Command(AddTutorialCommandImpl);
+            this.AddTutorialCommand = new Command(AddTutorialCommandImplAsync);
         }
 
-        private void AddTutorialCommandImpl()
-        {
-
-        }
+        private async void AddTutorialCommandImplAsync()
+            => await Result
+                .Success()
+                .OnSuccessTry(async () => await AddNewTutorial.AddAsync(), error => error.Message)
+                .Tap(async () => await LoadAtStartupAsync())
+                .OnFailure(error => MessageBox.Show(error));
 
         private void PlayTutorialCommandImpl(Guid tutorialId)
         {
@@ -54,7 +59,11 @@ namespace dataneo.TutorialsLib.WPF.UI
         {
             using var repo = new TutorialRespositoryAsync();
             var tutorialHeaders = await repo.GetTutorialHeadersDtoByIdAsync();
+            SetNewTutorialsHeader(tutorialHeaders);
+        }
 
+        private void SetNewTutorialsHeader(IReadOnlyList<TutorialHeaderDto> tutorialHeaders)
+        {
             this.Tutorials.Clear();
             foreach (var tutorialHeader in tutorialHeaders)
             {

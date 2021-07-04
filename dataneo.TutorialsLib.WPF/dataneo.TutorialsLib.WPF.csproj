@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dataneo.TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
+    <ProjectReference Include="..\dataneo.TutorialLibs.FileIO.Win\dataneo.TutorialLibs.FileIO.Win.csproj" />
     <ProjectReference Include="..\dataneo.TutorialLibs.Persistence.EF.SQLite\dataneo.TutorialLibs.Persistence.EF.SQLite.csproj" />
   </ItemGroup>
 

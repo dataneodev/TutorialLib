@@ -10,9 +10,14 @@ namespace dataneo.TutorialsLib.WPF
     {
         public App()
         {
+
             using var dbContext = new ApplicationDbContext();
             dbContext.Database.EnsureCreated();
         }
 
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+
+        }
     }
 }
