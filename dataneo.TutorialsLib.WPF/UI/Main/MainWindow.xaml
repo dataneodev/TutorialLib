@@ -7,7 +7,6 @@
     xmlns:local="clr-namespace:dataneo.TutorialsLib.WPF.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="tutorialSelectorWindow"
-    Title="{Binding Path=Caption}"
     Width="1200"
     Height="800"
     Background="#1A1A17"

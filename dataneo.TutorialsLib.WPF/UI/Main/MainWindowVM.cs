@@ -32,11 +32,16 @@ namespace dataneo.TutorialsLib.WPF.UI
         }
 
         private async void AddTutorialCommandImplAsync()
-            => await Result
-                .Success()
-                .OnSuccessTry(async () => await AddNewTutorial.AddAsync(), error => error.Message)
-                .Tap(async () => await LoadAtStartupAsync())
-                .OnFailure(error => MessageBox.Show(error));
+        {
+            var addResult =
+                await Result.Try(() => AddNewTutorialAction.AddAsync(), error => error.Message)
+                            .Bind(r => r);
+
+            Result.DefaultConfigureAwait = true;
+            await addResult.Tap(() => LoadAtStartupAsync())
+                           .OnFailure(error => MessageBox.Show(error));
+            Result.DefaultConfigureAwait = false;
+        }
 
         private void PlayTutorialCommandImpl(Guid tutorialId)
         {

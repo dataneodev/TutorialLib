@@ -36,8 +36,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
                          TotalEpisodes = (short)s.Folders.Sum(w => w.Episodes.Count()),
                          TotalSizeMB = (float)s.Folders.Sum(w => w.Episodes.Sum(se => se.File.FileSize / 1048576f)),
                      })
-                    .ToArrayAsync()
-                    .ConfigureAwait(false);
+                    .ToArrayAsync();
         }
 
         public async Task<Maybe<TutorialHeaderDto>> GetTutorialHeaderDtoByIdAsync(Guid id, CancellationToken cancellationToken = default)

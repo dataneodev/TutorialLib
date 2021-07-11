@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace dataneo.TutorialsLib.WPF.Actions
 {
-    internal static class AddNewTutorial
+    internal static class AddNewTutorialAction
     {
         public static async Task<Result> AddAsync()
         {
@@ -25,8 +25,7 @@ namespace dataneo.TutorialsLib.WPF.Actions
                 repo,
                 Log.Logger);
 
-            var res = await addTutorialEngine.AddTutorialAsync(directory.Value);
-            return res;
+            return await addTutorialEngine.AddTutorialAsync(directory.Value);
         }
 
         private static Maybe<DirectoryPath> GetDirectoryUserSelect()

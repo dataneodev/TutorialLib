@@ -54,7 +54,7 @@ namespace dataneo.TutorialLibs.Domain.Services
 
             return await folderTutrialResult
                 .Bind(result => result.ToResult("Nie znaleziono żadnych plików w folderze"))
-                .OnSuccessTry(async tutorial => await this._tutorialRespositoryAsync.AddAsync(tutorial, cancelationToken),
+                .OnSuccessTry(tutorial => this._tutorialRespositoryAsync.AddAsync(tutorial, cancelationToken),
                                                 exception => exception?.InnerException?.Message)
                 .ConfigureAwait(false);
         }

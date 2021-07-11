@@ -1,6 +1,6 @@
 ﻿namespace dataneo.TutorialsLib.WPF.Actions
 {
-    public class SearchNewEpisodes
+    public class SearchNewEpisodesAction
     {
 
     }

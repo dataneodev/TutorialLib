@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dataneo.TutorialsLib.WPF.Actions
 {
-    public class ChangeTutorialRating
+    public class SearchNewTutorialsAction
     {
         
     }
