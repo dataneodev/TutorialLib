@@ -5,13 +5,20 @@ using dataneo.TutorialLibs.FileIO.Win.Services;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
 using Serilog;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace dataneo.TutorialsLib.WPF.Actions
 {
-    internal static class AddNewTutorialAction
+    internal class AddNewTutorialAction
     {
-        public static async Task<Result> AddAsync()
+        private readonly Window _window;
+
+        public AddNewTutorialAction(Window window)
+        {
+            this._window = window;
+        }
+        public async Task<Result> AddAsync()
         {
             var directory = GetDirectoryUserSelect();
             if (directory.HasNoValue)

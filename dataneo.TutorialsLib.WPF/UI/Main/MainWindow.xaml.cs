@@ -11,10 +11,10 @@ namespace dataneo.TutorialsLib.WPF.UI
         {
             LibVLCSharp.Shared.Core.Initialize();
             InitializeComponent();
-            var vm = new MainWindowVM();
+            var vm = new MainWindowVM(this);
             vm.SetWindowVisibility = SetWindowVisibility;
             this.DataContext = vm;
-            vm.LoadAtStartupAsync();
+            vm.LoadTutorialsDtoAsync();
         }
 
         private void SetWindowVisibility(bool visible)

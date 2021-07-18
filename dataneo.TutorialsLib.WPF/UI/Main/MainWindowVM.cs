@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Ardalis.GuardClauses;
+using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.DTO;
 using dataneo.TutorialLibs.Domain.Enums;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
@@ -14,6 +15,8 @@ namespace dataneo.TutorialsLib.WPF.UI
 {
     internal sealed class MainWindowVM : BaseViewModel
     {
+        private readonly Window _parentHandle;
+
         public Action<bool> SetWindowVisibility;
 
         public ObservableCollection<TutorialHeaderDto> Tutorials { get; } = new ObservableCollection<TutorialHeaderDto>();
@@ -24,8 +27,9 @@ namespace dataneo.TutorialsLib.WPF.UI
         public ICommand SearchForUpdateCommand { get; }
         public ICommand SearchForNewTutorialsCommand { get; }
 
-        public MainWindowVM()
+        public MainWindowVM(Window paretnHandle)
         {
+            this._parentHandle = Guard.Against.Null(paretnHandle, nameof(paretnHandle));
             this.RatingChangedCommand = new Command<ValueTuple<Guid, RatingStars>>(RatingChangedCommandImpl);
             this.PlayTutorialCommand = new Command<Guid>(PlayTutorialCommandImpl);
             this.AddTutorialCommand = new Command(AddTutorialCommandImplAsync);
@@ -33,14 +37,11 @@ namespace dataneo.TutorialsLib.WPF.UI
 
         private async void AddTutorialCommandImplAsync()
         {
-            var addResult =
-                await Result.Try(() => AddNewTutorialAction.AddAsync(), error => error.Message)
-                            .Bind(r => r);
-
-            Result.DefaultConfigureAwait = true;
-            await addResult.Tap(() => LoadAtStartupAsync())
-                           .OnFailure(error => MessageBox.Show(error));
-            Result.DefaultConfigureAwait = false;
+            await Result
+               .Try(() => new AddNewTutorialAction(this._parentHandle).AddAsync(), e => e.Message)
+               .Bind(r => r)
+               .Tap(() => LoadTutorialsDtoAsync())
+               .OnFailure(error => MessageBox.Show(error));
         }
 
         private void PlayTutorialCommandImpl(Guid tutorialId)
@@ -60,7 +61,7 @@ namespace dataneo.TutorialsLib.WPF.UI
             this.SetWindowVisibility?.Invoke(true);
         }
 
-        public async Task LoadAtStartupAsync()
+        public async Task LoadTutorialsDtoAsync()
         {
             using var repo = new TutorialRespositoryAsync();
             try
@@ -83,155 +84,6 @@ namespace dataneo.TutorialsLib.WPF.UI
             {
                 this.Tutorials.Add(tutorialHeader);
             }
-        }
-
-        private IEnumerable<TutorialHeaderDto> GetFakeTutorials()
-        {
-            yield return new TutorialHeaderDto
-            {
-                DateAdd = DateTime.Now,
-                Id = Guid.NewGuid(),
-                Name = "Adding Search Abilities to Your Apps with Azure Search",
-                PlayedEpisodes = 15,
-                TimePlayed = TimeSpan.FromMinutes(250),
-                TotalEpisodes = 125,
-                TotalSizeMB = 632.3f,
-                TotalTime = TimeSpan.FromMinutes(362),
-                LastPlayedDate = DateTime.Now,
-                Rating = RatingStars.NotRated
-            };
-
-            yield return new TutorialHeaderDto
-            {
-                DateAdd = DateTime.Now,
-                Id = Guid.NewGuid(),
-                Name = "Adding Search Abilities to Your Apps with Azure Search",
-                PlayedEpisodes = 15,
-                TimePlayed = TimeSpan.FromMinutes(170),
-                TotalEpisodes = 125,
-                TotalSizeMB = 632.3f,
-                TotalTime = TimeSpan.FromMinutes(362),
-                LastPlayedDate = DateTime.Now,
-                Rating = RatingStars.FiveStars
-            };
-
-            yield return new TutorialHeaderDto
-            {
-                DateAdd = DateTime.Now,
-                Id = Guid.NewGuid(),
-                Name = "Adding Search Abilities to Your Apps with Azure Search",
-                PlayedEpisodes = 15,
-                TimePlayed = TimeSpan.FromMinutes(300),
-                TotalEpisodes = 125,
-                TotalSizeMB = 632.3f,
-                TotalTime = TimeSpan.FromMinutes(362),
-                LastPlayedDate = DateTime.Now,
-                Rating = RatingStars.ThreeStart
-            };
-
-            yield return new TutorialHeaderDto
-            {
-                DateAdd = DateTime.Now,
-                Id = Guid.NewGuid(),
-                Name = "Adding Search Abilities to Your Apps with Azure Search",
-                PlayedEpisodes = 15,
-                TimePlayed = TimeSpan.FromMinutes(340),
-                TotalEpisodes = 125,
-                TotalSizeMB = 632.3f,
-                TotalTime = TimeSpan.FromMinutes(362),
-                LastPlayedDate = DateTime.Now,
-            };
-
-            yield return new TutorialHeaderDto
-            {
-                DateAdd = DateTime.Now,
-                Id = Guid.NewGuid(),
-                Name = "Adding Search Abilities to Your Apps with Azure Search",
-                PlayedEpisodes = 15,
-                TimePlayed = TimeSpan.FromMinutes(62),
-                TotalEpisodes = 125,
-                TotalSizeMB = 632.3f,
-                TotalTime = TimeSpan.FromMinutes(362),
-                LastPlayedDate = DateTime.Now,
-            };
-
-            yield return new TutorialHeaderDto
-            {
-                DateAdd = DateTime.Now,
-                Id = Guid.NewGuid(),
-                Name = "Adding Search Abilities to Your Apps with Azure Search",
-                PlayedEpisodes = 15,
-                TimePlayed = TimeSpan.FromMinutes(62),
-                TotalEpisodes = 125,
-                TotalSizeMB = 632.3f,
-                TotalTime = TimeSpan.FromMinutes(362),
-                LastPlayedDate = DateTime.Now,
-            };
-
-            yield return new TutorialHeaderDto
-            {
-                DateAdd = DateTime.Now,
-                Id = Guid.NewGuid(),
-                Name = "Adding Search Abilities to Your Apps with Azure Search",
-                PlayedEpisodes = 15,
-                TimePlayed = TimeSpan.FromMinutes(62),
-                TotalEpisodes = 125,
-                TotalSizeMB = 632.3f,
-                TotalTime = TimeSpan.FromMinutes(362),
-                LastPlayedDate = DateTime.Now,
-            };
-
-            yield return new TutorialHeaderDto
-            {
-                DateAdd = DateTime.Now,
-                Id = Guid.NewGuid(),
-                Name = "Adding Search Abilities to Your Apps with Azure Search",
-                PlayedEpisodes = 15,
-                TimePlayed = TimeSpan.FromMinutes(62),
-                TotalEpisodes = 125,
-                TotalSizeMB = 632.3f,
-                TotalTime = TimeSpan.FromMinutes(362),
-                LastPlayedDate = DateTime.Now,
-            };
-
-            yield return new TutorialHeaderDto
-            {
-                DateAdd = DateTime.Now,
-                Id = Guid.NewGuid(),
-                Name = "Adding Search Abilities to Your Apps with Azure Search",
-                PlayedEpisodes = 15,
-                TimePlayed = TimeSpan.FromMinutes(62),
-                TotalEpisodes = 125,
-                TotalSizeMB = 632.3f,
-                TotalTime = TimeSpan.FromMinutes(362),
-                LastPlayedDate = DateTime.Now,
-            };
-
-            yield return new TutorialHeaderDto
-            {
-                DateAdd = DateTime.Now,
-                Id = Guid.NewGuid(),
-                Name = "Adding Search Abilities to Your Apps with Azure Search",
-                PlayedEpisodes = 15,
-                TimePlayed = TimeSpan.FromMinutes(62),
-                TotalEpisodes = 125,
-                TotalSizeMB = 632.3f,
-                TotalTime = TimeSpan.FromMinutes(362),
-                LastPlayedDate = DateTime.Now,
-            };
-
-            yield return new TutorialHeaderDto
-            {
-                DateAdd = DateTime.Now,
-                Id = Guid.NewGuid(),
-                Name = "Adding Search Abilities to Your Apps with Azure Search",
-                PlayedEpisodes = 15,
-                TimePlayed = TimeSpan.FromMinutes(62),
-                TotalEpisodes = 125,
-                TotalSizeMB = 632.3f,
-                TotalTime = TimeSpan.FromMinutes(362),
-                LastPlayedDate = DateTime.Now,
-            };
         }
     }
 }

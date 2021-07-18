@@ -1,4 +1,5 @@
-﻿using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
+﻿using CSharpFunctionalExtensions;
+using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
 using System.Windows;
 
 namespace dataneo.TutorialsLib.WPF
@@ -10,7 +11,7 @@ namespace dataneo.TutorialsLib.WPF
     {
         public App()
         {
-
+            Result.DefaultConfigureAwait = true;
             using var dbContext = new ApplicationDbContext();
             dbContext.Database.EnsureCreated();
         }

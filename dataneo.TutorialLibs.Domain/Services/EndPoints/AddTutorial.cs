@@ -49,8 +49,9 @@ namespace dataneo.TutorialLibs.Domain.Services
                                             handledFileExtension: this._handledFileExtension);
 
             var folderTutrialResult = await tutorialFolderProcessor.GetTutorialForFolderAsync(
-                                        tutorialPath,
-                                        cancelationToken);
+                                                    tutorialPath,
+                                                    cancelationToken)
+                                                .ConfigureAwait(false);
 
             return await folderTutrialResult
                 .Bind(result => result.ToResult("Nie znaleziono żadnych plików w folderze"))

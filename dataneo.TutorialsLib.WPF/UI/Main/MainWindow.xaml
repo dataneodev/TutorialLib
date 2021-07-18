@@ -16,11 +16,12 @@
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/dataneo.TutorialsLib.WPF;component/Resources/Global.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
             <conv:ProgressBarValueConverter x:Key="progressBarValueConverter" />
             <conv:ProgressBarColorConverter x:Key="progressBarColorConverter" />
-
-            <SolidColorBrush x:Key="foreGround">#B2B1B0</SolidColorBrush>
-            <SolidColorBrush x:Key="backGround">#1A1A17</SolidColorBrush>
 
             <Style x:Key="menuItemColors" TargetType="{x:Type MenuItem}">
                 <Style.Triggers>

@@ -99,7 +99,8 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
 
         private Result<TimeSpan> GetDuration(string filePath, MediaInfo.DotNetWrapper.MediaInfo mediaInfo)
         {
-            if (int.TryParse(mediaInfo.Get(StreamKind.General, 0, "Duration"), out int fileDuration))
+            var duration = mediaInfo.Get(StreamKind.General, 0, "Duration");
+            if (int.TryParse(duration, out int fileDuration))
                 return TimeSpan.FromMilliseconds(fileDuration);
 
             return Result.Failure<TimeSpan>(String.Format(Errors.ERROR_READING_VIDEO_DURATION, filePath));
