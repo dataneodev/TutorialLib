@@ -21,9 +21,11 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                 CancellationToken cancellationToken = default)
         {
             Guard.Against.NullOrWhiteSpace(filePath, nameof(filePath));
-            return (await GetFilesDetailsAsync(ArrayHelper.SingleElementToArray(filePath), cancellationToken).ConfigureAwait(false))
-                        .Ensure(data => data.Count > 0, "No result")
-                        .Bind(list => list.First());
+            var filesDetails = await GetFilesDetailsAsync(ArrayHelper.SingleElementToArray(filePath), cancellationToken)
+                                        .ConfigureAwait(false);
+
+            return filesDetails.Ensure(data => data.Count > 0, "No result")
+                               .Bind(list => list.First());
         }
 
         public Task<Result<IReadOnlyList<Result<EpisodeFile>>>> GetFilesDetailsAsync(
@@ -99,8 +101,7 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
 
         private Result<TimeSpan> GetDuration(string filePath, MediaInfo.DotNetWrapper.MediaInfo mediaInfo)
         {
-            var duration = mediaInfo.Get(StreamKind.General, 0, "Duration");
-            if (int.TryParse(duration, out int fileDuration))
+            if (int.TryParse(mediaInfo.Get(StreamKind.General, 0, "Duration"), out int fileDuration))
                 return TimeSpan.FromMilliseconds(fileDuration);
 
             return Result.Failure<TimeSpan>(String.Format(Errors.ERROR_READING_VIDEO_DURATION, filePath));

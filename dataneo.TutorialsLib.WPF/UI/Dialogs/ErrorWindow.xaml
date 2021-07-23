@@ -6,8 +6,12 @@
     xmlns:local="clr-namespace:dataneo.TutorialsLib.WPF.UI.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="ErrorWindow"
-    Width="800"
-    Height="450"
+    Background="#1A1A17"
+    Foreground="#B2B1B0"
+    SizeToContent="WidthAndHeight"
+    Topmost="True"
+    WindowStartupLocation="CenterOwner"
+    WindowStyle="SingleBorderWindow"
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
@@ -16,5 +20,70 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid />
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Viewbox
+            Grid.Row="0"
+            Grid.Column="0"
+            Width="40"
+            Margin="0,10,10,10"
+            HorizontalAlignment="Center"
+            Panel.ZIndex="1">
+            <Path
+                Name="phCircle"
+                Data="M14.5,25h3v-3h-3V25z M14.5,6v13h3V6H14.5z"
+                Stroke="#E6E6E6"
+                StrokeThickness="1.4" />
+        </Viewbox>
+        <Ellipse
+            Grid.Row="1"
+            Grid.Column="0"
+            Width="16"
+            Height="16"
+            Margin="18,0,0,0"
+            HorizontalAlignment="Center"
+            Stroke="#D72828"
+            StrokeThickness="16" />
+
+        <TextBlock
+            x:Name="tbErrorMessage"
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            MinWidth="250"
+            MaxWidth="300"
+            Margin="10"
+            VerticalAlignment="Center"
+            FontSize="13"
+            TextWrapping="Wrap" />
+
+        <Button
+            x:Name="btOK"
+            Grid.Row="2"
+            Grid.Column="1"
+            Width="100"
+            Margin="10"
+            HorizontalAlignment="Right"
+            Click="btOK_Click"
+            Cursor="Hand"
+            Style="{StaticResource button}">
+            <Button.Content>
+                <TextBlock
+                    Margin="5"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource foreGround}"
+                    Text="OK" />
+            </Button.Content>
+        </Button>
+    </Grid>
 </Window>

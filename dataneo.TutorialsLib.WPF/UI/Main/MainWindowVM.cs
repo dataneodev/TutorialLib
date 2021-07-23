@@ -4,6 +4,7 @@ using dataneo.TutorialLibs.Domain.DTO;
 using dataneo.TutorialLibs.Domain.Enums;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
 using dataneo.TutorialsLib.WPF.Actions;
+using dataneo.TutorialsLib.WPF.UI.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -41,7 +42,7 @@ namespace dataneo.TutorialsLib.WPF.UI
                .Try(() => new AddNewTutorialAction(this._parentHandle).AddAsync(), e => e.Message)
                .Bind(r => r)
                .Tap(() => LoadTutorialsDtoAsync())
-               .OnFailure(error => MessageBox.Show(error));
+               .OnFailure(error => ErrorWindow.ShowError(this._parentHandle, error));
         }
 
         private void PlayTutorialCommandImpl(Guid tutorialId)

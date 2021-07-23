@@ -247,31 +247,8 @@
                             Command="{Binding ElementName=tutorialSelectorWindow, Path=DataContext.PlayTutorialCommand, Mode=OneTime}"
                             CommandParameter="{Binding Path=Id, Mode=OneTime}"
                             Cursor="Hand"
-                            Opacity="1">
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Background" Value="#353535" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type Button}">
-                                                <Border
-                                                    x:Name="Border"
-                                                    Background="{TemplateBinding Background}"
-                                                    BorderBrush="Black"
-                                                    BorderThickness="1"
-                                                    CornerRadius="2">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="Border" Property="Background" Value="#2A2A2A" />
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Button.Style>
+                            Opacity="1"
+                            Style="{StaticResource button}">
 
                             <StackPanel Orientation="Horizontal">
                                 <Canvas Width="24" Height="24">

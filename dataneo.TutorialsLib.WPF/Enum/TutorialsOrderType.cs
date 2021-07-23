@@ -1,6 +1,6 @@
 ﻿namespace dataneo.TutorialsLib.WPF
 {
-    public enum TutorialsOrderType : byte
+    internal enum TutorialsOrderType : byte
     {
         ByTitle,
         ByDateAdd,
