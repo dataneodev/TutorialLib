@@ -5,9 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:dataneo.TutorialsLib.WPF.UI.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="ErrorWindow"
-    Background="#1A1A17"
-    Foreground="#B2B1B0"
+    xmlns:tr="clr-namespace:dataneo.TutorialsLib.WPF.Translation"
+    Title="{x:Static tr:UI.ERROR}"
     SizeToContent="WidthAndHeight"
     Topmost="True"
     WindowStartupLocation="CenterOwner"
@@ -20,6 +19,12 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+    <Window.Background>
+        <StaticResource ResourceKey="backGround" />
+    </Window.Background>
+    <Window.Foreground>
+        <StaticResource ResourceKey="foreGround" />
+    </Window.Foreground>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -49,7 +54,7 @@
             Grid.Column="0"
             Width="16"
             Height="16"
-            Margin="18,0,0,0"
+            Margin="20,0,0,0"
             HorizontalAlignment="Center"
             Stroke="#D72828"
             StrokeThickness="16" />
@@ -62,6 +67,7 @@
             MinWidth="250"
             MaxWidth="300"
             Margin="10"
+            HorizontalAlignment="Left"
             VerticalAlignment="Center"
             FontSize="13"
             TextWrapping="Wrap" />
