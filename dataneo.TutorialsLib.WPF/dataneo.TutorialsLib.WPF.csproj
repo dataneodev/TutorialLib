@@ -22,9 +22,26 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="Translation\" />
     <Folder Include="UI\About\" />
     <Folder Include="UI\Player\Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Translation\UI.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UI.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Translation\UI.pl.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translation\UI.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UI.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

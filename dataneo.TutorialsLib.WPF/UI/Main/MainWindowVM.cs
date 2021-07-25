@@ -4,10 +4,12 @@ using dataneo.TutorialLibs.Domain.DTO;
 using dataneo.TutorialLibs.Domain.Enums;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
 using dataneo.TutorialsLib.WPF.Actions;
+using dataneo.TutorialsLib.WPF.Comparers;
 using dataneo.TutorialsLib.WPF.UI.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -21,6 +23,17 @@ namespace dataneo.TutorialsLib.WPF.UI
         public Action<bool> SetWindowVisibility;
 
         public ObservableCollection<TutorialHeaderDto> Tutorials { get; } = new ObservableCollection<TutorialHeaderDto>();
+
+        private TutorialsOrderType selectedTutorialsOrderType = TutorialsOrderType.ByDateAdd;
+        public TutorialsOrderType SelectedTutorialsOrderType
+        {
+            get { return selectedTutorialsOrderType; }
+            set
+            {
+                selectedTutorialsOrderType = value;
+                Notify();
+            }
+        }
 
         public ICommand RatingChangedCommand { get; }
         public ICommand PlayTutorialCommand { get; }
@@ -41,7 +54,7 @@ namespace dataneo.TutorialsLib.WPF.UI
             await Result
                .Try(() => new AddNewTutorialAction(this._parentHandle).AddAsync(), e => e.Message)
                .Bind(r => r)
-               .Tap(() => LoadTutorialsDtoAsync())
+               .Tap(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType))
                .OnFailure(error => ErrorWindow.ShowError(this._parentHandle, error));
         }
 
@@ -62,13 +75,13 @@ namespace dataneo.TutorialsLib.WPF.UI
             this.SetWindowVisibility?.Invoke(true);
         }
 
-        public async Task LoadTutorialsDtoAsync()
+        public async Task LoadTutorialsDtoAsync(TutorialsOrderType tutorialsOrderType)
         {
             using var repo = new TutorialRespositoryAsync();
             try
             {
                 var tutorialHeaders = await repo.GetTutorialHeadersDtoByIdAsync();
-                SetNewTutorialsHeader(tutorialHeaders);
+                SetNewTutorialsHeader(tutorialHeaders, tutorialsOrderType);
             }
             catch (Exception e)
             {
@@ -78,10 +91,13 @@ namespace dataneo.TutorialsLib.WPF.UI
 
         }
 
-        private void SetNewTutorialsHeader(IReadOnlyList<TutorialHeaderDto> tutorialHeaders)
+        private void SetNewTutorialsHeader(IReadOnlyList<TutorialHeaderDto> tutorialHeaders,
+                                           TutorialsOrderType tutorialsOrderType)
         {
+            var comparer = TutorialsOrderComparerFactory.GetComparer(tutorialsOrderType);
+
             this.Tutorials.Clear();
-            foreach (var tutorialHeader in tutorialHeaders)
+            foreach (var tutorialHeader in tutorialHeaders.OrderBy(o => o, comparer))
             {
                 this.Tutorials.Add(tutorialHeader);
             }

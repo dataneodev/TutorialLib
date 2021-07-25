@@ -14,7 +14,7 @@ namespace dataneo.TutorialsLib.WPF.UI
             var vm = new MainWindowVM(this);
             vm.SetWindowVisibility = SetWindowVisibility;
             this.DataContext = vm;
-            vm.LoadTutorialsDtoAsync();
+            vm.LoadTutorialsDtoAsync(vm.SelectedTutorialsOrderType);
         }
 
         private void SetWindowVisibility(bool visible)

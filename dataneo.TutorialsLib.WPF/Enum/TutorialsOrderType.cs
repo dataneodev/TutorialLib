@@ -4,6 +4,7 @@
     {
         ByTitle,
         ByDateAdd,
-        ByLastVisit
+        ByLastVisit,
+        ByRating
     }
 }
