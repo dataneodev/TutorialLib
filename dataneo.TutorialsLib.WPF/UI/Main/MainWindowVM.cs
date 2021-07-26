@@ -73,8 +73,7 @@ namespace dataneo.TutorialsLib.WPF.UI
         private async void RatingChangedCommandImpl(ValueTuple<Guid, RatingStars> tutorialIdAndRating)
             => await Result
                 .Success(tutorialIdAndRating)
-                .OnSuccessTry(input => ChangeTutorialRatingAction.ChangeratingForTutorialAsync(input.Item1, input.Item2),
-                                      e => e.Message)
+                .OnSuccessTry(input => ChangeTutorialRatingAction.ChangeAsync(input.Item1, input.Item2), e => e.Message)
                 .Bind(r => r)
                 .OnFailure(error => ErrorWindow.ShowError(this._parentHandle, error));
 

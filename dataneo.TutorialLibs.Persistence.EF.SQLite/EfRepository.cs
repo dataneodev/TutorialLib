@@ -3,6 +3,7 @@ using Ardalis.Specification.EntityFrameworkCore;
 using dataneo.SharedKernel;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -24,7 +25,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite
             _dbContext = dbContext;
         }
 
-        public virtual async Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+        public virtual async Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var keyValues = new object[] { id };
             return await _dbContext.Set<T>().FindAsync(keyValues, cancellationToken);
