@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using CSharpFunctionalExtensions;
+using dataneo.TutorialLibs.Domain.Enums;
+using System;
 using System.Threading.Tasks;
 
 namespace dataneo.TutorialsLib.WPF.Actions
 {
-    public class ChangeTutorialRatingAction
+    public static class ChangeTutorialRatingAction
     {
-        
+        public static Task<Result> ChangeratingForTutorialAsync(Guid tutoriaId, RatingStars ratingStars)
+        {
+
+            return Task.FromResult(Result.Failure("Not implement yet"));
+        }
     }
 }

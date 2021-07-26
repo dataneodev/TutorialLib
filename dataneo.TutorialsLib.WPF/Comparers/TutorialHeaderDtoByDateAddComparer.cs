@@ -11,9 +11,9 @@ namespace dataneo.TutorialsLib.WPF.Comparers
                 return 0;
 
             if (x.DateAdd > y.DateAdd)
-                return 1;
+                return -1;
 
-            return -1;
+            return 1;
         }
     }
 }

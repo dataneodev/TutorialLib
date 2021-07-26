@@ -163,9 +163,9 @@
                 </Style>
             </Menu.Style>
             <MenuItem Header="Tutorial" Style="{StaticResource menuItemColors}">
-                <MenuItem Command="{Binding Path=AddTutorialCommand, Mode=OneTime}" Header="Dodaj tutorial ze sciezki" />
-                <MenuItem Command="{Binding Path=SearchForUpdateCommand, Mode=OneTime}" Header="Szukaj nowych odcinków tutorialach" />
-                <MenuItem Command="{Binding Path=SearchForNewTutorialsCommand, Mode=OneTime}" Header="Szukaj nowych tutoriali" />
+                <MenuItem Command="{Binding Path=AddTutorialCommand, Mode=OneTime}" Header="Dodaj pojedyńczy tutorial" />
+                <!--<MenuItem Command="{Binding Path=SearchForUpdateCommand, Mode=OneTime}" Header="Szukaj nowych odcinków tutorialach" />-->
+                <MenuItem Command="{Binding Path=SearchForNewTutorialsCommand, Mode=OneTime}" Header="Dodaj wszystkie tutoriale z folderu" />
             </MenuItem>
             <MenuItem Header="Sortuj" Style="{StaticResource menuItemColors}">
                 <MenuItem
@@ -183,9 +183,9 @@
                 <MenuItem
                     Header="Oceny"
                     IsCheckable="True"
-                    IsChecked="{Binding Path=SelectedTutorialsOrderType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Rating}" />
+                    IsChecked="{Binding Path=SelectedTutorialsOrderType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=ByRating}" />
             </MenuItem>
-            <MenuItem Header="Ustawienia" Style="{StaticResource menuItemColors}" />
+            <!--<MenuItem Header="Ustawienia" Style="{StaticResource menuItemColors}" />-->
         </Menu>
 
         <ListView
@@ -194,7 +194,7 @@
             HorizontalAlignment="Stretch"
             Background="{StaticResource backGround}"
             BorderThickness="0"
-            ItemsSource="{Binding Path=Tutorials, Mode=OneTime}"
+            ItemsSource="{Binding Path=Tutorials, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -208,6 +208,7 @@
                     <MenuItem Header="Skanuj w poszukiwaniu nowych odcinków" Style="{StaticResource menuItemColors}" />
                 </ContextMenu>
             </ListView.ContextMenu>-->
+
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid
@@ -221,8 +222,8 @@
                         </Grid.ColumnDefinitions>
 
                         <Grid.RowDefinitions>
-                            <RowDefinition />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -231,13 +232,13 @@
 
                         <TextBlock
                             x:Name="tbTitle"
-                            Grid.Row="1"
+                            Grid.Row="0"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
                             Margin="4,4,4,4"
                             HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            FontSize="16"
+                            VerticalAlignment="Center"
+                            FontSize="15"
                             Foreground="White"
                             Text="{Binding Path=Name, Mode=OneTime}"
                             TextWrapping="Wrap" />

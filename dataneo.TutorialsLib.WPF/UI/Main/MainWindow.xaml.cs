@@ -18,15 +18,6 @@ namespace dataneo.TutorialsLib.WPF.UI
         }
 
         private void SetWindowVisibility(bool visible)
-        {
-            if (visible)
-            {
-                this.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this.Visibility = Visibility.Collapsed;
-            }
-        }
+            => this.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
     }
 }
