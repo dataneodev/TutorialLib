@@ -2,14 +2,13 @@
 using dataneo.TutorialLibs.Domain.Entities;
 using dataneo.TutorialLibs.Domain.Enums;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
-using System;
 using System.Threading.Tasks;
 
 namespace dataneo.TutorialsLib.WPF.Actions
 {
     public static class ChangeTutorialRatingAction
     {
-        public static async Task<Result> ChangeAsync(Guid tutoriaId, RatingStars ratingStars)
+        public static async Task<Result> ChangeAsync(int tutoriaId, RatingStars ratingStars)
         {
             using var respository = new TutorialRespositoryAsync();
             return await Result.Success(respository)

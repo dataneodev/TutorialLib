@@ -23,15 +23,11 @@ namespace dataneo.TutorialLibs.Domain.Entities
         private Tutorial() { }
 
         public static Result<Tutorial> Create(
-                        Guid id,
                         string name,
                         DirectoryPath basePath,
                         IReadOnlyList<Folder> folders,
                         DateTime dateTimeNow)
         {
-            if (id == Guid.Empty)
-                return Result.Failure<Tutorial>(Errors.EMPTY_GUID);
-
             if (String.IsNullOrWhiteSpace(name))
                 return Result.Failure<Tutorial>(Errors.TUTORIAL_NAME_INCORECT);
 
@@ -46,8 +42,7 @@ namespace dataneo.TutorialLibs.Domain.Entities
 
             return new Tutorial
             {
-                Id = id,
-                Name = name,
+                Name = name.Trim(),
                 BasePath = basePath,
                 Folders = folders,
                 AddDate = dateTimeNow,

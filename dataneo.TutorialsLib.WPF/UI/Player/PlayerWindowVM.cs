@@ -1,5 +1,4 @@
 ﻿using dataneo.TutorialLibs.Domain.Enums;
-using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
@@ -7,7 +6,7 @@ namespace dataneo.TutorialsLib.WPF.UI
 {
     internal class PlayerWindowVM : BaseViewModel
     {
-        private readonly Guid _tutorialPlayerId;
+        private readonly int _tutorialPlayerId;
 
         public IList<object> VideoItems { get; set; } = new List<object>();
 
@@ -25,7 +24,7 @@ namespace dataneo.TutorialsLib.WPF.UI
             }
         }
 
-        public PlayerWindowVM(Guid tutorialPlayerId)
+        public PlayerWindowVM(int tutorialPlayerId)
         {
             this._tutorialPlayerId = tutorialPlayerId;
             this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);

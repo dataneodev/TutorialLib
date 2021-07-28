@@ -42,6 +42,7 @@
             Width="40"
             Margin="0,10,10,10"
             HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
             Panel.ZIndex="1">
             <Path
                 Name="phCircle"
@@ -56,6 +57,7 @@
             Height="16"
             Margin="20,0,0,0"
             HorizontalAlignment="Center"
+            VerticalAlignment="Top"
             Stroke="#D72828"
             StrokeThickness="16" />
 

@@ -11,7 +11,7 @@ namespace dataneo.TutorialLibs.Domain.Entities
     public sealed class Folder : BaseEntity
     {
         private const int MinFolderName = 1;
-        public Guid ParentTutorialId { get; private set; }
+        public int ParentTutorialId { get; private set; }
         public short Order { get; private set; }
         public string Name { get; private set; }
         public string FolderPath { get; private set; }
@@ -20,17 +20,8 @@ namespace dataneo.TutorialLibs.Domain.Entities
 
         private Folder() { }
 
-        public static Result<Folder> Create(Guid id,
-                                            Guid parentTutorialId,
-                                            string folderPath,
-                                            IReadOnlyList<Episode> episodes)
+        public static Result<Folder> Create(string folderPath, IReadOnlyList<Episode> episodes)
         {
-            if (parentTutorialId == Guid.Empty)
-                return Result.Failure<Folder>(Errors.EMPTY_PARENT_TUTORIAL_ID);
-
-            if (id == Guid.Empty)
-                return Result.Failure<Folder>(Errors.EMPTY_GUID);
-
             if ((episodes?.Count ?? 0) < 1)
                 return Result.Failure<Folder>(Errors.NO_EPISODE);
 
@@ -48,8 +39,6 @@ namespace dataneo.TutorialLibs.Domain.Entities
 
             return new Folder
             {
-                Id = id,
-                ParentTutorialId = parentTutorialId,
                 FolderPath = folderPath,
                 Name = folderPathTrimmed,
                 Episodes = episodes,

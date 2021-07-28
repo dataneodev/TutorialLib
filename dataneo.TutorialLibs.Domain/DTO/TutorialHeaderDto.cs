@@ -5,7 +5,7 @@ namespace dataneo.TutorialLibs.Domain.DTO
 {
     public sealed class TutorialHeaderDto
     {
-        public Guid Id { get; init; }
+        public int Id { get; init; }
         public string Name { get; init; }
         public TimeSpan TotalTime { get; init; }
         public TimeSpan TimePlayed { get; init; }

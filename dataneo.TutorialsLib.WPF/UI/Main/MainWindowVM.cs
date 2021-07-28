@@ -51,8 +51,8 @@ namespace dataneo.TutorialsLib.WPF.UI
         public MainWindowVM(Window paretnHandle)
         {
             this._parentHandle = Guard.Against.Null(paretnHandle, nameof(paretnHandle));
-            this.RatingChangedCommand = new Command<ValueTuple<Guid, RatingStars>>(RatingChangedCommandImpl);
-            this.PlayTutorialCommand = new Command<Guid>(PlayTutorialCommandImpl);
+            this.RatingChangedCommand = new Command<ValueTuple<int, RatingStars>>(RatingChangedCommandImpl);
+            this.PlayTutorialCommand = new Command<int>(PlayTutorialCommandImpl);
             this.AddTutorialCommand = new Command(AddTutorialCommandImplAsync);
         }
 
@@ -63,21 +63,21 @@ namespace dataneo.TutorialsLib.WPF.UI
                .OnSuccessTry(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType))
                .OnFailure(error => ErrorWindow.ShowError(this._parentHandle, error));
 
-        private void PlayTutorialCommandImpl(Guid tutorialId)
+        private void PlayTutorialCommandImpl(int tutorialId)
         {
             this.SetWindowVisibility?.Invoke(false);
             var playerWindow = new PlayerWindow(tutorialId, () => ClosePlayerWindow(tutorialId));
             playerWindow.Load();
         }
 
-        private async void RatingChangedCommandImpl(ValueTuple<Guid, RatingStars> tutorialIdAndRating)
+        private async void RatingChangedCommandImpl(ValueTuple<int, RatingStars> tutorialIdAndRating)
             => await Result
                 .Success(tutorialIdAndRating)
-                .OnSuccessTry(input => ChangeTutorialRatingAction.ChangeAsync(input.Item1, input.Item2), e => e.Message)
+                .Map(input => ChangeTutorialRatingAction.ChangeAsync(input.Item1, input.Item2))
                 .Bind(r => r)
                 .OnFailure(error => ErrorWindow.ShowError(this._parentHandle, error));
 
-        private void ClosePlayerWindow(Guid playedTutorialId)
+        private void ClosePlayerWindow(int playedTutorialId)
         {
             this.SetWindowVisibility?.Invoke(true);
         }

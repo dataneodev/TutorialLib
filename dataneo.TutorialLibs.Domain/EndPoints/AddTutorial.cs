@@ -3,13 +3,14 @@ using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Entities;
 using dataneo.TutorialLibs.Domain.Interfaces;
 using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
+using dataneo.TutorialLibs.Domain.Services;
 using dataneo.TutorialLibs.Domain.Specifications;
 using dataneo.TutorialLibs.Domain.ValueObjects;
 using Serilog;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace dataneo.TutorialLibs.Domain.Services
+namespace dataneo.TutorialLibs.Domain.EndPoints
 {
     public sealed class AddTutorial
     {

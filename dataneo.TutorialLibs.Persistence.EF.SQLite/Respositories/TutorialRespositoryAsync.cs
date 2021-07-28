@@ -30,16 +30,16 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
                          Name = s.Name,
                          DateAdd = s.AddDate,
                          Rating = s.Rating,
-                         //PlayedEpisodes = (short)s.Folders.Sum(w => w.Episodes.Count(w => w.PlayedTime > w.File.PlayTime * 0.92)),
-                         //LastPlayedDate = s.Folders.Max(m => m.Episodes.Select(se => se.LastPlayedDate)).Max(),
-                         //TimePlayed = s.Folders.Sum(w => w.Episodes.Sum(se => se.PlayedTime)),
+                         //  PlayedEpisodes = (short)s.Folders.Sum(w => w.Episodes.Count(w => w.PlayedTime > w.File.PlayTime * 0.92)),
+                         //  LastPlayedDate = s.Folders.Max(m => m.Episodes.Select(se => se.LastPlayedDate)).Max(),
+                         //  TimePlayed = s.Folders.Sum(w => w.Episodes.Sum(se => se.PlayedTime.TotalSeconds)),
                          TotalEpisodes = (short)s.Folders.Sum(w => w.Episodes.Count()),
                          TotalSizeMB = (float)s.Folders.Sum(w => w.Episodes.Sum(se => se.File.FileSize / 1048576f)),
                      })
-                    .ToArrayAsync();
+                    .ToListAsync();
         }
 
-        public async Task<Maybe<TutorialHeaderDto>> GetTutorialHeaderDtoByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Maybe<TutorialHeaderDto>> GetTutorialHeaderDtoByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             var tutorial = await this._dbContext.Tutorials
                     .Where(w => w.Id == id)

@@ -12,7 +12,7 @@ namespace dataneo.TutorialsLib.WPF.UI
         private readonly Action _onClose;
         private readonly PlayerWindowVM _VM;
 
-        public PlayerWindow(Guid playedTutorialId, Action onClose)
+        public PlayerWindow(int playedTutorialId, Action onClose)
         {
             this._onClose = Guard.Against.Null(onClose, nameof(onClose));
             InitializeComponent();

@@ -15,7 +15,7 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public const byte UnWatchPercentage = 8;
         public const byte WatchPercentage = 92;
 
-        public Guid ParentFolderId { get; private set; }
+        public int ParentFolderId { get; private set; }
         public short Order { get; private set; }
         public string Name { get; private set; }
         public EpisodeFile File { get; private set; }
@@ -27,11 +27,9 @@ namespace dataneo.TutorialLibs.Domain.Entities
 
         private Episode() { }
 
-        public static Result<Episode> Create(Guid parentFolderId, EpisodeFile episodeFile, DateTime dateAdd)
+        public static Result<Episode> Create(EpisodeFile episodeFile, DateTime dateAdd)
         {
             Guard.Against.Null(episodeFile, nameof(episodeFile));
-            if (parentFolderId == Guid.Empty)
-                return Result.Failure<Episode>(Errors.EMPTY_PARENT_FOLDER_ID);
 
             if (dateAdd == DateTime.MinValue)
                 return Result.Failure<Episode>(Errors.INVALID_DATE);
@@ -40,7 +38,6 @@ namespace dataneo.TutorialLibs.Domain.Entities
             {
                 Name = Path.GetFileNameWithoutExtension(episodeFile.FileName),
                 DateAdd = dateAdd,
-                ParentFolderId = parentFolderId,
                 File = episodeFile
             };
         }

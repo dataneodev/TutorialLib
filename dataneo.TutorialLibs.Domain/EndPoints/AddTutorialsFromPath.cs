@@ -3,14 +3,15 @@ using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Entities;
 using dataneo.TutorialLibs.Domain.Interfaces;
 using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
+using dataneo.TutorialLibs.Domain.Specifications;
+using dataneo.TutorialLibs.Domain.ValueObjects;
 using Serilog;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace dataneo.TutorialLibs.Domain.Services
+namespace dataneo.TutorialLibs.Domain.EndPoints
 {
-    public sealed class UpdateTutorial
+    public sealed class AddTutorialsFromPath
     {
         private readonly IFileScanner _fileScanner;
         private readonly IMediaInfoProvider _mediaInfoProvider;
@@ -18,7 +19,7 @@ namespace dataneo.TutorialLibs.Domain.Services
         private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
         private readonly ILogger _logger;
 
-        public UpdateTutorial(
+        public AddTutorialsFromPath(
                             IFileScanner fileScanner,
                             IMediaInfoProvider mediaInfoProvider,
                             IHandledFileExtension handledFileExtension,
@@ -32,11 +33,26 @@ namespace dataneo.TutorialLibs.Domain.Services
             this._logger = Guard.Against.Null(logger, nameof(logger));
         }
 
-        public async Task<Result<Tutorial>> UpdateTutorialAsync(Guid tutorialId, CancellationToken cancelationToken = default)
+        public async Task<Result> AddTutorialsAsync(DirectoryPath directoryPath, CancellationToken cancelationToken = default)
         {
+            Guard.Against.Null(directoryPath, nameof(directoryPath));
 
+            if (await CheckIfDirectoryPathUsed(directoryPath, cancelationToken))
+            {
+                return Result.Failure("Ten katalog jest już uzyty");
 
-            return Result.Failure<Tutorial>("Not implement");
+            }
+
+            return Result.Failure("NotImplement");
+        }
+
+        private async Task<bool> CheckIfDirectoryPathUsed(DirectoryPath directoryPath, CancellationToken cancelationToken)
+        {
+            var spec = new TutorialsForDirectoryPath(directoryPath);
+            Maybe<Tutorial> findResult = await this._tutorialRespositoryAsync
+                                                        .FirstOrDefaultAsync(spec, cancelationToken)
+                                                        .ConfigureAwait(false);
+            return findResult.HasValue;
         }
     }
 }
