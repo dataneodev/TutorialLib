@@ -61,6 +61,13 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
             return Maybe<TutorialHeaderDto>.From(tutorial);
         }
 
+        public override async Task<Tutorial> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+            => await _dbContext.Tutorials
+                        .Include(i => i.Folders)
+                        .ThenInclude(f => f.Episodes)
+                        .FirstOrDefaultAsync(f => f.Id == id, cancellationToken);
+
+
         public void Dispose()
         {
             this._dbContext.Dispose();

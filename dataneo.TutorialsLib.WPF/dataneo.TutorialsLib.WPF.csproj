@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="Properties\" />
     <Folder Include="UI\About\" />
-    <Folder Include="UI\Player\Services\" />
   </ItemGroup>
 
   <ItemGroup>

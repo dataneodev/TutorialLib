@@ -46,15 +46,15 @@ namespace dataneo.TutorialsLib.WPF.UI
         public static readonly DependencyProperty TutorialGuidProperty =
         DependencyProperty.Register(
             nameof(TutorialGuid),
-            typeof(Guid),
+            typeof(int),
             typeof(RatingControl),
             new PropertyMetadata(
-                Guid.Empty,
+                default(int),
                 new PropertyChangedCallback(OnTutorialGuidChanged)));
 
-        public Guid TutorialGuid
+        public int TutorialGuid
         {
-            get { return (Guid)GetValue(TutorialGuidProperty); }
+            get { return (int)GetValue(TutorialGuidProperty); }
             set { SetValue(TutorialGuidProperty, value); }
         }
 
@@ -67,7 +67,7 @@ namespace dataneo.TutorialsLib.WPF.UI
 
         private void OnSetTutorialGuidChanged(DependencyPropertyChangedEventArgs e)
         {
-            this.TutorialGuid = (Guid)e.NewValue;
+            this.TutorialGuid = (int)e.NewValue;
         }
 
         public static readonly DependencyProperty RatingStarChangedProperty =
@@ -133,7 +133,7 @@ namespace dataneo.TutorialsLib.WPF.UI
         private void SetAndInvokeRatingStarChanged(RatingStars ratingStars)
         {
             this.RatingStarValue = ratingStars;
-            var value = new ValueTuple<Guid, RatingStars>(
+            var value = new ValueTuple<int, RatingStars>(
                         this.TutorialGuid,
                         this.RatingStarValue);
 

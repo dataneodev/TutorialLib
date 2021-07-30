@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace dataneo.TutorialsLib.WPF.UI
@@ -16,14 +17,14 @@ namespace dataneo.TutorialsLib.WPF.UI
         {
             this._onClose = Guard.Against.Null(onClose, nameof(onClose));
             InitializeComponent();
-            this._VM = new PlayerWindowVM(playedTutorialId);
+            this._VM = new PlayerWindowVM(this, playedTutorialId);
             this.DataContext = _VM;
         }
 
-        public void Load()
+        public Task LoadAsync()
         {
             this.Show();
-            this._VM.Load();
+            return this._VM.LoadAsync();
         }
 
         private void playeWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

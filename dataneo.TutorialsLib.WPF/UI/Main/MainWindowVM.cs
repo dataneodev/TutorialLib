@@ -23,7 +23,6 @@ namespace dataneo.TutorialsLib.WPF.UI
         public Action<bool> SetWindowVisibility;
 
         private IEnumerable<TutorialHeaderDto> tutorials;
-
         public IEnumerable<TutorialHeaderDto> Tutorials
         {
             get { return tutorials; }
@@ -48,9 +47,9 @@ namespace dataneo.TutorialsLib.WPF.UI
         public ICommand SearchForUpdateCommand { get; }
         public ICommand SearchForNewTutorialsCommand { get; }
 
-        public MainWindowVM(Window paretnHandle)
+        public MainWindowVM(Window parentHandle)
         {
-            this._parentHandle = Guard.Against.Null(paretnHandle, nameof(paretnHandle));
+            this._parentHandle = Guard.Against.Null(parentHandle, nameof(parentHandle));
             this.RatingChangedCommand = new Command<ValueTuple<int, RatingStars>>(RatingChangedCommandImpl);
             this.PlayTutorialCommand = new Command<int>(PlayTutorialCommandImpl);
             this.AddTutorialCommand = new Command(AddTutorialCommandImplAsync);
@@ -63,11 +62,11 @@ namespace dataneo.TutorialsLib.WPF.UI
                .OnSuccessTry(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType))
                .OnFailure(error => ErrorWindow.ShowError(this._parentHandle, error));
 
-        private void PlayTutorialCommandImpl(int tutorialId)
+        private async void PlayTutorialCommandImpl(int tutorialId)
         {
             this.SetWindowVisibility?.Invoke(false);
             var playerWindow = new PlayerWindow(tutorialId, () => ClosePlayerWindow(tutorialId));
-            playerWindow.Load();
+            await playerWindow.LoadAsync();
         }
 
         private async void RatingChangedCommandImpl(ValueTuple<int, RatingStars> tutorialIdAndRating)
