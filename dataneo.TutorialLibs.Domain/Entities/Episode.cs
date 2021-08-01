@@ -12,8 +12,8 @@ namespace dataneo.TutorialLibs.Domain.Entities
     public sealed class Episode : BaseEntity
     {
         public const byte EpisonNameMinLength = 2;
-        public const byte UnWatchPercentage = 8;
-        public const byte WatchPercentage = 92;
+        public const byte UnWatchPercentage = 10;
+        public const byte WatchPercentage = 96;
 
         public int ParentFolderId { get; private set; }
         public short Order { get; private set; }
@@ -47,7 +47,12 @@ namespace dataneo.TutorialLibs.Domain.Entities
             if (this.File == null)
                 throw new NullReferenceException(nameof(File));
 
-            var playRatio = (PlayedTime / File.PlayTime) * 100;
+            return GetWatchStatus(this.PlayedTime, this.File.PlayTime);
+        }
+
+        public static VideoWatchStatus GetWatchStatus(TimeSpan playedTime, TimeSpan totalEpisodeTime)
+        {
+            var playRatio = (playedTime / totalEpisodeTime) * 100;
             if (playRatio < UnWatchPercentage)
                 return VideoWatchStatus.NotWatched;
 

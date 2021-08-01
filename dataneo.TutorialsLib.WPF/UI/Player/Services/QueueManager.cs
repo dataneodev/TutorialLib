@@ -92,11 +92,15 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
         public async void SetPlayedEpisodePosition(int position)
         {
             var oldState = this._currentPlayedEpisode.EpisodeD.Status;
-            this._currentPlayedEpisode.EpisodeD.SetPlayedTime(
-                this._currentPlayedEpisode.EpisodeD.GetPlayedTime(position));
+            var newPlayedTime = this._currentPlayedEpisode.EpisodeD.GetPlayedTime(position);
+
+            if (Episode.GetWatchStatus(newPlayedTime, this._currentPlayedEpisode.EpisodeD.File.PlayTime) == VideoWatchStatus.NotWatched)
+                return;
+
+            this._currentPlayedEpisode.EpisodeD.SetPlayedTime(newPlayedTime);
 
             var newState = this._currentPlayedEpisode.EpisodeD.Status;
-            if (oldState == newState || this._currentPlayedEpisode.VideoItemD.WatchStatus == VideoWatchStatus.InProgress)
+            if (oldState == newState)
                 return;
 
             this._currentPlayedEpisode.VideoItemD.WatchStatus = newState;

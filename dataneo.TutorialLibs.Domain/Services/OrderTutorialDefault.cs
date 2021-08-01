@@ -27,7 +27,7 @@ namespace dataneo.TutorialLibs.Domain.Services
         private static void OrderEpisodes(IReadOnlyList<Episode> episodes)
         {
             short orderEpisode = 1;
-            foreach (var episode in episodes.OrderByDescending(o => o.Name))
+            foreach (var episode in episodes.OrderBy(o => o.Name))
             {
                 episode.SetOrder(orderEpisode++);
             }
