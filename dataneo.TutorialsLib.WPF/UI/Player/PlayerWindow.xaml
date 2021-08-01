@@ -34,6 +34,7 @@
             HorizontalAlignment="Stretch" />
         <local:VideoList
             Grid.Column="2"
-            ItemSource="{Binding Path=VideoItems}"/>
+            EpisodeClick="{Binding Path=ClickedOnEpisodeOrFolderCommand, Mode=OneTime}"
+            ItemSource="{Binding Path=VideoItems, Mode=OneTime}" />
     </Grid>
 </Window>

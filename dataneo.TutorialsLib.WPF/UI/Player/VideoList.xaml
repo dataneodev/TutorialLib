@@ -10,9 +10,8 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <conv:TimeSpanToStringConverter x:Key="timeSpanToStringConverter" />
-
         <SolidColorBrush x:Key="grayColor">#929290</SolidColorBrush>
+        <conv:TimeSpanToStringConverter x:Key="timeSpanToStringConverter" />
         <DataTemplate x:Key="VideoItemTemplate">
             <Grid MinWidth="200" Margin="8,0,4,0">
                 <Grid.ColumnDefinitions>
@@ -129,6 +128,9 @@
         </DataTemplate>
         <DataTemplate x:Key="FolderItemTemplate">
             <Grid Margin="4,0,4,0">
+                <Grid.Resources>
+                    <conv:TimeSpanToStringConverter x:Key="timeSpanToStringConverter" />
+                </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
@@ -188,7 +190,8 @@
                     FontSize="15"
                     FontWeight="Bold"
                     Foreground="White"
-                    Text="{Binding Name}" />
+                    Text="{Binding Name}"
+                    TextWrapping="Wrap" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="1"
@@ -208,6 +211,8 @@
         Padding="0"
         Background="#222222"
         ItemTemplateSelector="{StaticResource ListItemDataTemplateSelector}"
+        MouseDoubleClick="tvVideoList_MouseDoubleClick"
+        
         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <ListView.ItemContainerStyle>
             <Style TargetType="ListViewItem">

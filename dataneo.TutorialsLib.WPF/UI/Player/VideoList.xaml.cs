@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace dataneo.TutorialsLib.WPF.UI
 {
@@ -35,9 +36,38 @@ namespace dataneo.TutorialsLib.WPF.UI
                 tvVideoList.ItemsSource = newItemSource;
         }
 
+        public static readonly DependencyProperty EpisodeClickProperty =
+         DependencyProperty.Register(
+             nameof(EpisodeClick),
+             typeof(ICommand),
+             typeof(VideoList),
+              new PropertyMetadata(null, new PropertyChangedCallback(OnEpisodeClickChanged)));
+
+        private static void OnEpisodeClickChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ratingControl = d as VideoList;
+            ratingControl.OnSetEpisodeClickChanged(e);
+        }
+
+        private void OnSetEpisodeClickChanged(DependencyPropertyChangedEventArgs e)
+        {
+            this.EpisodeClick = (ICommand)e.NewValue;
+        }
+
+        public ICommand EpisodeClick
+        {
+            get { return (ICommand)GetValue(EpisodeClickProperty); }
+            set { SetValue(EpisodeClickProperty, value); }
+        }
+
         public VideoList()
         {
             InitializeComponent();
+        }
+
+        private void tvVideoList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

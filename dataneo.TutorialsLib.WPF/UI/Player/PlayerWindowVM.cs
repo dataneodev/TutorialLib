@@ -41,7 +41,7 @@ namespace dataneo.TutorialsLib.WPF.UI
         {
             this._tutorialPlayerId = Guard.Against.NegativeOrZero(tutorialPlayerId, nameof(tutorialPlayerId));
             this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);
-            this.ClickedOnEpisodeOrFolderCommand = new Command(ClickedOnEpisodeOrFolderCommandImpl);
+            this.ClickedOnEpisodeOrFolderCommand = new Command<int>(ClickedOnEpisodeOrFolderCommandImpl);
             this._windowHandle = Guard.Against.Null(windowHandle, nameof(windowHandle));
         }
 
@@ -50,7 +50,7 @@ namespace dataneo.TutorialsLib.WPF.UI
             this.CurrentMediaPath = @"Z:\District 9 2009 ITA-ENG BRRip 720p x264-HD4ME\District.9.2009.ITA-ENG.BRRip.720p.x264-HD4ME.mkv";
         }
 
-        private void ClickedOnEpisodeOrFolderCommandImpl()
+        private void ClickedOnEpisodeOrFolderCommandImpl(int episodeId)
         {
 
         }
