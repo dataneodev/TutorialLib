@@ -11,7 +11,6 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <SolidColorBrush x:Key="grayColor">#929290</SolidColorBrush>
-        <conv:TimeSpanToStringConverter x:Key="timeSpanToStringConverter" />
         <DataTemplate x:Key="VideoItemTemplate">
             <Grid MinWidth="200" Margin="8,0,4,0">
                 <Grid.ColumnDefinitions>
@@ -121,16 +120,20 @@
                         Margin="0,-3,0,2"
                         VerticalAlignment="Top"
                         FontSize="11"
-                        Foreground="{StaticResource grayColor}"
-                        Text="{Binding Path=EpisodePlayTime, Mode=OneTime, ConverterParameter={StaticResource timeSpanToStringConverter}}" />
+                        Foreground="{StaticResource grayColor}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0:00}:{1:00}:{2:00}">
+                                <Binding Mode="OneTime" Path="EpisodePlayTime.Hours" />
+                                <Binding Mode="OneTime" Path="EpisodePlayTime.Minutes" />
+                                <Binding Mode="OneTime" Path="EpisodePlayTime.Seconds" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                 </StackPanel>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="FolderItemTemplate">
             <Grid Margin="4,0,4,0">
-                <Grid.Resources>
-                    <conv:TimeSpanToStringConverter x:Key="timeSpanToStringConverter" />
-                </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
@@ -187,7 +190,7 @@
                     Grid.Column="1"
                     Margin="6,0,0,0"
                     VerticalAlignment="Bottom"
-                    FontSize="15"
+                    FontSize="14"
                     FontWeight="Bold"
                     Foreground="White"
                     Text="{Binding Name}"
@@ -197,8 +200,15 @@
                     Grid.Column="1"
                     Margin="6,-2,0,2"
                     VerticalAlignment="Top"
-                    Foreground="{StaticResource grayColor}"
-                    Text="{Binding Path=FolderPlayTime, Mode=OneTime, ConverterParameter={StaticResource timeSpanToStringConverter}}" />
+                    Foreground="{StaticResource grayColor}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0:00}:{1:00}:{2:00}">
+                            <Binding Mode="OneTime" Path="FolderPlayTime.Hours" />
+                            <Binding Mode="OneTime" Path="FolderPlayTime.Minutes" />
+                            <Binding Mode="OneTime" Path="FolderPlayTime.Seconds" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
             </Grid>
         </DataTemplate>
         <local:VideoListItemTemplateSelector
@@ -212,7 +222,6 @@
         Background="#222222"
         ItemTemplateSelector="{StaticResource ListItemDataTemplateSelector}"
         MouseDoubleClick="tvVideoList_MouseDoubleClick"
-        
         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <ListView.ItemContainerStyle>
             <Style TargetType="ListViewItem">

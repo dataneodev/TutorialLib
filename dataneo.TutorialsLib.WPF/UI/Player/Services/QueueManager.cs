@@ -2,6 +2,7 @@
 using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Entities;
 using dataneo.TutorialLibs.Domain.Enums;
+using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -73,11 +74,11 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
 
         public async Task EndWorkAsync()
         {
-            if (this._currentPlayedEpisode.EpisodeD is not null)
-            {
-                await SaveEpisodeToDBAsync(this._currentPlayedEpisode.EpisodeD)
-                        .ConfigureAwait(false);
-            }
+            if (this._currentPlayedEpisode.EpisodeD is null)
+                return;
+
+            await SaveEpisodeToDBAsync(this._currentPlayedEpisode.EpisodeD)
+                    .ConfigureAwait(false);
         }
 
         private void EpisodePlay(int idEpisode)
@@ -106,13 +107,11 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
                 this._currentPlayedEpisode.EpisodeD.GetPlayedTime(position));
 
             var newState = this._currentPlayedEpisode.EpisodeD.Status;
-            if (oldState != newState)
-            {
-                this._currentPlayedEpisode.VideoItemD.WatchStatus = newState;
-                UpdateFolderPlayedStatus(this._currentPlayedEpisode.FolderItemD);
-                await SaveEpisodeToDBAsync(this._currentPlayedEpisode.EpisodeD)
-                        .ConfigureAwait(false);
-            }
+            if (oldState == newState || this._currentPlayedEpisode.VideoItemD.WatchStatus == VideoWatchStatus.InProgress)
+                return;
+
+            this._currentPlayedEpisode.VideoItemD.WatchStatus = newState;
+            UpdateFolderPlayedStatus(this._currentPlayedEpisode.FolderItemD);
         }
 
         private static void SetAsPlaying(EpisodeData episode)
@@ -133,15 +132,14 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
             Maybe<Folder> folder = this._currentPlayedEpisode.TutorialD.Folders.FirstOrDefault(f => f.Id == folderItem.FolderId);
             if (folder.HasNoValue)
                 return;
-
-            //  if (folder.Value.Episodes.All(a => a.Status =))
-            //if (this._videoItemsCreatorResult.FoldersProcessed.All(a => a.Value.WatchStatus == VideoWatchStatus.NotWatched))
-
+            var stateForFolder = VideoItemsCreatorEngine.GetFolderStatus(folder.Value.Episodes);
+            folderItem.WatchStatus = stateForFolder;
         }
 
         private static async Task SaveEpisodeToDBAsync(Episode episode)
         {
-
+            using var repo = new TutorialRespositoryAsync();
+            await repo.UpdateEpisodeAsync(episode);
         }
 
         private Maybe<EpisodeData> FindEpisode(int idEpisode)

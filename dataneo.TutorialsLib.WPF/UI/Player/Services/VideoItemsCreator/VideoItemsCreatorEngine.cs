@@ -62,12 +62,14 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
                             allItems: allItems);
         }
 
+        public static VideoWatchStatus GetFolderStatus(IEnumerable<Episode> episodes)
+            => episodes.Aggregate(
+                VideoWatchStatus.Watched,
+                SelectVideoWatchStatusForAllFolder);
+
         private static KeyValuePair<Folder, FolderItem> GetFolderItem(Folder folder, ref short folderPosition)
         {
-            var watchStatus = folder.Episodes.Aggregate(
-                                    VideoWatchStatus.Watched,
-                                    SelectVideoWatchStatusForAllFolder);
-
+            var watchStatus = GetFolderStatus(folder.Episodes);
             var folderPlayedTime = System.TimeSpan.FromSeconds(
                                         folder.Episodes.Sum(s => s.File.PlayTime.TotalSeconds));
 
@@ -104,7 +106,7 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
         private static VideoItemLocationType GetVideoItemLocationType(int i, int count)
         {
             if (count == 1)
-                return VideoItemLocationType.InnerElement;
+                return VideoItemLocationType.AloneElement;
 
             if (i == 0)
                 return VideoItemLocationType.FirstElement;
@@ -119,7 +121,7 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
             => new VideoItem
             {
                 EpisodeId = episode.Id,
-                EpisodePlayTime = episode.PlayedTime,
+                EpisodePlayTime = episode.File.PlayTime,
                 Name = episode.Name,
                 WatchStatus = episode.Status,
                 LocationOnList = videoItemLocationType,

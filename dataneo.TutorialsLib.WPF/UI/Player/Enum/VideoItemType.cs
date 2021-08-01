@@ -4,6 +4,7 @@
     {
         FirstElement,
         InnerElement,
+        AloneElement,
         LastElement
     }
 }

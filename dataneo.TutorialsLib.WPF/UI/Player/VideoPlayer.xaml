@@ -268,6 +268,7 @@
                 Grid.Row="1"
                 Grid.Column="6"
                 Width="160"
+                Margin="0,0,5,0"
                 VerticalAlignment="Center"
                 Cursor="Hand"
                 Maximum="100"
