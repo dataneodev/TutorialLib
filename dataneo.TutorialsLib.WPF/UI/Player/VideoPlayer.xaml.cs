@@ -147,12 +147,7 @@ namespace dataneo.TutorialsLib.WPF.UI
         {
             ThreadPool.QueueUserWorkItem(_ =>
             {
-                if (this._mediaPlayer is not null)
-                {
-                    this._mediaPlayer.Stop();
-                }
-
-                var media = new Media(_libVLC, new Uri(mediaPath));
+                using var media = new Media(_libVLC, new Uri(mediaPath));
                 this._mediaPlayer.Play(media);
             });
         }

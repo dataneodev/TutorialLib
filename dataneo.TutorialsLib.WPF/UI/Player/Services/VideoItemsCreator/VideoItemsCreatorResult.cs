@@ -8,37 +8,37 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
 {
     internal sealed class VideoItemsCreatorResult
     {
-        public Tutorial ProcessedTutorial { get; }
-        public IReadOnlyList<KeyValuePair<Folder, FolderItem>> FoldersProcessed { get; }
-        public IReadOnlyList<KeyValuePair<Episode, VideoItem>> EpisodesProcessed { get; }
-        public IReadOnlyList<object> AllItemsProcessed { get; }
+        public Tutorial Context { get; }
+        public IReadOnlyList<KeyValuePair<Folder, FolderItem>> Folders { get; }
+        public IReadOnlyList<KeyValuePair<Episode, VideoItem>> Episodes { get; }
+        public IReadOnlyList<object> AllItems { get; }
 
         public VideoItemsCreatorResult(
-                    Tutorial processedTutorial,
-                    IReadOnlyList<KeyValuePair<Folder, FolderItem>> foldersProcessed,
-                    IReadOnlyList<KeyValuePair<Episode, VideoItem>> episodesProcessed,
-                    IReadOnlyList<object> allItemsProcessed)
+                    Tutorial tutorial,
+                    IReadOnlyList<KeyValuePair<Folder, FolderItem>> folders,
+                    IReadOnlyList<KeyValuePair<Episode, VideoItem>> episodes,
+                    IReadOnlyList<object> allItems)
         {
-            ProcessedTutorial = Guard.Against.Null(processedTutorial, nameof(processedTutorial));
-            FoldersProcessed = Guard.Against.Null(foldersProcessed, nameof(foldersProcessed));
-            EpisodesProcessed = Guard.Against.Null(episodesProcessed, nameof(episodesProcessed));
-            AllItemsProcessed = Guard.Against.Null(allItemsProcessed, nameof(allItemsProcessed));
+            Context = Guard.Against.Null(tutorial, nameof(tutorial));
+            Folders = Guard.Against.Null(folders, nameof(folders));
+            Episodes = Guard.Against.Null(episodes, nameof(episodes));
+            AllItems = Guard.Against.Null(allItems, nameof(allItems));
         }
 
         public Maybe<EpisodeData> GetEpisodeData(int idEpisode)
         {
             Guard.Against.NegativeOrZero(idEpisode, nameof(idEpisode));
 
-            var episode = this.EpisodesProcessed.FirstOrDefault(f => f.Key.Id == idEpisode);
+            var episode = this.Episodes.FirstOrDefault(f => f.Key.Id == idEpisode);
             if (episode.Key is null)
                 return Maybe<EpisodeData>.None;
 
-            var folder = this.FoldersProcessed.FirstOrDefault(f => f.Key.Episodes.Any(e => e == episode.Key));
+            var folder = this.Folders.FirstOrDefault(f => f.Key.Episodes.Any(e => e == episode.Key));
             if (folder.Key is null)
                 return Maybe<EpisodeData>.None;
 
             return new EpisodeData(
-                this.ProcessedTutorial,
+                this.Context,
                     folderD: folder.Key,
                     episodeD: episode.Key,
                     videoItemD: episode.Value,
@@ -47,10 +47,10 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
 
         public Maybe<int> GetNextEpisodeId(int currentEpsiodeId)
         {
-            for (int i = 0; i < EpisodesProcessed.Count; i++)
+            for (int i = 0; i < Episodes.Count; i++)
             {
-                if (EpisodesProcessed[i].Key.Id == currentEpsiodeId && i < EpisodesProcessed.Count - 1)
-                    return EpisodesProcessed[++i].Key.Id;
+                if (Episodes[i].Key.Id == currentEpsiodeId && i < Episodes.Count - 1)
+                    return Episodes[++i].Key.Id;
             }
             return Maybe<int>.None;
         }

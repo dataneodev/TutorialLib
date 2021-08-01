@@ -56,10 +56,10 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
             }
 
             return new VideoItemsCreatorResult(
-                            processedTutorial: tutorial,
-                            foldersProcessed: foldersProcessed,
-                            episodesProcessed: episodesProcessed,
-                            allItemsProcessed: allItems);
+                            tutorial: tutorial,
+                            folders: foldersProcessed,
+                            episodes: episodesProcessed,
+                            allItems: allItems);
         }
 
         private static KeyValuePair<Folder, FolderItem> GetFolderItem(Folder folder, ref short folderPosition)

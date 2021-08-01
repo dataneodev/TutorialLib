@@ -72,5 +72,11 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
         {
             this._dbContext.Dispose();
         }
+
+        public async Task UpdateEpisodeAsync(Episode episode, CancellationToken cancellationToken = default)
+        {
+            _dbContext.Entry(episode).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
     }
 }

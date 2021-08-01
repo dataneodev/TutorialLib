@@ -10,5 +10,6 @@ namespace dataneo.TutorialLibs.Domain.Interfaces.Respositories
     public interface ITutorialRespositoryAsync : IAsyncRepository<Tutorial>
     {
         Task<Maybe<TutorialHeaderDto>> GetTutorialHeaderDtoByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task UpdateEpisodeAsync(Episode episode, CancellationToken cancellationToken = default);
     }
 }

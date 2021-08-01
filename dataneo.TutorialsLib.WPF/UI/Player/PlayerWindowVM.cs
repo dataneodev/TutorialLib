@@ -12,6 +12,7 @@ namespace dataneo.TutorialsLib.WPF.UI
 {
     internal class PlayerWindowVM : BaseViewModel
     {
+        private readonly int _tutorialId;
         private readonly Window _windowHandle;
         private QueueManager _queueManager;
 
@@ -51,17 +52,16 @@ namespace dataneo.TutorialsLib.WPF.UI
         public PlayerWindowVM(Window windowHandle, int tutorialPlayerId)
         {
             this._windowHandle = Guard.Against.Null(windowHandle, nameof(windowHandle));
-
+            this._tutorialId = Guard.Against.NegativeOrZero(tutorialPlayerId, nameof(tutorialPlayerId));
             this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);
             this.ClickedOnEpisodeCommand = new Command<int>(ClickedOnEpisodeCommandImpl);
-
-            LoadAsync(tutorialPlayerId);
         }
 
         private void _queueManager_BeginPlayFile(PlayFileParameter playFileParameter)
         {
             this.CurrentMediaPath = playFileParameter.Path;
             this.Position = playFileParameter.Position;
+            this.Caption = playFileParameter.Title;
         }
 
         private void CurrentVideoEndedCommandImpl()
@@ -73,20 +73,25 @@ namespace dataneo.TutorialsLib.WPF.UI
         private void SetEpsiodePosition(int position)
             => this._queueManager?.SetPlayedEpisodePosition(position);
 
-        private async Task LoadAsync(int tutorialId)
+        public async Task LoadAsync()
         {
             using var repo = new TutorialRespositoryAsync();
             var videoItemsCreator = new VideoItemsCreatorEngine(repo);
 
-            (await videoItemsCreator.LoadAndCreate(tutorialId))
+            (await videoItemsCreator.LoadAndCreate(this._tutorialId))
                 .OnFailure(error => ErrorWindow.ShowError(this._windowHandle, error))
                 .Tap(result =>
                 {
                     this._queueManager = new QueueManager(result);
                     this._queueManager.BeginPlayFile += _queueManager_BeginPlayFile;
-                    this.VideoItems = result.AllItemsProcessed;
+                    this.VideoItems = result.AllItems;
                     this._queueManager.StartupPlay();
                 });
         }
+
+        public async Task EndWorkAsync()
+            => await this._queueManager
+                            .EndWorkAsync()
+                            .ConfigureAwait(false);
     }
 }

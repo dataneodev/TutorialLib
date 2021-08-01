@@ -62,10 +62,11 @@ namespace dataneo.TutorialsLib.WPF.UI
                .OnSuccessTry(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType))
                .OnFailure(error => ErrorWindow.ShowError(this._parentHandle, error));
 
-        private void PlayTutorialCommandImpl(int tutorialId)
+        private async void PlayTutorialCommandImpl(int tutorialId)
         {
             this.SetWindowVisibility?.Invoke(false);
             var playerWindow = new PlayerWindow(tutorialId, () => ClosePlayerWindow(tutorialId));
+            await Result.Try(async () => await playerWindow.LoadAsync());
         }
 
         private async void RatingChangedCommandImpl(ValueTuple<int, RatingStars> tutorialIdAndRating)

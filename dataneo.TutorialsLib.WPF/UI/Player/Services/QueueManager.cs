@@ -3,6 +3,8 @@ using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Entities;
 using dataneo.TutorialLibs.Domain.Enums;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace dataneo.TutorialsLib.WPF.UI.Player.Services
 {
@@ -22,8 +24,11 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
 
         public void StartupPlay()
         {
-
-
+            var firstUnwatchedEpisode = this._videoItemsCreatorResult.Episodes
+                                            .FirstOrDefault(f => f.Key.Status != VideoWatchStatus.Watched);
+            if (firstUnwatchedEpisode.Key is null)
+                return;
+            EpisodePlay(firstUnwatchedEpisode.Key.Id);
         }
 
         public void CurrentPlayedEpisodeHasEnded()
@@ -40,16 +45,39 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
                 EpisodePlay(nextEpisode.Value);
         }
 
-        public void UserRequestEpisodePlay(int idEpisode)
+        public async void UserRequestEpisodePlay(int idEpisode)
         {
             if (this._currentPlayedEpisode is EpisodeData episodeData &&
                     episodeData.EpisodeD.Id != idEpisode)
             {
                 this._currentPlayedEpisode.VideoItemD.WatchStatus = this._currentPlayedEpisode.EpisodeD.Status;
-                SaveEpisodeToDBAsync(episodeData.EpisodeD);
+                UpdateFolderPlayedStatus(this._currentPlayedEpisode.FolderItemD);
+                await SaveEpisodeToDBAsync(episodeData.EpisodeD);
             }
 
             EpisodePlay(idEpisode);
+        }
+
+        public void NextEpisode()
+        {
+
+
+        }
+
+        public void PrevExpisode()
+        {
+
+
+
+        }
+
+        public async Task EndWorkAsync()
+        {
+            if (this._currentPlayedEpisode.EpisodeD is not null)
+            {
+                await SaveEpisodeToDBAsync(this._currentPlayedEpisode.EpisodeD)
+                        .ConfigureAwait(false);
+            }
         }
 
         private void EpisodePlay(int idEpisode)
@@ -67,10 +95,11 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
             this.BeginPlayFile?.Invoke(
                 new PlayFileParameter(
                     episodePath,
+                    episode.Value.EpisodeD.Name,
                     episode.Value.EpisodeD.GetPosition()));
         }
 
-        public void SetPlayedEpisodePosition(int position)
+        public async void SetPlayedEpisodePosition(int position)
         {
             var oldState = this._currentPlayedEpisode.EpisodeD.Status;
             this._currentPlayedEpisode.EpisodeD.SetPlayedTime(
@@ -81,7 +110,8 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
             {
                 this._currentPlayedEpisode.VideoItemD.WatchStatus = newState;
                 UpdateFolderPlayedStatus(this._currentPlayedEpisode.FolderItemD);
-                SaveEpisodeToDBAsync(this._currentPlayedEpisode.EpisodeD);
+                await SaveEpisodeToDBAsync(this._currentPlayedEpisode.EpisodeD)
+                        .ConfigureAwait(false);
             }
         }
 
@@ -90,20 +120,26 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
             episode.VideoItemD.WatchStatus = VideoWatchStatus.InProgress;
         }
 
-        private static void SetAsWatched(EpisodeData episode)
+        private static async void SetAsWatched(EpisodeData episode)
         {
             episode.VideoItemD.WatchStatus = VideoWatchStatus.Watched;
             episode.EpisodeD.SetAsWatched();
-            SaveEpisodeToDBAsync(episode.EpisodeD);
+            await SaveEpisodeToDBAsync(episode.EpisodeD)
+                    .ConfigureAwait(false);
         }
 
         private void UpdateFolderPlayedStatus(FolderItem folderItem)
         {
+            Maybe<Folder> folder = this._currentPlayedEpisode.TutorialD.Folders.FirstOrDefault(f => f.Id == folderItem.FolderId);
+            if (folder.HasNoValue)
+                return;
+
+            //  if (folder.Value.Episodes.All(a => a.Status =))
             //if (this._videoItemsCreatorResult.FoldersProcessed.All(a => a.Value.WatchStatus == VideoWatchStatus.NotWatched))
 
         }
 
-        private static void SaveEpisodeToDBAsync(Episode episode)
+        private static async Task SaveEpisodeToDBAsync(Episode episode)
         {
 
         }
