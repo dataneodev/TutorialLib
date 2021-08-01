@@ -1,38 +1,15 @@
-﻿using Ardalis.GuardClauses;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Entities;
 using dataneo.TutorialLibs.Domain.Enums;
-using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace dataneo.TutorialsLib.WPF.UI.Player.Services
 {
-    internal sealed class VideoItemsCreator
+    internal static class VideoItemsCreator
     {
-        public async Task<Result<IReadOnlyList<object>>> GetAsync(int tutorialId)
-        {
-            Guard.Against.NegativeOrZero(tutorialId, nameof(tutorialId));
-            var tutorialResult = await GetTutorialFromDBAsync(tutorialId);
-            if (tutorialResult.IsFailure)
-                return tutorialResult.ConvertFailure<IReadOnlyList<object>>();
-
-            if (tutorialResult.Value.HasNoValue)
-                return tutorialResult.Value
-                            .ToResult($"Nie znaleziono tutorialu o id {tutorialId}")
-                            .ConvertFailure<IReadOnlyList<object>>();
-
-            return GetProcessedTutorial(tutorialResult.Value.Value)
-                    .ToArray();
-        }
-
-        private static Task<Result<Maybe<Tutorial>>> GetTutorialFromDBAsync(int tutorialId)
-        {
-            using var repo = new TutorialRespositoryAsync();
-            return Result.Try(async () => await repo.GetByIdAsync(tutorialId), error => error?.Message)
-                         .Map(m => Maybe<Tutorial>.From(m));
-        }
+        public static Result<IReadOnlyList<object>> Create(Tutorial tutorial)
+            => GetProcessedTutorial(tutorial).ToArray();
 
         private static IEnumerable<object> GetProcessedTutorial(Tutorial tutorial)
         {
@@ -58,6 +35,7 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
 
             return new FolderItem
             {
+                FolderId = folder.Id,
                 Position = ++folderPosition,
                 Name = folder.Name,
                 FolderPlayTime = folderPlayedTime,
@@ -95,6 +73,7 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
         private static VideoItem GetVideoItem(Episode episode, VideoItemLocationType videoItemLocationType)
             => new VideoItem
             {
+                EpisodeId = episode.Id,
                 EpisodePlayTime = episode.PlayedTime,
                 Name = episode.Name,
                 WatchStatus = episode.Status,

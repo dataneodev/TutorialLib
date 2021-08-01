@@ -45,8 +45,8 @@ namespace dataneo.TutorialsLib.WPF.UI
 
         private static void OnEpisodeClickChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var ratingControl = d as VideoList;
-            ratingControl.OnSetEpisodeClickChanged(e);
+            var videoList = d as VideoList;
+            videoList.OnSetEpisodeClickChanged(e);
         }
 
         private void OnSetEpisodeClickChanged(DependencyPropertyChangedEventArgs e)
@@ -67,7 +67,12 @@ namespace dataneo.TutorialsLib.WPF.UI
 
         private void tvVideoList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            if (sender is ListView listView && listView.SelectedItem is VideoItem)
+            {
+                var selectedItem = listView.SelectedItem as VideoItem;
+                if (this.EpisodeClick?.CanExecute(selectedItem.EpisodeId) ?? false)
+                    this.EpisodeClick?.Execute(selectedItem.EpisodeId);
+            }
         }
     }
 }

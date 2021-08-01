@@ -152,7 +152,6 @@ namespace dataneo.TutorialsLib.WPF.UI
                 this._mediaPlayer.Media = media;
                 this._mediaPlayer.Play();
             }
-
         }
 
         private void VideoPlayer_Loaded(object sender, RoutedEventArgs e)

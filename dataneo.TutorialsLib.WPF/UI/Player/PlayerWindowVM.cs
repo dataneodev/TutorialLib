@@ -11,8 +11,8 @@ namespace dataneo.TutorialsLib.WPF.UI
 {
     internal class PlayerWindowVM : BaseViewModel
     {
-        private readonly int _tutorialPlayerId;
         private readonly Window _windowHandle;
+        private readonly QueueManager _queueManager;
 
         private IReadOnlyList<object> videoItems;
         public IReadOnlyList<object> VideoItems
@@ -21,12 +21,10 @@ namespace dataneo.TutorialsLib.WPF.UI
             set { videoItems = value; Notify(); }
         }
 
-        public ICommand ClickedOnEpisodeOrFolderCommand { get; }
+        public ICommand ClickedOnEpisodeCommand { get; }
         public ICommand CurrentVideoEndedCommand { get; }
 
         private string currentMediaPath;
-
-
         public string CurrentMediaPath
         {
             get { return currentMediaPath; }
@@ -39,96 +37,28 @@ namespace dataneo.TutorialsLib.WPF.UI
 
         public PlayerWindowVM(Window windowHandle, int tutorialPlayerId)
         {
-            this._tutorialPlayerId = Guard.Against.NegativeOrZero(tutorialPlayerId, nameof(tutorialPlayerId));
+            this._queueManager = new QueueManager(tutorialPlayerId);
+            this._queueManager.BeginPlayFile += _queueManager_BeginPlayFile;
             this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);
-            this.ClickedOnEpisodeOrFolderCommand = new Command<int>(ClickedOnEpisodeOrFolderCommandImpl);
+            this.ClickedOnEpisodeCommand = new Command<int>(ClickedOnEpisodeCommandImpl);
             this._windowHandle = Guard.Against.Null(windowHandle, nameof(windowHandle));
         }
 
+        private void _queueManager_BeginPlayFile(string filePath)
+            => this.CurrentMediaPath = filePath;
+
         private void CurrentVideoEndedCommandImpl()
-        {
-            this.CurrentMediaPath = @"Z:\District 9 2009 ITA-ENG BRRip 720p x264-HD4ME\District.9.2009.ITA-ENG.BRRip.720p.x264-HD4ME.mkv";
-        }
+            => this._queueManager.CurrentPlayedEpisodeHasEnded();
 
-        private void ClickedOnEpisodeOrFolderCommandImpl(int episodeId)
-        {
-
-        }
+        private void ClickedOnEpisodeCommandImpl(int episodeId)
+            => this._queueManager.UserRequestEpisodePlay(episodeId);
 
         public async Task LoadAsync()
         {
-            var loadPlayedList = new VideoItemsCreator();
-            (await loadPlayedList.GetAsync(this._tutorialPlayerId))
-                .Tap(playedList => this.VideoItems = playedList)
-                .OnFailure(error => ErrorWindow.ShowError(this._windowHandle, error));
-        }
-
-        //private void NewMethod()
-        //{
-        //    VideoItems.Add(new FolderItem
-        //    {
-        //        Name = "Start",
-        //        WatchStatus = VideoWatchStatus.Watched
-        //    });
-
-        //    VideoItems.Add(
-        //        new VideoItem
-        //        {
-        //            Name = "Test tytułu 1",
-        //            LocationOnList = VideoItemLocationType.FirstElement
-        //        });
-
-        //    VideoItems.Add(new VideoItem
-        //    {
-        //        Name = "Test tytułu 2",
-        //        LocationOnList = VideoItemLocationType.InnerElement
-        //    });
-
-        //    VideoItems.Add(new VideoItem
-        //    {
-        //        Name = "Test tytułu 3",
-        //        LocationOnList = VideoItemLocationType.LastElement
-        //    });
-
-        //    VideoItems.Add(new FolderItem
-        //    {
-        //        Name = "Folder test",
-        //        WatchStatus = VideoWatchStatus.Watched
-        //    });
-
-        //    VideoItems.Add(
-        //        new VideoItem
-        //        {
-        //            Name = "Test tytułu 1",
-        //            LocationOnList = VideoItemLocationType.FirstElement,
-        //            WatchStatus = VideoWatchStatus.Watched
-        //        });
-
-        //    VideoItems.Add(new VideoItem
-        //    {
-        //        Name = "Test tytułu 2",
-        //        LocationOnList = VideoItemLocationType.InnerElement,
-        //        WatchStatus = VideoWatchStatus.InProgress
-        //    });
-
-        //    VideoItems.Add(new VideoItem
-        //    {
-        //        Name = "Test tytułu 3",
-        //        LocationOnList = VideoItemLocationType.LastElement,
-        //        WatchStatus = VideoWatchStatus.NotWatched
-        //    });
-
-        //    VideoItems.Add(new FolderItem
-        //    {
-        //        Name = "Folder test",
-        //        WatchStatus = VideoWatchStatus.NotWatched
-        //    });
-        //}
-
-        public void Test()
-        {
-            // this.CurrentMediaPath = @"F:\Teledyski\Karolina Stanisławczyk - Cliché (official music video) (1080p_25fps_AV1-128kbit_AAC)_KjQYmiGcBKA.mp4";
-
+            (await this._queueManager.LoadVideoItemsAsync())
+                .OnFailure(error => ErrorWindow.ShowError(this._windowHandle, error))
+                .Tap(videoList => this.VideoItems = videoList)
+                .Tap(() => this._queueManager.StartupPlay());
         }
     }
 }
