@@ -10,7 +10,8 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <SolidColorBrush x:Key="grayColor">#929290</SolidColorBrush>
+        <SolidColorBrush x:Key="timeDescColor">#929290</SolidColorBrush>
+        <SolidColorBrush x:Key="titleColor">#E0E0E0</SolidColorBrush>
         <DataTemplate x:Key="VideoItemTemplate">
             <Grid MinWidth="200" Margin="8,0,4,0">
                 <Grid.ColumnDefinitions>
@@ -112,7 +113,7 @@
                     <TextBlock
                         VerticalAlignment="Top"
                         FontSize="13"
-                        Foreground="White"
+                        Foreground="{StaticResource titleColor}"
                         Text="{Binding Name}"
                         TextWrapping="Wrap" />
 
@@ -120,7 +121,7 @@
                         Margin="0,-3,0,2"
                         VerticalAlignment="Top"
                         FontSize="11"
-                        Foreground="{StaticResource grayColor}">
+                        Foreground="{StaticResource timeDescColor}">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0:00}:{1:00}:{2:00}">
                                 <Binding Mode="OneTime" Path="EpisodePlayTime.Hours" />
@@ -192,7 +193,7 @@
                     VerticalAlignment="Bottom"
                     FontSize="14"
                     FontWeight="Bold"
-                    Foreground="White"
+                    Foreground="{StaticResource titleColor}"
                     Text="{Binding Name}"
                     TextWrapping="Wrap" />
                 <TextBlock
@@ -200,7 +201,7 @@
                     Grid.Column="1"
                     Margin="6,-2,0,2"
                     VerticalAlignment="Top"
-                    Foreground="{StaticResource grayColor}">
+                    Foreground="{StaticResource timeDescColor}">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0:00}:{1:00}:{2:00}">
                             <Binding Mode="OneTime" Path="FolderPlayTime.Hours" />

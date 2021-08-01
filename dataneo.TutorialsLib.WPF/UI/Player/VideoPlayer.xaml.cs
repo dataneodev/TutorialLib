@@ -22,15 +22,15 @@ namespace dataneo.TutorialsLib.WPF.UI
         public static readonly DependencyProperty MediaPathProperty =
          DependencyProperty.Register(
              nameof(MediaPath),
-             typeof(string),
+             typeof(PlayFileParameter),
              typeof(VideoPlayer),
              new PropertyMetadata(
-                 String.Empty,
+                 null,
                  new PropertyChangedCallback(OnMediaPathChanged)));
 
-        public string MediaPath
+        public PlayFileParameter MediaPath
         {
-            get { return (string)GetValue(MediaPathProperty); }
+            get { return (PlayFileParameter)GetValue(MediaPathProperty); }
             set { SetValue(MediaPathProperty, value); }
         }
 
@@ -42,8 +42,8 @@ namespace dataneo.TutorialsLib.WPF.UI
 
         private void OnSetMediaPathChanged(DependencyPropertyChangedEventArgs e)
         {
-            this.MediaPath = (string)e.NewValue;
-            if (!String.IsNullOrWhiteSpace(this.MediaPath))
+            this.MediaPath = e.NewValue as PlayFileParameter;
+            if (this.MediaPath is not null)
                 PlayMediaFile(this.MediaPath);
         }
 
@@ -143,12 +143,13 @@ namespace dataneo.TutorialsLib.WPF.UI
             Loaded += VideoPlayer_Loaded;
         }
 
-        private void PlayMediaFile(string mediaPath)
+        private void PlayMediaFile(PlayFileParameter mediaPath)
         {
             ThreadPool.QueueUserWorkItem(_ =>
             {
-                using var media = new Media(_libVLC, new Uri(mediaPath));
+                using var media = new Media(_libVLC, new Uri(mediaPath.Path));
                 this._mediaPlayer.Play(media);
+                this._mediaPlayer.Position = mediaPath.Position / 100f;
             });
         }
 

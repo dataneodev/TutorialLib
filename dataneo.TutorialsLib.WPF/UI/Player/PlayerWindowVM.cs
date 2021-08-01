@@ -26,8 +26,8 @@ namespace dataneo.TutorialsLib.WPF.UI
         public ICommand ClickedOnEpisodeCommand { get; }
         public ICommand CurrentVideoEndedCommand { get; }
 
-        private string currentMediaPath;
-        public string CurrentMediaPath
+        private PlayFileParameter currentMediaPath;
+        public PlayFileParameter CurrentMediaPath
         {
             get { return currentMediaPath; }
             set
@@ -59,8 +59,7 @@ namespace dataneo.TutorialsLib.WPF.UI
 
         private void _queueManager_BeginPlayFile(PlayFileParameter playFileParameter)
         {
-            this.CurrentMediaPath = playFileParameter.Path;
-            this.Position = playFileParameter.Position;
+            this.CurrentMediaPath = playFileParameter;
             this.Caption = playFileParameter.Title;
         }
 

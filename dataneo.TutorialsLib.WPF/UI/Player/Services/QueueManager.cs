@@ -59,19 +59,6 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
             EpisodePlay(idEpisode);
         }
 
-        public void NextEpisode()
-        {
-
-
-        }
-
-        public void PrevExpisode()
-        {
-
-
-
-        }
-
         public async Task EndWorkAsync()
         {
             if (this._currentPlayedEpisode.EpisodeD is null)
@@ -93,11 +80,13 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
             UpdateFolderPlayedStatus(episode.Value.FolderItemD);
 
             var episodePath = episode.Value.GetEpisodePath();
+            var epsiodePlayPosition = episode.Value.EpisodeD.Status != VideoWatchStatus.Watched ?
+                                        episode.Value.EpisodeD.GetPosition() : 0;
             this.BeginPlayFile?.Invoke(
                 new PlayFileParameter(
                     episodePath,
                     episode.Value.EpisodeD.Name,
-                    episode.Value.EpisodeD.GetPosition()));
+                    epsiodePlayPosition));
         }
 
         public async void SetPlayedEpisodePosition(int position)
