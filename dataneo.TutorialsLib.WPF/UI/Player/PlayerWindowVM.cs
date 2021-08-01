@@ -36,6 +36,18 @@ namespace dataneo.TutorialsLib.WPF.UI
             }
         }
 
+        private int position;
+        public int Position
+        {
+            get { return position; }
+            set
+            {
+                position = value;
+                Notify();
+                SetEpsiodePosition(value);
+            }
+        }
+
         public PlayerWindowVM(Window windowHandle, int tutorialPlayerId)
         {
             this._windowHandle = Guard.Against.Null(windowHandle, nameof(windowHandle));
@@ -46,14 +58,20 @@ namespace dataneo.TutorialsLib.WPF.UI
             LoadAsync(tutorialPlayerId);
         }
 
-        private void _queueManager_BeginPlayFile(string filePath)
-            => this.CurrentMediaPath = filePath;
+        private void _queueManager_BeginPlayFile(PlayFileParameter playFileParameter)
+        {
+            this.CurrentMediaPath = playFileParameter.Path;
+            this.Position = playFileParameter.Position;
+        }
 
         private void CurrentVideoEndedCommandImpl()
             => this._queueManager?.CurrentPlayedEpisodeHasEnded();
 
         private void ClickedOnEpisodeCommandImpl(int episodeId)
             => this._queueManager?.UserRequestEpisodePlay(episodeId);
+
+        private void SetEpsiodePosition(int position)
+            => this._queueManager?.SetPlayedEpisodePosition(position);
 
         private async Task LoadAsync(int tutorialId)
         {

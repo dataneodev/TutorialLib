@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -144,27 +145,36 @@ namespace dataneo.TutorialsLib.WPF.UI
 
         private void PlayMediaFile(string mediaPath)
         {
-            if (this._mediaPlayer == null)
-                return;
-
-            using (var media = new Media(_libVLC, new Uri(mediaPath)))
+            ThreadPool.QueueUserWorkItem(_ =>
             {
-                this._mediaPlayer.Media = media;
-                this._mediaPlayer.Play();
-            }
+                if (this._mediaPlayer is not null)
+                {
+                    this._mediaPlayer.Stop();
+                }
+
+                var media = new Media(_libVLC, new Uri(mediaPath));
+                this._mediaPlayer.Play(media);
+            });
         }
 
         private void VideoPlayer_Loaded(object sender, RoutedEventArgs e)
         {
             this._libVLC = new LibVLC();
-            this._mediaPlayer = new MediaPlayer(_libVLC);
-            this._mediaPlayer.PositionChanged += _mediaPlayer_PositionChanged;
-            this._mediaPlayer.VolumeChanged += _mediaPlayer_VolumeChanged;
-            this._mediaPlayer.Stopped += _mediaPlayer_Stopped;
-            this._mediaPlayer.Paused += _mediaPlayer_Paused;
-            this._mediaPlayer.Playing += _mediaPlayer_Playing;
-            this._mediaPlayer.EndReached += _mediaPlayer_EndReached;
-            videoView.MediaPlayer = _mediaPlayer;
+            this._mediaPlayer = GetMediaPlayer(this._libVLC);
+
+            videoView.MediaPlayer = this._mediaPlayer;
+        }
+
+        private MediaPlayer GetMediaPlayer(LibVLC libVLC)
+        {
+            var mediaPlayer = new MediaPlayer(libVLC);
+            mediaPlayer.PositionChanged += _mediaPlayer_PositionChanged;
+            mediaPlayer.VolumeChanged += _mediaPlayer_VolumeChanged;
+            mediaPlayer.Stopped += _mediaPlayer_Stopped;
+            mediaPlayer.Paused += _mediaPlayer_Paused;
+            mediaPlayer.Playing += _mediaPlayer_Playing;
+            mediaPlayer.EndReached += _mediaPlayer_EndReached;
+            return mediaPlayer;
         }
 
         private void Controls_Unloaded(object sender, RoutedEventArgs e)

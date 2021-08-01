@@ -27,6 +27,7 @@
             x:Name="videoView"
             Grid.Column="0"
             MediaPath="{Binding Path=DataContext.CurrentMediaPath, ElementName=playerWindow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            Position="{Binding Path=DataContext.Position, ElementName=playerWindow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             VideoEnded="{Binding Path=DataContext.CurrentVideoEndedCommand, ElementName=playerWindow, Mode=OneWay}" />
         <GridSplitter
             Grid.Column="1"

@@ -76,6 +76,9 @@ namespace dataneo.TutorialLibs.Domain.Entities
             this.PlayedTime = playedTime;
         }
 
+        public void SetAsWatched()
+            => this.PlayedTime = this.File.PlayTime;
+
         public Result SetNewName(string newName)
         {
             if (string.IsNullOrWhiteSpace(newName))
