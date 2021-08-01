@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
+using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
 using dataneo.TutorialsLib.WPF.UI.Dialogs;
 using dataneo.TutorialsLib.WPF.UI.Player.Services;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace dataneo.TutorialsLib.WPF.UI
     internal class PlayerWindowVM : BaseViewModel
     {
         private readonly Window _windowHandle;
-        private readonly QueueManager _queueManager;
+        private QueueManager _queueManager;
 
         private IReadOnlyList<object> videoItems;
         public IReadOnlyList<object> VideoItems
@@ -37,28 +38,37 @@ namespace dataneo.TutorialsLib.WPF.UI
 
         public PlayerWindowVM(Window windowHandle, int tutorialPlayerId)
         {
-            this._queueManager = new QueueManager(tutorialPlayerId);
-            this._queueManager.BeginPlayFile += _queueManager_BeginPlayFile;
+            this._windowHandle = Guard.Against.Null(windowHandle, nameof(windowHandle));
+
             this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);
             this.ClickedOnEpisodeCommand = new Command<int>(ClickedOnEpisodeCommandImpl);
-            this._windowHandle = Guard.Against.Null(windowHandle, nameof(windowHandle));
+
+            LoadAsync(tutorialPlayerId);
         }
 
         private void _queueManager_BeginPlayFile(string filePath)
             => this.CurrentMediaPath = filePath;
 
         private void CurrentVideoEndedCommandImpl()
-            => this._queueManager.CurrentPlayedEpisodeHasEnded();
+            => this._queueManager?.CurrentPlayedEpisodeHasEnded();
 
         private void ClickedOnEpisodeCommandImpl(int episodeId)
-            => this._queueManager.UserRequestEpisodePlay(episodeId);
+            => this._queueManager?.UserRequestEpisodePlay(episodeId);
 
-        public async Task LoadAsync()
+        private async Task LoadAsync(int tutorialId)
         {
-            (await this._queueManager.LoadVideoItemsAsync())
+            using var repo = new TutorialRespositoryAsync();
+            var videoItemsCreator = new VideoItemsCreatorEngine(repo);
+
+            (await videoItemsCreator.LoadAndCreate(tutorialId))
                 .OnFailure(error => ErrorWindow.ShowError(this._windowHandle, error))
-                .Tap(videoList => this.VideoItems = videoList)
-                .Tap(() => this._queueManager.StartupPlay());
+                .Tap(result =>
+                {
+                    this._queueManager = new QueueManager(result);
+                    this._queueManager.BeginPlayFile += _queueManager_BeginPlayFile;
+                    this.VideoItems = result.AllItemsProcessed;
+                    this._queueManager.StartupPlay();
+                });
         }
     }
 }
