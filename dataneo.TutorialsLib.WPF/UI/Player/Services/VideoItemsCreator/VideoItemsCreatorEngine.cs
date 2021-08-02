@@ -22,6 +22,7 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
 
         public async Task<Result<VideoItemsCreatorResult>> LoadAndCreate(int idTutorial)
         {
+            Guard.Against.NegativeOrZero(idTutorial, nameof(idTutorial));
             var tutorialResult = await GetTutorialFromDBAsync(
                                         tutorialId: idTutorial,
                                         tutorialRespositoryAsync: this._tutorialRespositoryAsync);
@@ -36,6 +37,8 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
 
         public static VideoItemsCreatorResult Create(Tutorial tutorial)
         {
+            Guard.Against.Null(tutorial, nameof(tutorial));
+
             var foldersProcessed = new List<KeyValuePair<Folder, FolderItem>>(tutorial.Folders.Count);
             var episodesProcessed = new List<KeyValuePair<Episode, VideoItem>>(tutorial.Folders.Sum(s => s.Episodes.Count));
             var allItems = new List<object>(foldersProcessed.Count + episodesProcessed.Count);
@@ -63,9 +66,12 @@ namespace dataneo.TutorialsLib.WPF.UI.Player.Services
         }
 
         public static VideoWatchStatus GetFolderStatus(IEnumerable<Episode> episodes)
-            => episodes.Aggregate(
+        {
+            Guard.Against.Null(episodes, nameof(episodes));
+            return episodes.Aggregate(
                 VideoWatchStatus.Watched,
                 SelectVideoWatchStatusForAllFolder);
+        }
 
         private static KeyValuePair<Folder, FolderItem> GetFolderItem(Folder folder, ref short folderPosition)
         {
