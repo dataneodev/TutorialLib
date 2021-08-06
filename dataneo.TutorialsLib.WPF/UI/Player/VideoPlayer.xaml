@@ -9,8 +9,9 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <UserControl.Resources />
-
+    <UserControl.Resources>
+        <ResourceDictionary Source="pack://application:,,,/dataneo.TutorialsLibs.WPF;component/Resources/Global.xaml" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -24,31 +25,6 @@
         <Grid Grid.Row="1" Background="#191919">
             <Grid.Resources>
                 <ResourceDictionary>
-                    <SolidColorBrush x:Key="btnNavColot" Color="#464646" />
-                    <Style x:Key="btnControlStyle" TargetType="{x:Type Button}">
-                        <Setter Property="Background" Value="LightBlue" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border
-                                        x:Name="Border"
-                                        Margin="2"
-                                        Padding="8"
-                                        BorderThickness="0"
-                                        CornerRadius="0">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Border" Property="Background" Value="#2A2A2A" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-
-
                     <Style x:Key="SliderRepeatButton" TargetType="RepeatButton">
                         <Setter Property="SnapsToDevicePixels" Value="true" />
                         <Setter Property="OverridesDefaultStyle" Value="true" />

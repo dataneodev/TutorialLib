@@ -14,6 +14,9 @@
     Topmost="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary Source="pack://application:,,,/dataneo.TutorialsLibs.WPF;component/Resources/Global.xaml" />
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*" />
@@ -23,17 +26,89 @@
                 MinWidth="260"
                 MaxWidth="360" />
         </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Button
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Width="50"
+                Height="50"
+                Margin="0"
+                Padding="0"
+                Style="{StaticResource btnControlStyle}">
+                <Button.Content>
+                    <Grid>
+                        <Path
+                            Width="30"
+                            Height="30"
+                            Data="M 15, 15 L 10,10  Z"
+                            Fill="{StaticResource btnNavColot}" />
+                        <Ellipse
+                            Width="30"
+                            Height="30"
+                            Margin="0"
+                            Stroke="{StaticResource btnNavColot}"
+                            StrokeThickness="2" />
+                    </Grid>
+
+
+                </Button.Content>
+            </Button>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="5,2,0,0"
+                FontSize="16"
+                FontWeight="Medium"
+                Foreground="White"
+                Opacity="0.8"
+                Text="Tutorial name" />
+
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="5,0,0,0"
+                FontSize="14"
+                Foreground="White"
+                Opacity="0.8"
+                Text="Tutorial name" />
+
+            <Button
+                Grid.Row="2"
+                Grid.RowSpan="2"
+                Grid.Column="2" />
+        </Grid>
         <local:VideoPlayer
             x:Name="videoView"
+            Grid.Row="1"
             Grid.Column="0"
             MediaPath="{Binding Path=DataContext.CurrentMediaPath, ElementName=playerWindow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Position="{Binding Path=DataContext.Position, ElementName=playerWindow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             VideoEnded="{Binding Path=DataContext.CurrentVideoEndedCommand, ElementName=playerWindow, Mode=OneWay}" />
         <GridSplitter
+            Grid.Row="0"
+            Grid.RowSpan="2"
             Grid.Column="1"
             Width="2"
             HorizontalAlignment="Stretch" />
         <local:VideoList
+            Grid.Row="0"
+            Grid.RowSpan="2"
             Grid.Column="2"
             EpisodeClick="{Binding Path=ClickedOnEpisodeCommand, Mode=OneTime}"
             ItemSource="{Binding Path=VideoItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
