@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace dataneo.TutorialsLib.WPF.Converters
+namespace dataneo.TutorialsLibs.WPF.Converters
 {
     public class ProgressBarColorConverter : IValueConverter
     {

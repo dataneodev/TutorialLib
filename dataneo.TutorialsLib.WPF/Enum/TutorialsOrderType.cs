@@ -1,4 +1,4 @@
-﻿namespace dataneo.TutorialsLib.WPF
+﻿namespace dataneo.TutorialsLibs.WPF
 {
     internal enum TutorialsOrderType : byte
     {

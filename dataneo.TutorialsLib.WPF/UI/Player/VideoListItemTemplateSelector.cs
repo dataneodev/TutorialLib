@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace dataneo.TutorialsLib.WPF.UI
+namespace dataneo.TutorialsLibs.WPF.UI
 {
     internal class VideoListItemTemplateSelector : DataTemplateSelector
     {

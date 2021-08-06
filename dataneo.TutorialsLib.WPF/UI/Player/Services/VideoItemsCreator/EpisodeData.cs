@@ -1,7 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using dataneo.TutorialLibs.Domain.Entities;
 
-namespace dataneo.TutorialsLib.WPF.UI.Player.Services
+namespace dataneo.TutorialsLibs.WPF.UI.Player.Services
 {
     internal sealed class EpisodeData
     {

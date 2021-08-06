@@ -1,9 +1,9 @@
 ﻿<Window
-    x:Class="dataneo.TutorialsLib.WPF.UI.PlayerWindow"
+    x:Class="dataneo.TutorialsLibs.WPF.UI.PlayerWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:dataneo.TutorialsLib.WPF.UI"
+    xmlns:local="clr-namespace:dataneo.TutorialsLibs.WPF.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="playerWindow"
     Title="{Binding Path=Caption}"

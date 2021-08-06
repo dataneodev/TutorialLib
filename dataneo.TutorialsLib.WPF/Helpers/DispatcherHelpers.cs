@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Windows;
 
-namespace dataneo.TutorialsLib.WPF.Helpers
+namespace dataneo.TutorialsLibs.WPF.Helpers
 {
     public static class DispatcherHelpers
     {

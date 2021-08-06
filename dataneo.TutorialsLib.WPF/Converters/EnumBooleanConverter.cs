@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace dataneo.TutorialsLib.WPF.Converters
+namespace dataneo.TutorialsLibs.WPF.Converters
 {
     public class EnumBooleanConverter : IValueConverter
     {

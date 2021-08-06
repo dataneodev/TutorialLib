@@ -4,7 +4,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace dataneo.TutorialsLib.WPF.Converters
+namespace dataneo.TutorialsLibs.WPF.Converters
 {
     public class ProgressBarValueConverter : IValueConverter
     {

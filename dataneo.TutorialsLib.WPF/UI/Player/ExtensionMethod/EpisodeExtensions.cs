@@ -1,7 +1,7 @@
 ﻿using dataneo.TutorialLibs.Domain.Entities;
 using System;
 
-namespace dataneo.TutorialsLib.WPF.UI
+namespace dataneo.TutorialsLibs.WPF.UI
 {
     internal static class EpisodeExtensions
     {

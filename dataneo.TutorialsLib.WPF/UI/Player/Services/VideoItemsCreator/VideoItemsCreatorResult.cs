@@ -4,7 +4,7 @@ using dataneo.TutorialLibs.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace dataneo.TutorialsLib.WPF.UI.Player.Services
+namespace dataneo.TutorialsLibs.WPF.UI.Player.Services
 {
     internal sealed class VideoItemsCreatorResult
     {

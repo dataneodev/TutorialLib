@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace dataneo.TutorialsLib.WPF.UI.Player.Services
+namespace dataneo.TutorialsLibs.WPF.UI.Player.Services
 {
     internal sealed class VideoItemsCreatorEngine
     {

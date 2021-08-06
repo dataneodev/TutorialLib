@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace dataneo.TutorialsLib.WPF.Translation {
+namespace dataneo.TutorialsLibs.WPF.Translation {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace dataneo.TutorialsLib.WPF.Translation {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("dataneo.TutorialsLib.WPF.Translation.UI", typeof(UI).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("dataneo.TutorialsLibs.WPF.Translation.UI", typeof(UI).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

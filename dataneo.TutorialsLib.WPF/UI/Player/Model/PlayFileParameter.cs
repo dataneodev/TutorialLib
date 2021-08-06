@@ -1,4 +1,4 @@
-﻿namespace dataneo.TutorialsLib.WPF.UI
+﻿namespace dataneo.TutorialsLibs.WPF.UI
 {
     public sealed class PlayFileParameter
     {

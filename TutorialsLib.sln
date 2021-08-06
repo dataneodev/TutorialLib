@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialsLib.WPF", "dataneo.TutorialsLib.WPF\dataneo.TutorialsLib.WPF.csproj", "{52B34334-00A6-43AB-A5F2-7A801B0E6E72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialsLibs.WPF", "dataneo.TutorialsLib.WPF\dataneo.TutorialsLibs.WPF.csproj", "{52B34334-00A6-43AB-A5F2-7A801B0E6E72}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{9BF06453-6B03-43B3-81ED-9B099B43E136}"
 EndProject
@@ -39,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialLibs.FileIO
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaInfo.DotNetWrapper", "MediaInfo.DotNetWrapper\MediaInfo.DotNetWrapper.csproj", "{307AEBCA-B5C9-4F4A-9A85-38988E2D7A68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dataneo.TutorialLibs.DomainTests", "Tests\dataneo.TutorialLibs.DomainTests\dataneo.TutorialLibs.DomainTests.csproj", "{0CF7625B-7315-4DE3-B0A7-73A226D34161}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialLibs.DomainTests", "Tests\dataneo.TutorialLibs.DomainTests\dataneo.TutorialLibs.DomainTests.csproj", "{0CF7625B-7315-4DE3-B0A7-73A226D34161}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

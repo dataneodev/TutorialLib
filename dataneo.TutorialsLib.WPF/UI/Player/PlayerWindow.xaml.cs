@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace dataneo.TutorialsLib.WPF.UI
+namespace dataneo.TutorialsLibs.WPF.UI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

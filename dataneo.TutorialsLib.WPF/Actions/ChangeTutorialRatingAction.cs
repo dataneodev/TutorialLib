@@ -4,7 +4,7 @@ using dataneo.TutorialLibs.Domain.Enums;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
 using System.Threading.Tasks;
 
-namespace dataneo.TutorialsLib.WPF.Actions
+namespace dataneo.TutorialsLibs.WPF.Actions
 {
     public static class ChangeTutorialRatingAction
     {

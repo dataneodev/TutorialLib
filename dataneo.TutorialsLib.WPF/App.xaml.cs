@@ -2,7 +2,7 @@
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
 using System.Windows;
 
-namespace dataneo.TutorialsLib.WPF
+namespace dataneo.TutorialsLibs.WPF
 {
     /// <summary>
     /// Interaction logic for App.xaml

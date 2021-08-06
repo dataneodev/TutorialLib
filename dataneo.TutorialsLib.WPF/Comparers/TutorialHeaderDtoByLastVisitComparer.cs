@@ -1,7 +1,7 @@
 ﻿using dataneo.TutorialLibs.Domain.DTO;
 using System.Collections.Generic;
 
-namespace dataneo.TutorialsLib.WPF.Comparers
+namespace dataneo.TutorialsLibs.WPF.Comparers
 {
     public sealed class TutorialHeaderDtoByLastVisitComparer : IComparer<TutorialHeaderDto>
     {
