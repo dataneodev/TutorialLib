@@ -15,7 +15,31 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
-        <ResourceDictionary Source="pack://application:,,,/dataneo.TutorialsLibs.WPF;component/Resources/Global.xaml" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/dataneo.TutorialsLibs.WPF;component/Resources/Global.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="btnNavStyle" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="LightBlue" />
+                <Setter Property="Foreground" Value="{StaticResource btnNavColot}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border
+                                x:Name="Border"
+                                Margin="2"
+                                Padding="8"
+                                BorderBrush="#00FFFF00"
+                                BorderThickness="0"
+                                CornerRadius="0">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -45,34 +69,47 @@
                 Grid.Row="0"
                 Grid.RowSpan="2"
                 Grid.Column="0"
-                Width="50"
-                Height="50"
-                Margin="0"
-                Padding="0"
-                Style="{StaticResource btnControlStyle}">
-                <Button.Content>
-                    <Grid>
-                        <Path
-                            Width="30"
-                            Height="30"
-                            Data="M 15, 15 L 10,10  Z"
-                            Fill="{StaticResource btnNavColot}" />
-                        <Ellipse
-                            Width="30"
-                            Height="30"
-                            Margin="0"
-                            Stroke="{StaticResource btnNavColot}"
-                            StrokeThickness="2" />
-                    </Grid>
-
-
-                </Button.Content>
+                Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Path
+                                Width="30"
+                                Height="30"
+                                Data="M 14.5, 15 H 15  Z"
+                                Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                                StrokeThickness="2" />
+                            <Path
+                                Width="30"
+                                Height="30"
+                                Data="M 12.5, 22.5 L 5,15 L 12.5,7.5"
+                                Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                                StrokeThickness="2" />
+                            <Ellipse
+                                Width="30"
+                                Height="30"
+                                Margin="0"
+                                Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                                StrokeThickness="2" />
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
+                <Button.Style>
+                    <Style BasedOn="{StaticResource btnNavStyle}" TargetType="Button">
+                        <Style.Triggers>
+                            <Trigger Property="Button.IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
             </Button>
 
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="1"
-                Margin="5,2,0,0"
+                Margin="0,2,0,0"
                 FontSize="16"
                 FontWeight="Medium"
                 Foreground="White"
@@ -82,16 +119,59 @@
             <TextBlock
                 Grid.Row="1"
                 Grid.Column="1"
-                Margin="5,0,0,0"
+                Margin="0"
                 FontSize="14"
                 Foreground="White"
                 Opacity="0.8"
                 Text="Tutorial name" />
 
             <Button
-                Grid.Row="2"
+                Grid.Row="0"
                 Grid.RowSpan="2"
-                Grid.Column="2" />
+                Grid.Column="2"
+                Cursor="Hand">
+                <Button.Content>
+                    <Grid>
+                        <Path
+                            Width="30"
+                            Height="30"
+                            Data="M 14.5, 15 H 15  Z"
+                            Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                            StrokeThickness="2" />
+
+                        <Path
+                            Width="30"
+                            Height="30"
+                            Data="M 14.5, 22.5 H 15  Z"
+                            Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                            StrokeThickness="2" />
+
+                        <Path
+                            Width="30"
+                            Height="30"
+                            Data="M 14.5, 7.5 H 15  Z"
+                            Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                            StrokeThickness="2" />
+
+                        <Path
+                            Width="30"
+                            Height="30"
+                            Data="M 17.5, 4 L 25 7.5 L 17.5, 11"
+                            Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                            StrokeThickness="1" />
+
+                    </Grid>
+                </Button.Content>
+                <Button.Style>
+                    <Style BasedOn="{StaticResource btnNavStyle}" TargetType="Button">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
         <local:VideoPlayer
             x:Name="videoView"
