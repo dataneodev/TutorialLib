@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace dataneo.TutorialsLibs.WPF.UI
+namespace dataneo.TutorialLibs.WPF.UI
 {
     public class FolderItem : INotifyPropertyChanged
     {

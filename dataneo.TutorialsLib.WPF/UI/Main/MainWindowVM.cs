@@ -4,9 +4,9 @@ using dataneo.Extensions;
 using dataneo.TutorialLibs.Domain.DTO;
 using dataneo.TutorialLibs.Domain.Enums;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
-using dataneo.TutorialsLibs.WPF.Actions;
-using dataneo.TutorialsLibs.WPF.Comparers;
-using dataneo.TutorialsLibs.WPF.UI.Dialogs;
+using dataneo.TutorialLibs.WPF.Actions;
+using dataneo.TutorialLibs.WPF.Comparers;
+using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace dataneo.TutorialsLibs.WPF.UI
+namespace dataneo.TutorialLibs.WPF.UI
 {
     internal sealed class MainWindowVM : BaseViewModel
     {

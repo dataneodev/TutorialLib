@@ -1,14 +1,14 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
-using dataneo.TutorialsLibs.WPF.UI.Dialogs;
-using dataneo.TutorialsLibs.WPF.UI.Player.Services;
+using dataneo.TutorialLibs.WPF.UI.Dialogs;
+using dataneo.TutorialLibs.WPF.UI.Player.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace dataneo.TutorialsLibs.WPF.UI
+namespace dataneo.TutorialLibs.WPF.UI
 {
     internal class PlayerWindowVM : BaseViewModel
     {

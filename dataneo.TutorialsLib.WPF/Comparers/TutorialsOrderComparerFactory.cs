@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace dataneo.TutorialsLibs.WPF.Comparers
+namespace dataneo.TutorialLibs.WPF.Comparers
 {
     internal static class TutorialsOrderComparerFactory
     {

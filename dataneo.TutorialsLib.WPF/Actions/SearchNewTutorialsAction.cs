@@ -1,4 +1,4 @@
-﻿namespace dataneo.TutorialsLibs.WPF.Actions
+﻿namespace dataneo.TutorialLibs.WPF.Actions
 {
     public class SearchNewTutorialsAction
     {

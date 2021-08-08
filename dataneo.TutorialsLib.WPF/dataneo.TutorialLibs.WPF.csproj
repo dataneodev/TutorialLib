@@ -6,6 +6,8 @@
     <UseWPF>true</UseWPF>
     <Authors>dataneo</Authors>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <AssemblyName>dataneo.TutorialLibs.WPF</AssemblyName>
+    <RootNamespace>dataneo.TutorialLibs.WPF</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

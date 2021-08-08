@@ -1,7 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using System.Windows;
 
-namespace dataneo.TutorialsLibs.WPF.UI.Dialogs
+namespace dataneo.TutorialLibs.WPF.UI.Dialogs
 {
     public partial class ErrorWindow : Window
     {

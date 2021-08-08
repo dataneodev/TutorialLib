@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialsLibs.WPF", "dataneo.TutorialsLib.WPF\dataneo.TutorialsLibs.WPF.csproj", "{52B34334-00A6-43AB-A5F2-7A801B0E6E72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialLibs.WPF", "dataneo.TutorialsLib.WPF\dataneo.TutorialLibs.WPF.csproj", "{52B34334-00A6-43AB-A5F2-7A801B0E6E72}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{9BF06453-6B03-43B3-81ED-9B099B43E136}"
 EndProject

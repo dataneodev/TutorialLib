@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace dataneo.TutorialsLibs.WPF.Actions
+namespace dataneo.TutorialLibs.WPF.Actions
 {
     internal class AddNewTutorialAction
     {

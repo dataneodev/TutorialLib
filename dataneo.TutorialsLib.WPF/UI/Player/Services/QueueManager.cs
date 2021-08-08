@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace dataneo.TutorialsLibs.WPF.UI.Player.Services
+namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 {
     internal sealed class QueueManager
     {

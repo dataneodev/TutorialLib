@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace dataneo.TutorialsLibs.WPF.UI
+namespace dataneo.TutorialLibs.WPF.UI
 {
     public class Command<T> : ICommand
     {

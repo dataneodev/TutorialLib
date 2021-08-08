@@ -1,8 +1,8 @@
 ﻿<Application
-    x:Class="dataneo.TutorialsLibs.WPF.App"
+    x:Class="dataneo.TutorialLibs.WPF.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ui="clr-namespace:dataneo.TutorialsLibs.WPF"
+    xmlns:ui="clr-namespace:dataneo.TutorialLibs.WPF"
     DispatcherUnhandledException="Application_DispatcherUnhandledException"
     StartupUri="UI/Main/MainWindow.xaml">
     <Application.Resources />

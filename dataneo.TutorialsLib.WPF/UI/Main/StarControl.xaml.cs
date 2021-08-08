@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace dataneo.TutorialsLibs.WPF.UI
+namespace dataneo.TutorialLibs.WPF.UI
 {
     /// <summary>
     /// Interaction logic for StarControl.xaml

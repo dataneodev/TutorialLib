@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace dataneo.TutorialsLibs.WPF.UI.Setting
+namespace dataneo.TutorialLibs.WPF.UI.Setting
 {
     /// <summary>
     /// Interaction logic for SettingWindow.xaml
