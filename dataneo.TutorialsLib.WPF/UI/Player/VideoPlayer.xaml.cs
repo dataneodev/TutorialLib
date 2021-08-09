@@ -71,6 +71,30 @@ namespace dataneo.TutorialLibs.WPF.UI
             set { SetValue(VideoEndedProperty, value); }
         }
 
+        public static readonly DependencyProperty FullscreenToggleProperty =
+         DependencyProperty.Register(
+             nameof(FullscreenToggle),
+             typeof(ICommand),
+             typeof(VideoPlayer),
+              new PropertyMetadata(null, new PropertyChangedCallback(OnFullscreenToggleChanged)));
+
+        private static void OnFullscreenToggleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var vPlayer = d as VideoPlayer;
+            vPlayer.OnSetFullscreenToggleChanged(e);
+        }
+
+        private void OnSetFullscreenToggleChanged(DependencyPropertyChangedEventArgs e)
+        {
+            this.FullscreenToggle = (ICommand)e.NewValue;
+        }
+
+        public ICommand FullscreenToggle
+        {
+            get { return (ICommand)GetValue(FullscreenToggleProperty); }
+            set { SetValue(FullscreenToggleProperty, value); }
+        }
+
         public static readonly DependencyProperty PositionProperty =
          DependencyProperty.Register(
              nameof(Position),
@@ -244,6 +268,14 @@ namespace dataneo.TutorialLibs.WPF.UI
             double MousePosition = e.GetPosition(pbVideoProgress).X;
             double ratio = MousePosition / pbVideoProgress.ActualWidth;
             this.Position = (int)(ratio * pbVideoProgress.Maximum);
+        }
+
+        private void btnFullscreen_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.FullscreenToggle?.CanExecute(null) ?? false)
+            {
+                this.FullscreenToggle?.Execute(null);
+            }
         }
     }
 }

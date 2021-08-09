@@ -25,6 +25,7 @@ namespace dataneo.TutorialLibs.WPF.UI
 
         public ICommand ClickedOnEpisodeCommand { get; }
         public ICommand CurrentVideoEndedCommand { get; }
+        public ICommand FullscreenToggleCommand { get; }
 
         private PlayFileParameter currentMediaPath;
         public PlayFileParameter CurrentMediaPath
@@ -55,6 +56,21 @@ namespace dataneo.TutorialLibs.WPF.UI
             this._tutorialId = Guard.Against.NegativeOrZero(tutorialPlayerId, nameof(tutorialPlayerId));
             this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);
             this.ClickedOnEpisodeCommand = new Command<int>(ClickedOnEpisodeCommandImpl);
+            this.FullscreenToggleCommand = new Command(FullscreenToggleCommandImpl);
+        }
+
+        private void FullscreenToggleCommandImpl()
+        {
+            if (this._windowHandle.WindowState == WindowState.Maximized)
+            {
+                this._windowHandle.WindowState = WindowState.Normal;
+                this._windowHandle.WindowStyle = WindowStyle.ThreeDBorderWindow;
+            }
+            else
+            {
+                this._windowHandle.WindowState = WindowState.Maximized;
+                this._windowHandle.WindowStyle = WindowStyle.None;
+            }
         }
 
         private void _queueManager_BeginPlayFile(PlayFileParameter playFileParameter)

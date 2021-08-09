@@ -248,7 +248,8 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Cursor="Hand"
-                Style="{StaticResource btnControlStyle}">
+                Style="{StaticResource btnControlStyle}"
+                Click="btnFullscreen_Click">
                 <Grid Background="#00000000">
                     <Path
                         Data="M 6,0 L 0,0 L 0,6"

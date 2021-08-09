@@ -29,5 +29,17 @@ namespace dataneo.TutorialLibs.WPF.UI
             await this._VM.EndWorkAsync();
             this._onClose.Invoke();
         }
+
+        private void btToggleVideo_Click(object sender, RoutedEventArgs e)
+        {
+            var nextState = GetNextState();
+            ucVideoList.Visibility = nextState;
+            gsVerticalSpliter.Visibility = nextState;
+
+            Visibility GetNextState()
+                => ucVideoList.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+
     }
 }

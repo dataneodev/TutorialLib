@@ -34,7 +34,6 @@
                                 CornerRadius="0">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Border>
-
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -45,10 +44,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition
-                Width="*"
-                MinWidth="260"
-                MaxWidth="360" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -126,9 +122,11 @@
                 Text="Tutorial name" />
 
             <Button
+                x:Name="btToggleVideo"
                 Grid.Row="0"
                 Grid.RowSpan="2"
                 Grid.Column="2"
+                Click="btToggleVideo_Click"
                 Cursor="Hand">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -175,22 +173,26 @@
             </Button>
         </Grid>
         <local:VideoPlayer
-            x:Name="videoView"
+            x:Name="ucVideoView"
             Grid.Row="1"
             Grid.Column="0"
+            FullscreenToggle="{Binding Path=DataContext.FullscreenToggleCommand, ElementName=playerWindow}"
             MediaPath="{Binding Path=DataContext.CurrentMediaPath, ElementName=playerWindow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Position="{Binding Path=DataContext.Position, ElementName=playerWindow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             VideoEnded="{Binding Path=DataContext.CurrentVideoEndedCommand, ElementName=playerWindow, Mode=OneWay}" />
         <GridSplitter
+            x:Name="gsVerticalSpliter"
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="1"
             Width="2"
             HorizontalAlignment="Stretch" />
         <local:VideoList
+            x:Name="ucVideoList"
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="2"
+            Width="250"
             EpisodeClick="{Binding Path=ClickedOnEpisodeCommand, Mode=OneTime}"
             ItemSource="{Binding Path=VideoItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
