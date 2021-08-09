@@ -50,6 +50,20 @@ namespace dataneo.TutorialLibs.WPF.UI
             }
         }
 
+        private string folderTitle;
+        public string FolderTitle
+        {
+            get { return folderTitle; }
+            set { folderTitle = value; Notify(); }
+        }
+
+        private string episodeTitle;
+        public string EpisodeTitle
+        {
+            get { return episodeTitle; }
+            set { episodeTitle = value; Notify(); }
+        }
+
         public PlayerWindowVM(Window windowHandle, int tutorialPlayerId)
         {
             this._windowHandle = Guard.Against.Null(windowHandle, nameof(windowHandle));
@@ -76,7 +90,9 @@ namespace dataneo.TutorialLibs.WPF.UI
         private void _queueManager_BeginPlayFile(PlayFileParameter playFileParameter)
         {
             this.CurrentMediaPath = playFileParameter;
-            this.Caption = playFileParameter.Title;
+            this.Caption = playFileParameter.TutorialTitle;
+            this.FolderTitle = playFileParameter.FolderTitle;
+            this.EpisodeTitle = playFileParameter.EpisodeTitle;
         }
 
         private void CurrentVideoEndedCommandImpl()

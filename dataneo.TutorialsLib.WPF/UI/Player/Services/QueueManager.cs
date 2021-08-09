@@ -85,7 +85,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
             this.BeginPlayFile?.Invoke(
                 new PlayFileParameter(
                     episodePath,
+                    episode.Value.TutorialD.Name,
+                    episode.Value.FolderD.Name,
                     episode.Value.EpisodeD.Name,
+                    episode.Value.EpisodeD.File.PlayTime,
                     epsiodePlayPosition));
         }
 

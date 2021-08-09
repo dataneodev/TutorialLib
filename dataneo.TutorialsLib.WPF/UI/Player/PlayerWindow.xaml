@@ -10,7 +10,6 @@
     Width="800"
     Height="450"
     Background="Black"
-    Closing="playeWindow_Closing"
     Topmost="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -110,7 +109,7 @@
                 FontWeight="Medium"
                 Foreground="White"
                 Opacity="0.8"
-                Text="Tutorial name" />
+                Text="{Binding Path=Caption, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
                 Grid.Row="1"
@@ -118,8 +117,11 @@
                 Margin="4,0,0,0"
                 FontSize="14"
                 Foreground="White"
-                Opacity="0.8"
-                Text="Tutorial name" />
+                Opacity="0.8">
+                <Run Text="{Binding Path=FolderTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Run Text="/" />
+                <Run Text="{Binding Path=EpisodeTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            </TextBlock>
 
             <Button
                 x:Name="btToggleVideo"

@@ -239,6 +239,15 @@
                 </Grid>
             </Button>
 
+            <TextBlock
+                x:Name="tbTimeProgress"
+                Grid.Row="1"
+                Grid.Column="3"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Foreground="#929290"
+                Text="00:00 / 00:00"/>
+
             <Button
                 x:Name="btnFullscreen"
                 Grid.Row="1"
@@ -247,9 +256,9 @@
                 Height="50"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
+                Click="btnFullscreen_Click"
                 Cursor="Hand"
-                Style="{StaticResource btnControlStyle}"
-                Click="btnFullscreen_Click">
+                Style="{StaticResource btnControlStyle}">
                 <Grid Background="#00000000">
                     <Path
                         Data="M 6,0 L 0,0 L 0,6"

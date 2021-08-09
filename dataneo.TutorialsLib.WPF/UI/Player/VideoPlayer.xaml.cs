@@ -43,6 +43,7 @@ namespace dataneo.TutorialLibs.WPF.UI
         private void OnSetMediaPathChanged(DependencyPropertyChangedEventArgs e)
         {
             this.MediaPath = e.NewValue as PlayFileParameter;
+            SetTimes(this.MediaPath.PlayTime);
             if (this.MediaPath is not null)
                 PlayMediaFile(this.MediaPath);
         }
@@ -250,6 +251,7 @@ namespace dataneo.TutorialLibs.WPF.UI
                 SetValue(PositionProperty, newPosition);
                 OnPropertyChanged(nameof(Position));
             });
+            UpdateTimes(newPosition);
         }
 
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
@@ -271,11 +273,37 @@ namespace dataneo.TutorialLibs.WPF.UI
         }
 
         private void btnFullscreen_Click(object sender, RoutedEventArgs e)
+            => SetFullscreenToggle();
+
+        private void SetFullscreenToggle()
         {
             if (this.FullscreenToggle?.CanExecute(null) ?? false)
             {
                 this.FullscreenToggle?.Execute(null);
             }
         }
+
+        private TimeSpan playTime;
+        private void SetTimes(TimeSpan playTime)
+        {
+            this.playTime = playTime;
+        }
+
+        private void UpdateTimes(int position)
+        {
+            App.Current.Dispatcher.Invoke(() =>
+                tbTimeProgress.Text = GetNewTimeDescritpion(position));
+        }
+
+        private string GetNewTimeDescritpion(int position)
+        {
+            var playedTime = TimeSpan.FromSeconds(
+                    (position / 100f) * this.playTime.TotalSeconds);
+
+            return $"{GetFormatedTimeSpan(playedTime)} / {GetFormatedTimeSpan(this.playTime)}";
+        }
+
+        private string GetFormatedTimeSpan(TimeSpan timeSpan)
+            => timeSpan.ToString(@"mm\:ss");
     }
 }

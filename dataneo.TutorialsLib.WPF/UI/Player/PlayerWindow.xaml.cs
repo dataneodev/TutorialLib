@@ -39,7 +39,5 @@ namespace dataneo.TutorialLibs.WPF.UI
             Visibility GetNextState()
                 => ucVideoList.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
-
-
     }
 }
