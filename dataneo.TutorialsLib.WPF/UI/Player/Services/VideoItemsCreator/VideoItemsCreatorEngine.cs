@@ -76,16 +76,11 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
         private static KeyValuePair<Folder, FolderItem> GetFolderItem(Folder folder, ref short folderPosition)
         {
             var watchStatus = GetFolderStatus(folder.Episodes);
-            var folderPlayedTime = System.TimeSpan.FromSeconds(
-                                        folder.Episodes.Sum(s => s.File.PlayTime.TotalSeconds));
+            ;
 
-            var folderItem = new FolderItem
+            var folderItem = new FolderItem(folder)
             {
-                FolderId = folder.Id,
                 Position = ++folderPosition,
-                Name = folder.Name,
-                FolderPlayTime = folderPlayedTime,
-                WatchStatus = watchStatus,
             };
 
             return new KeyValuePair<Folder, FolderItem>(
@@ -123,12 +118,8 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
         }
 
         private static VideoItem GetVideoItem(Episode episode, VideoItemLocationType videoItemLocationType)
-            => new VideoItem
+            => new VideoItem(episode)
             {
-                EpisodeId = episode.Id,
-                EpisodePlayTime = episode.File.PlayTime,
-                Name = episode.Name,
-                WatchStatus = episode.Status,
                 LocationOnList = videoItemLocationType,
             };
 

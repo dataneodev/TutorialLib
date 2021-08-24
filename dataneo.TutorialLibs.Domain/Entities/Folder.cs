@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using dataneo.SharedKernel;
+using dataneo.TutorialLibs.Domain.Enums;
 using dataneo.TutorialLibs.Domain.Translation;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,27 @@ namespace dataneo.TutorialLibs.Domain.Entities
             if (order < 0)
                 throw new ArgumentException(nameof(order));
             Order = order;
+        }
+
+        public TimeSpan GetFolderPlayedTime()
+            => TimeSpan.FromSeconds(this.Episodes.Sum(s => s.File.PlayTime.TotalSeconds));
+
+        public VideoWatchStatus GetFolderStatus()
+            => this.Episodes.Aggregate(
+                    VideoWatchStatus.Watched,
+                    SelectVideoWatchStatusForAllFolder);
+
+        private static VideoWatchStatus SelectVideoWatchStatusForAllFolder(
+                           VideoWatchStatus aggregate,
+                           Episode episode)
+        {
+            if (aggregate == VideoWatchStatus.InProgress)
+                return aggregate;
+
+            if (episode.Status != VideoWatchStatus.Watched)
+                return episode.Status;
+
+            return VideoWatchStatus.Watched;
         }
     }
 }

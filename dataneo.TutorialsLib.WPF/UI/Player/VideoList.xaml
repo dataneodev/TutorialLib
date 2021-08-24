@@ -12,32 +12,39 @@
     <UserControl.Resources>
         <SolidColorBrush x:Key="timeDescColor">#929290</SolidColorBrush>
         <SolidColorBrush x:Key="titleColor">#E0E0E0</SolidColorBrush>
+        <SolidColorBrush x:Key="iconBackground">DarkSlateGray</SolidColorBrush>
+        <SolidColorBrush x:Key="iconActiveColor">#A1C2C2</SolidColorBrush>
+        <SolidColorBrush x:Key="iconActiveBackgroundColor">Green</SolidColorBrush>
         <DataTemplate x:Key="VideoItemTemplate">
             <Grid MinWidth="200" Margin="8,0,4,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="12" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
+                    <RowDefinition />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Rectangle
                     Grid.Row="0"
                     Grid.Column="0"
                     Width="2"
-                    Margin="0,0,0,-3"
-                    HorizontalAlignment="Stretch"
-                    Stroke="DarkSlateGray">
+                    Margin="0"
+                    HorizontalAlignment="Center"
+                    Stretch="Fill"
+                    Stroke="{StaticResource iconBackground}">
                     <Rectangle.Style>
                         <Style TargetType="Rectangle">
-                            <Setter Property="Visibility" Value="Visible" />
+                            <Setter Property="Visibility" Value="Hidden" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding LocationOnList}" Value="FirstElement">
-                                    <Setter Property="Visibility" Value="Hidden" />
+                                <DataTrigger Binding="{Binding LocationOnList}" Value="InnerElement">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding LocationOnList}" Value="LastElement">
+                                    <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -49,13 +56,14 @@
                     Width="12"
                     Height="12"
                     Margin="0"
-                    HorizontalAlignment="Center">
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
                     <Ellipse.Style>
                         <Style TargetType="Ellipse">
-                            <Setter Property="Fill" Value="Green" />
+                            <Setter Property="Fill" Value="{StaticResource iconActiveBackgroundColor}" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding WatchStatus}" Value="NotWatched">
-                                    <Setter Property="Fill" Value="DarkSlateGray" />
+                                    <Setter Property="Fill" Value="{StaticResource iconBackground}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -64,11 +72,11 @@
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="0"
-                    Margin="2,-1,0,0"
+                    Margin="2,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontSize="8"
-                    Foreground="White">
+                    Foreground="{StaticResource iconActiveColor}">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
                             <Setter Property="Visibility" Value="Collapsed" />
@@ -89,21 +97,24 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     Width="2"
-                    Margin="0,-3,0,0"
-                    HorizontalAlignment="Stretch"
-                    Stroke="DarkSlateGray">
+                    Margin="0"
+                    HorizontalAlignment="Center"
+                    Stretch="Fill"
+                    Stroke="{StaticResource iconBackground}">
                     <Rectangle.Style>
                         <Style TargetType="Rectangle">
-                            <Setter Property="Visibility" Value="Visible" />
+                            <Setter Property="Visibility" Value="Hidden" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding LocationOnList}" Value="LastElement">
-                                    <Setter Property="Visibility" Value="Hidden" />
+                                <DataTrigger Binding="{Binding LocationOnList}" Value="InnerElement">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding LocationOnList}" Value="FirstElement">
+                                    <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </Rectangle.Style>
                 </Rectangle>
-
                 <StackPanel
                     Grid.Row="0"
                     Grid.RowSpan="3"
@@ -116,7 +127,6 @@
                         Foreground="{StaticResource titleColor}"
                         Text="{Binding Name}"
                         TextWrapping="Wrap" />
-
                     <TextBlock
                         Margin="0,-3,0,2"
                         VerticalAlignment="Top"
@@ -136,7 +146,7 @@
         <DataTemplate x:Key="FolderItemTemplate">
             <Grid Margin="4,0,4,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="20" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
@@ -156,10 +166,10 @@
                     VerticalAlignment="Center">
                     <Ellipse.Style>
                         <Style TargetType="Ellipse">
-                            <Setter Property="Fill" Value="DarkSlateGray" />
+                            <Setter Property="Fill" Value="{StaticResource iconBackground}" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding WatchStatus}" Value="Watched">
-                                    <Setter Property="Fill" Value="Green" />
+                                    <Setter Property="Fill" Value="{StaticResource iconActiveBackgroundColor}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -172,7 +182,7 @@
                     Grid.Column="0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Foreground="LightGray">
+                    Foreground="{StaticResource iconActiveColor}">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
                             <Setter Property="Text" Value="{Binding Position}" />

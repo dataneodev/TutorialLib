@@ -41,7 +41,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
             SetAsWatched(this._currentPlayedEpisode);
             UpdateFolderPlayedStatus(this._currentPlayedEpisode.FolderItemD);
 
-            var nextEpisode = GetNextEpisode(this._currentPlayedEpisode.EpisodeD.Id);
+            var nextEpisode = GetNextEpisode(this._currentPlayedEpisode.VideoItemD.EpisodeId);
             if (nextEpisode.HasValue)
                 EpisodePlay(nextEpisode.Value);
         }
@@ -49,11 +49,9 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
         public async void UserRequestEpisodePlay(int idEpisode)
         {
             if (this._currentPlayedEpisode is EpisodeData episodeData &&
-                    episodeData.EpisodeD.Id != idEpisode)
+                    episodeData.VideoItemD.EpisodeId != idEpisode)
             {
-                this._currentPlayedEpisode.VideoItemD.WatchStatus = this._currentPlayedEpisode.EpisodeD.Status;
                 UpdateFolderPlayedStatus(this._currentPlayedEpisode.FolderItemD);
-                await SaveEpisodeToDBAsync(episodeData.EpisodeD);
             }
 
             EpisodePlay(idEpisode);
@@ -61,10 +59,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 
         public async Task EndWorkAsync()
         {
-            if (this._currentPlayedEpisode.EpisodeD is null)
+            if (this._currentPlayedEpisode.VideoItemD?.Episode is null)
                 return;
 
-            await SaveEpisodeToDBAsync(this._currentPlayedEpisode.EpisodeD)
+            await SaveEpisodeToDBAsync(this._currentPlayedEpisode.VideoItemD.Episode)
                     .ConfigureAwait(false);
         }
 
@@ -80,56 +78,51 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
             UpdateFolderPlayedStatus(episode.Value.FolderItemD);
 
             var episodePath = episode.Value.GetEpisodePath();
-            var epsiodePlayPosition = episode.Value.EpisodeD.Status != VideoWatchStatus.Watched ?
-                                        episode.Value.EpisodeD.GetPosition() : 0;
+            var epsiodePlayPosition = episode.Value.VideoItemD.Episode.Status != VideoWatchStatus.Watched ?
+                                        episode.Value.VideoItemD.Episode.GetPosition() : 0;
             this.BeginPlayFile?.Invoke(
                 new PlayFileParameter(
                     episodePath,
                     episode.Value.TutorialD.Name,
-                    episode.Value.FolderD.Name,
-                    episode.Value.EpisodeD.Name,
-                    episode.Value.EpisodeD.File.PlayTime,
+                    episode.Value.FolderItemD.Name,
+                    episode.Value.VideoItemD.Name,
+                    episode.Value.VideoItemD.Episode.File.PlayTime,
                     epsiodePlayPosition));
         }
 
         public async void SetPlayedEpisodePosition(int position)
         {
-            var oldState = this._currentPlayedEpisode.EpisodeD.Status;
-            var newPlayedTime = this._currentPlayedEpisode.EpisodeD.GetPlayedTime(position);
+            var oldState = this._currentPlayedEpisode.VideoItemD.Episode.Status;
+            var newPlayedTime = this._currentPlayedEpisode.VideoItemD.Episode.GetPlayedTime(position);
+            this._currentPlayedEpisode.VideoItemD.SetPlayedTime(newPlayedTime);
 
-            if (Episode.GetWatchStatus(newPlayedTime, this._currentPlayedEpisode.EpisodeD.File.PlayTime) == VideoWatchStatus.NotWatched)
+            if (Episode.GetWatchStatus(
+                    newPlayedTime,
+                    this._currentPlayedEpisode.VideoItemD.Episode.File.PlayTime) == VideoWatchStatus.NotWatched)
                 return;
 
-            this._currentPlayedEpisode.EpisodeD.SetPlayedTime(newPlayedTime);
-
-            var newState = this._currentPlayedEpisode.EpisodeD.Status;
+            var newState = this._currentPlayedEpisode.VideoItemD.Episode.Status;
             if (oldState == newState)
                 return;
 
-            this._currentPlayedEpisode.VideoItemD.WatchStatus = newState;
             UpdateFolderPlayedStatus(this._currentPlayedEpisode.FolderItemD);
         }
 
         private static void SetAsPlaying(EpisodeData episode)
         {
-            episode.VideoItemD.WatchStatus = VideoWatchStatus.InProgress;
+            //episode.VideoItemD.WatchStatus = VideoWatchStatus.InProgress;
         }
 
         private static async void SetAsWatched(EpisodeData episode)
         {
-            episode.VideoItemD.WatchStatus = VideoWatchStatus.Watched;
-            episode.EpisodeD.SetAsWatched();
-            await SaveEpisodeToDBAsync(episode.EpisodeD)
+            episode.VideoItemD.Episode.SetAsWatched();
+            await SaveEpisodeToDBAsync(episode.VideoItemD.Episode)
                     .ConfigureAwait(false);
         }
 
         private void UpdateFolderPlayedStatus(FolderItem folderItem)
         {
-            Maybe<Folder> folder = this._currentPlayedEpisode.TutorialD.Folders.FirstOrDefault(f => f.Id == folderItem.FolderId);
-            if (folder.HasNoValue)
-                return;
-            var stateForFolder = VideoItemsCreatorEngine.GetFolderStatus(folder.Value.Episodes);
-            folderItem.WatchStatus = stateForFolder;
+            folderItem.NotifyWatchStatus();
         }
 
         private static async Task SaveEpisodeToDBAsync(Episode episode)

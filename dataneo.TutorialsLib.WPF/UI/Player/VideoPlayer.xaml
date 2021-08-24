@@ -42,7 +42,6 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
-
                     <Style x:Key="SliderRepeatButton1" TargetType="RepeatButton">
                         <Setter Property="SnapsToDevicePixels" Value="true" />
                         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -59,7 +58,6 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
-
                     <Style x:Key="SliderThumb" TargetType="Thumb">
                         <Setter Property="SnapsToDevicePixels" Value="true" />
                         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -246,7 +244,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Foreground="#929290"
-                Text="00:00 / 00:00"/>
+                Text="00:00 / 00:00" />
 
             <Button
                 x:Name="btnFullscreen"

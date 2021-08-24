@@ -38,11 +38,9 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
                 return Maybe<EpisodeData>.None;
 
             return new EpisodeData(
-                this.Context,
-                    folderD: folder.Key,
-                    episodeD: episode.Key,
-                    videoItemD: episode.Value,
-                    folderItemD: folder.Value);
+                tutorialD: this.Context,
+                videoItemD: episode.Value,
+                folderItemD: folder.Value);
         }
 
         public Maybe<int> GetNextEpisodeId(int currentEpsiodeId)
