@@ -39,8 +39,8 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
         {
             Guard.Against.Null(tutorial, nameof(tutorial));
 
-            var foldersProcessed = new List<KeyValuePair<Folder, FolderItem>>(tutorial.Folders.Count);
-            var episodesProcessed = new List<KeyValuePair<Episode, VideoItem>>(tutorial.Folders.Sum(s => s.Episodes.Count));
+            var foldersProcessed = new List<FolderItem>(tutorial.Folders.Count);
+            var episodesProcessed = new List<VideoItem>(tutorial.Folders.Sum(s => s.Episodes.Count));
             var allItems = new List<object>(foldersProcessed.Count + episodesProcessed.Count);
 
             short folderPosition = 0;
@@ -49,12 +49,12 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
                 var folderProcessed = GetFolderItem(folder, ref folderPosition);
 
                 foldersProcessed.Add(folderProcessed);
-                allItems.Add(folderProcessed.Value);
+                allItems.Add(folderProcessed);
 
                 foreach (var episodeProcess in GetVideoItems(folder.Episodes))
                 {
                     episodesProcessed.Add(episodeProcess);
-                    allItems.Add(episodeProcess.Value);
+                    allItems.Add(episodeProcess);
                 }
             }
 
@@ -73,35 +73,29 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
                 SelectVideoWatchStatusForAllFolder);
         }
 
-        private static KeyValuePair<Folder, FolderItem> GetFolderItem(Folder folder, ref short folderPosition)
+        private static FolderItem GetFolderItem(Folder folder, ref short folderPosition)
         {
             var watchStatus = GetFolderStatus(folder.Episodes);
-            ;
-
             var folderItem = new FolderItem(folder)
             {
                 Position = ++folderPosition,
             };
 
-            return new KeyValuePair<Folder, FolderItem>(
-                folder,
-                folderItem);
+            return folderItem;
         }
 
-        private static IEnumerable<KeyValuePair<Episode, VideoItem>> GetVideoItems(IReadOnlyList<Episode> episodes)
+        private static IEnumerable<VideoItem> GetVideoItems(IReadOnlyList<Episode> episodes)
         {
             if (episodes.Count == 0)
-                return Enumerable.Empty<KeyValuePair<Episode, VideoItem>>();
+                return Enumerable.Empty<VideoItem>();
 
             return episodes
                 .OrderBy(o => o.Order)
                 .Select((episode, index) => GetEpisodeVideoItem(episodes.Count, episode, index));
         }
 
-        private static KeyValuePair<Episode, VideoItem> GetEpisodeVideoItem(int episodeCount, Episode episode, int index)
-            => new KeyValuePair<Episode, VideoItem>(
-                    episode,
-                    GetVideoItem(episode, GetVideoItemLocationType(index, episodeCount)));
+        private static VideoItem GetEpisodeVideoItem(int episodeCount, Episode episode, int index)
+            => GetVideoItem(episode, GetVideoItemLocationType(index, episodeCount));
 
         private static VideoItemLocationType GetVideoItemLocationType(int i, int count)
         {

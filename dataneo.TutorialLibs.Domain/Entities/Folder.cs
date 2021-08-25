@@ -59,19 +59,6 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public VideoWatchStatus GetFolderStatus()
             => this.Episodes.Aggregate(
                     VideoWatchStatus.Watched,
-                    SelectVideoWatchStatusForAllFolder);
-
-        private static VideoWatchStatus SelectVideoWatchStatusForAllFolder(
-                           VideoWatchStatus aggregate,
-                           Episode episode)
-        {
-            if (aggregate == VideoWatchStatus.InProgress)
-                return aggregate;
-
-            if (episode.Status != VideoWatchStatus.Watched)
-                return episode.Status;
-
-            return VideoWatchStatus.Watched;
-        }
+                    (aggregate, episode) => episode.Status < aggregate ? episode.Status : aggregate);
     }
 }

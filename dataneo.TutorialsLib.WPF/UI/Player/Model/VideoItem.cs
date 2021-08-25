@@ -14,12 +14,9 @@ namespace dataneo.TutorialLibs.WPF.UI
         public VideoItemLocationType LocationOnList { get; init; }
 
         public Episode Episode => this._episode;
-
         public int EpisodeId => _episode.Id;
-
         public string Name => _episode.Name;
         public TimeSpan EpisodePlayTime => this._episode.File.PlayTime;
-
         public VideoWatchStatus WatchStatus => this._episode.Status;
 
         public event PropertyChangedEventHandler PropertyChanged;

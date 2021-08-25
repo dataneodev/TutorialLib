@@ -148,6 +148,7 @@
                 Width="50"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
+                Command="{Binding Path=PrevEpisode}"
                 Cursor="Hand"
                 Style="{StaticResource btnControlStyle}">
                 <Grid>
@@ -221,6 +222,7 @@
                 Width="50"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
+                Command="{Binding Path=NextEpisode}"
                 Cursor="Hand"
                 Style="{StaticResource btnControlStyle}">
                 <Grid>

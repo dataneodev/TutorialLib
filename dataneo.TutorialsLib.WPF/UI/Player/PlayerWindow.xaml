@@ -41,7 +41,7 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="8*" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
@@ -180,7 +180,9 @@
             Grid.Column="0"
             FullscreenToggle="{Binding Path=DataContext.FullscreenToggleCommand, ElementName=playerWindow}"
             MediaPath="{Binding Path=DataContext.CurrentMediaPath, ElementName=playerWindow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            NextEpisode="{Binding Path=DataContext.NextEpisodeCommand, ElementName=playerWindow}"
             Position="{Binding Path=DataContext.Position, ElementName=playerWindow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            PrevEpisode="{Binding Path=DataContext.PrevEpisodeCommand, ElementName=playerWindow}"
             VideoEnded="{Binding Path=DataContext.CurrentVideoEndedCommand, ElementName=playerWindow, Mode=OneWay}" />
         <GridSplitter
             x:Name="gsVerticalSpliter"
@@ -194,8 +196,8 @@
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="2"
-            Width="250"
             EpisodeClick="{Binding Path=ClickedOnEpisodeCommand, Mode=OneTime}"
-            ItemSource="{Binding Path=VideoItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            ItemSource="{Binding Path=VideoItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding Path=SelectedItem, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </Window>

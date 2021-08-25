@@ -11,7 +11,8 @@ namespace dataneo.TutorialLibs.WPF.UI
                         string folderTitle,
                         string episodeTitle,
                         TimeSpan playTime,
-                        int position)
+                        int position,
+                        object item)
         {
             Path = Guard.Against.NullOrWhiteSpace(path, nameof(path));
             TutorialTitle = Guard.Against.NullOrWhiteSpace(tutorialTitle, nameof(tutorialTitle));
@@ -19,6 +20,7 @@ namespace dataneo.TutorialLibs.WPF.UI
             EpisodeTitle = Guard.Against.NullOrWhiteSpace(episodeTitle, nameof(episodeTitle));
             PlayTime = playTime;
             Position = position;
+            Item = item;
         }
 
         public string Path { get; }
@@ -27,5 +29,6 @@ namespace dataneo.TutorialLibs.WPF.UI
         public string EpisodeTitle { get; }
         public TimeSpan PlayTime { get; }
         public int Position { get; }
+        public object Item { get; }
     }
 }

@@ -23,8 +23,17 @@ namespace dataneo.TutorialLibs.WPF.UI
             set { videoItems = value; Notify(); }
         }
 
+        private object selectedItem;
+        public object SelectedItem
+        {
+            get { return selectedItem; }
+            set { selectedItem = value; Notify(); }
+        }
+
         public ICommand ClickedOnEpisodeCommand { get; }
         public ICommand CurrentVideoEndedCommand { get; }
+        public ICommand NextEpisodeCommand { get; }
+        public ICommand PrevEpisodeCommand { get; }
         public ICommand FullscreenToggleCommand { get; }
 
         private PlayFileParameter currentMediaPath;
@@ -71,19 +80,28 @@ namespace dataneo.TutorialLibs.WPF.UI
             this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);
             this.ClickedOnEpisodeCommand = new Command<int>(ClickedOnEpisodeCommandImpl);
             this.FullscreenToggleCommand = new Command(FullscreenToggleCommandImpl);
+            this.NextEpisodeCommand = new Command(NextEpisodeCommandImpl);
+            this.PrevEpisodeCommand = new Command(PrevEpisodeCommandImpl);
         }
 
+        WindowState toggleFullscreenOldState;
         private void FullscreenToggleCommandImpl()
         {
-            if (this._windowHandle.WindowState == WindowState.Maximized)
+            if (this._windowHandle.WindowState != WindowState.Maximized)
             {
-                this._windowHandle.WindowState = WindowState.Normal;
-                this._windowHandle.WindowStyle = WindowStyle.ThreeDBorderWindow;
+                toggleFullscreenOldState = this._windowHandle.WindowState;
+                this._windowHandle.WindowState = WindowState.Maximized;
+                this._windowHandle.Visibility = Visibility.Collapsed;
+                this._windowHandle.WindowStyle = WindowStyle.None;
+                this._windowHandle.ResizeMode = ResizeMode.NoResize;
+                this._windowHandle.Visibility = Visibility.Visible;
+                this._windowHandle.Activate();
             }
             else
             {
-                this._windowHandle.WindowState = WindowState.Maximized;
-                this._windowHandle.WindowStyle = WindowStyle.None;
+                this._windowHandle.WindowState = toggleFullscreenOldState;
+                this._windowHandle.WindowStyle = WindowStyle.SingleBorderWindow;
+                this._windowHandle.ResizeMode = ResizeMode.CanResize;
             }
         }
 
@@ -93,6 +111,7 @@ namespace dataneo.TutorialLibs.WPF.UI
             this.Caption = playFileParameter.TutorialTitle;
             this.FolderTitle = playFileParameter.FolderTitle;
             this.EpisodeTitle = playFileParameter.EpisodeTitle;
+            this.SelectedItem = playFileParameter.Item;
         }
 
         private void CurrentVideoEndedCommandImpl()
@@ -102,7 +121,13 @@ namespace dataneo.TutorialLibs.WPF.UI
             => this._queueManager?.UserRequestEpisodePlay(episodeId);
 
         private void SetEpsiodePosition(int position)
-            => this._queueManager?.SetPlayedEpisodePosition(position);
+            => this._queueManager?.SetPlayedEpisodePositionAsync(position);
+
+        private void PrevEpisodeCommandImpl()
+            => this._queueManager?.PlayPrevEpisodeAsync();
+
+        private void NextEpisodeCommandImpl()
+            => this._queueManager?.PlayNextEpisodeAsync();
 
         public async Task LoadAsync()
         {

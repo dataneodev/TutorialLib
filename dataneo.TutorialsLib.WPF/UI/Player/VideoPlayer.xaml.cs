@@ -48,6 +48,66 @@ namespace dataneo.TutorialLibs.WPF.UI
                 PlayMediaFile(this.MediaPath);
         }
 
+        public static readonly DependencyProperty PrevEpisodeProperty =
+         DependencyProperty.Register(
+             nameof(PrevEpisode),
+             typeof(ICommand),
+             typeof(VideoPlayer),
+              new PropertyMetadata(null, new PropertyChangedCallback(OnPrevEpisodeChanged)));
+
+        private static void OnPrevEpisodeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ratingControl = d as VideoPlayer;
+            ratingControl.OnSetPrevEpisodeChanged(e);
+        }
+
+        private void OnSetPrevEpisodeChanged(DependencyPropertyChangedEventArgs e)
+        {
+            this.PrevEpisode = (ICommand)e.NewValue;
+        }
+
+        public ICommand PrevEpisode
+        {
+            get { return (ICommand)GetValue(PrevEpisodeProperty); }
+            set { SetValue(PrevEpisodeProperty, value); }
+        }
+
+        public static readonly DependencyProperty NextEpisodeProperty =
+         DependencyProperty.Register(
+             nameof(NextEpisode),
+             typeof(ICommand),
+             typeof(VideoPlayer),
+              new PropertyMetadata(null, new PropertyChangedCallback(OnNextEpisodeChanged)));
+
+        private static void OnNextEpisodeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ratingControl = d as VideoPlayer;
+            ratingControl.OnSetNextEpisodeChanged(e);
+        }
+
+        private void OnSetNextEpisodeChanged(DependencyPropertyChangedEventArgs e)
+        {
+            this.NextEpisode = (ICommand)e.NewValue;
+        }
+
+        public ICommand NextEpisode
+        {
+            get { return (ICommand)GetValue(NextEpisodeProperty); }
+            set { SetValue(NextEpisodeProperty, value); }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
         public static readonly DependencyProperty VideoEndedProperty =
          DependencyProperty.Register(
              nameof(VideoEnded),

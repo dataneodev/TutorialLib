@@ -9,14 +9,14 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
     internal sealed class VideoItemsCreatorResult
     {
         public Tutorial Context { get; }
-        public IReadOnlyList<KeyValuePair<Folder, FolderItem>> Folders { get; }
-        public IReadOnlyList<KeyValuePair<Episode, VideoItem>> Episodes { get; }
+        public IReadOnlyList<FolderItem> Folders { get; }
+        public IReadOnlyList<VideoItem> Episodes { get; }
         public IReadOnlyList<object> AllItems { get; }
 
         public VideoItemsCreatorResult(
                     Tutorial tutorial,
-                    IReadOnlyList<KeyValuePair<Folder, FolderItem>> folders,
-                    IReadOnlyList<KeyValuePair<Episode, VideoItem>> episodes,
+                    IReadOnlyList<FolderItem> folders,
+                    IReadOnlyList<VideoItem> episodes,
                     IReadOnlyList<object> allItems)
         {
             Context = Guard.Against.Null(tutorial, nameof(tutorial));
@@ -29,27 +29,38 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
         {
             Guard.Against.NegativeOrZero(idEpisode, nameof(idEpisode));
 
-            var episode = this.Episodes.FirstOrDefault(f => f.Key.Id == idEpisode);
-            if (episode.Key is null)
+            var episode = this.Episodes.FirstOrDefault(f => f.EpisodeId == idEpisode);
+            if (episode is null)
                 return Maybe<EpisodeData>.None;
 
-            var folder = this.Folders.FirstOrDefault(f => f.Key.Episodes.Any(e => e == episode.Key));
-            if (folder.Key is null)
+            var folder = this.Folders.FirstOrDefault(f => f.Folder.Episodes.Any(e => e == episode.Episode));
+            if (folder is null)
                 return Maybe<EpisodeData>.None;
 
             return new EpisodeData(
                 tutorialD: this.Context,
-                videoItemD: episode.Value,
-                folderItemD: folder.Value);
+                videoItemD: episode,
+                folderItemD: folder);
         }
 
         public Maybe<int> GetNextEpisodeId(int currentEpsiodeId)
         {
-            for (int i = 0; i < Episodes.Count; i++)
-            {
-                if (Episodes[i].Key.Id == currentEpsiodeId && i < Episodes.Count - 1)
-                    return Episodes[++i].Key.Id;
-            }
+            var id = this.Episodes.SkipWhile(s => s.EpisodeId != currentEpsiodeId)
+                         .Skip(1)
+                         .FirstOrDefault()?.EpisodeId;
+            if (id.HasValue)
+                return id.Value;
+
+            return Maybe<int>.None;
+        }
+
+        public Maybe<int> GetPrevEpisodeId(int currentEpsiodeId)
+        {
+            var id = this.Episodes.TakeWhile(s => s.EpisodeId != currentEpsiodeId)
+                         .LastOrDefault()?.EpisodeId;
+            if (id.HasValue)
+                return id.Value;
+
             return Maybe<int>.None;
         }
     }

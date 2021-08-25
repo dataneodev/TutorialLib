@@ -14,7 +14,7 @@ namespace dataneo.TutorialLibs.WPF.UI
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public static readonly DependencyProperty SetItemSourceProperty =
-         DependencyProperty.Register("ItemSource", typeof(IEnumerable<object>), typeof(VideoList), new
+         DependencyProperty.Register(nameof(ItemSource), typeof(IEnumerable<object>), typeof(VideoList), new
             PropertyMetadata(new object[0], new PropertyChangedCallback(OnItemSourcePropertyChanged)));
 
         public IEnumerable<object> ItemSource
@@ -27,13 +27,36 @@ namespace dataneo.TutorialLibs.WPF.UI
                 DependencyPropertyChangedEventArgs e)
         {
             VideoList myUserControl = dependencyObject as VideoList;
-            myUserControl.OnPropertyChanged("ItemSource");
+            myUserControl.OnPropertyChanged(nameof(ItemSource));
             myUserControl.OnItemSourcePropertyChanged(e);
         }
         private void OnItemSourcePropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue is IEnumerable<object> newItemSource)
                 tvVideoList.ItemsSource = newItemSource;
+        }
+
+        public static readonly DependencyProperty SetSelectedItemProperty =
+         DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(VideoList), new
+            PropertyMetadata(null, new PropertyChangedCallback(OnSelectedItemPropertyChanged)));
+
+        public object SelectedItem
+        {
+            get { return GetValue(SetSelectedItemProperty); }
+            set { SetValue(SetSelectedItemProperty, value); }
+        }
+
+        private static void OnSelectedItemPropertyChanged(DependencyObject dependencyObject,
+                DependencyPropertyChangedEventArgs e)
+        {
+            VideoList myUserControl = dependencyObject as VideoList;
+            myUserControl.OnPropertyChanged(nameof(SelectedItem));
+            myUserControl.OnSelectedItemPropertyChanged(e);
+        }
+        private void OnSelectedItemPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is object item)
+                tvVideoList.SelectedItem = item;
         }
 
         public static readonly DependencyProperty EpisodeClickProperty =
