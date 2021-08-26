@@ -21,6 +21,7 @@
             <conv:ProgressBarValueConverter x:Key="progressBarValueConverter" />
             <conv:ProgressBarColorConverter x:Key="progressBarColorConverter" />
             <conv:EnumBooleanConverter x:Key="enumBooleanConverter" />
+            <conv:LastPlayedDateConverter x:Key="lastPlayedDateConverter" />
 
             <Style x:Key="menuItemColors" TargetType="{x:Type MenuItem}">
                 <Style.Triggers>
@@ -303,10 +304,11 @@
                                 RatingStarValue="{Binding Path=Rating, Mode=OneTime}"
                                 TutorialGuid="{Binding Path=Id, Mode=OneTime}" />
                             <TextBlock
+                                Margin="2,0,4,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
                                 Foreground="{StaticResource foreGround}"
-                                Text="{Binding Path=LastPlayedDate, Mode=OneTime, StringFormat={}{0:HH:mm dd.MM.yyyy}}" />
+                                Text="{Binding LastPlayedDate, Mode=OneTime, Converter={StaticResource lastPlayedDateConverter}, StringFormat={}{0:dd.MM.yyyy hh:mm}}" />
                         </StackPanel>
 
                         <ProgressBar
@@ -331,9 +333,26 @@
                             VerticalAlignment="Center"
                             FontSize="14"
                             Foreground="Black">
-                            <Run Text="{Binding Path=TimePlayed, Mode=OneTime, StringFormat={}{0:hh\\:mm}}" />
+                            <Run>
+                                <Run.Text>
+                                    <MultiBinding StringFormat="{}{0:00}:{1:00}:{2:00}">
+                                        <Binding Mode="OneTime" Path="TimePlayed.Hours" />
+                                        <Binding Mode="OneTime" Path="TimePlayed.Minutes" />
+                                        <Binding Mode="OneTime" Path="TimePlayed.Seconds" />
+                                    </MultiBinding>
+                                </Run.Text>
+                            </Run>
                             <Run Text="/" />
-                            <Run Text="{Binding TotalTime, Mode=OneTime, StringFormat={}{0:hh\\:mm}}" />
+                            <Run>
+                                <Run.Text>
+                                    <MultiBinding StringFormat="{}{0:00}:{1:00}:{2:00}">
+                                        <Binding Mode="OneTime" Path="TotalTime.Hours" />
+                                        <Binding Mode="OneTime" Path="TotalTime.Minutes" />
+                                        <Binding Mode="OneTime" Path="TotalTime.Seconds" />
+                                    </MultiBinding>
+                                </Run.Text>
+                            </Run>
+
                             <Run Text="(" /><Run Text="{Binding Path=PlayedEpisodes, Mode=OneTime}" />
                             <Run Text="/" />
                             <Run Text="{Binding Path=TotalEpisodes, Mode=OneTime}" /><Run Text=")" />

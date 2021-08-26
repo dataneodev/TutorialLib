@@ -11,12 +11,23 @@ namespace dataneo.TutorialLibs.Domain.ValueObjects
     {
         public const short MinPlayTimeInSeconds = 1;
         public const short MinFileSizeInBytes = 128;
-
         public TimeSpan PlayTime { get; private set; }
         public string FileName { get; private set; }
         public long FileSize { get; private set; }
         public DateTime DateCreated { get; private set; }
         public DateTime DateModified { get; private set; }
+
+        public double PlayTimeSecond
+        {
+            get
+            {
+                return this.PlayTime.TotalSeconds;
+            }
+            private set
+            {
+                this.PlayTime = TimeSpan.FromSeconds(value);
+            }
+        }
 
         private EpisodeFile() { }
 

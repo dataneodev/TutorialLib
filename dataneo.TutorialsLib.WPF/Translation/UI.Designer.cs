@@ -68,5 +68,14 @@ namespace dataneo.TutorialLibs.WPF.Translation {
                 return ResourceManager.GetString("ERROR", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not watched.
+        /// </summary>
+        public static string NOT_WATCHED {
+            get {
+                return ResourceManager.GetString("NOT_WATCHED", resourceCulture);
+            }
+        }
     }
 }

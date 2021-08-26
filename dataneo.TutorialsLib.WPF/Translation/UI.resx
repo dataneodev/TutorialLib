@@ -120,4 +120,7 @@
   <data name="ERROR" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="NOT_WATCHED" xml:space="preserve">
+    <value>Not watched</value>
+  </data>
 </root>

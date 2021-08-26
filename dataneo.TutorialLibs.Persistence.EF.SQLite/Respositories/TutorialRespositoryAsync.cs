@@ -20,45 +20,41 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
         public TutorialRespositoryAsync(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
 
-        public async Task<IReadOnlyList<TutorialHeaderDto>> GetTutorialHeadersDtoByIdAsync(CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<TutorialHeaderDto>> GetAllTutorialHeadersDtoAsync(CancellationToken cancellationToken = default)
         {
-            return await this._dbContext.Tutorials
-                    .Select(s =>
-                     new TutorialHeaderDto
-                     {
-                         Id = s.Id,
-                         Name = s.Name,
-                         DateAdd = s.AddDate,
-                         Rating = s.Rating,
-                         //  PlayedEpisodes = (short)s.Folders.Sum(w => w.Episodes.Count(w => w.PlayedTime > w.File.PlayTime * 0.92)),
-                         //  LastPlayedDate = s.Folders.Max(m => m.Episodes.Select(se => se.LastPlayedDate)).Max(),
-                         //  TimePlayed = s.Folders.Sum(w => w.Episodes.Sum(se => se.PlayedTime.TotalSeconds)),
-                         TotalEpisodes = (short)s.Folders.Sum(w => w.Episodes.Count()),
-                         TotalSizeMB = (float)s.Folders.Sum(w => w.Episodes.Sum(se => se.File.FileSize / 1048576f)),
-                     })
-                    .ToListAsync();
-        }
+            var watchProgressFractor = Episode.WatchPercentage / 100f;
+            var result = await this._dbContext.Tutorials
+                .Select(s =>
+                    new
+                    {
+                        Id = s.Id,
+                        Name = s.Name,
+                        DateAdd = s.AddDate,
+                        Rating = s.Rating,
+                        LastPlayedDate = s.Folders.Min(m => m.Episodes.Min(se => se.LastPlayedDate)),
+                        TotalTime = s.Folders.Sum(w => w.Episodes.Sum(se => se.File.PlayTimeSecond)),
+                        TimePlayed = s.Folders.Sum(w => w.Episodes.Sum(se => se.PlayedTimeSecond)),
+                        PlayedEpisodes = (short)s.Folders.Sum(w =>
+                                            w.Episodes.Count(w => w.PlayedTimeSecond > w.File.PlayTimeSecond * watchProgressFractor)),
+                        TotalEpisodes = (short)s.Folders.Sum(w => w.Episodes.Count()),
+                        TotalSizeMB = (float)s.Folders.Sum(w => w.Episodes.Sum(se => se.File.FileSize / 1048576f)),
+                    })
+                .ToArrayAsync(cancellationToken)
+                .ConfigureAwait(false);
 
-        public async Task<Maybe<TutorialHeaderDto>> GetTutorialHeaderDtoByIdAsync(int id, CancellationToken cancellationToken = default)
-        {
-            var tutorial = await this._dbContext.Tutorials
-                    .Where(w => w.Id == id)
-                    .Take(1)
-                    .Select(s =>
-                     new TutorialHeaderDto
-                     {
-                         Id = s.Id,
-                         Name = s.Name,
-                         DateAdd = s.AddDate,
-                         Rating = s.Rating,
-                         PlayedEpisodes = (short)s.Folders.Sum(w => w.Episodes.Count(w => w.PlayedTime > w.File.PlayTime * 0.92)),
-                         LastPlayedDate = s.Folders.Max(m => m.Episodes.Select(se => se.LastPlayedDate)).Max(),
-                         //TimePlayed = s.Folders.Sum(w => w.Episodes.Sum(se => se.PlayedTime)),
-                         TotalEpisodes = (short)s.Folders.Sum(w => w.Episodes.Count()),
-                         TotalSizeMB = (float)s.Folders.Sum(w => w.Episodes.Sum(se => se.File.FileSize / 1048576f)),
-                     })
-                    .FirstOrDefaultAsync();
-            return Maybe<TutorialHeaderDto>.From(tutorial);
+            return result.Select(s => new TutorialHeaderDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+                DateAdd = s.DateAdd,
+                Rating = s.Rating,
+                LastPlayedDate = s.LastPlayedDate,
+                TotalTime = TimeSpan.FromSeconds(s.TotalTime),
+                TimePlayed = TimeSpan.FromSeconds(s.TimePlayed),
+                PlayedEpisodes = s.PlayedEpisodes,
+                TotalEpisodes = s.TotalEpisodes,
+                TotalSizeMB = s.TotalSizeMB
+            }).ToArray();
         }
 
         public override async Task<Tutorial> GetByIdAsync(int id, CancellationToken cancellationToken = default)
@@ -67,7 +63,6 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
                         .ThenInclude(f => f.Episodes)
                         .FirstOrDefaultAsync(f => f.Id == id, cancellationToken);
 
-
         public void Dispose()
         {
             this._dbContext.Dispose();
@@ -75,7 +70,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
 
         public async Task UpdateEpisodeAsync(Episode episode, CancellationToken cancellationToken = default)
         {
-            _dbContext.Entry(episode).State = EntityState.Modified;
+            _dbContext.Update(episode);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }

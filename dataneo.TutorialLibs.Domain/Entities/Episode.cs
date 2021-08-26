@@ -24,6 +24,17 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public DateTime DateAdd { get; private set; }
 
         public VideoWatchStatus Status => GetWatchStatus();
+        public double PlayedTimeSecond
+        {
+            get
+            {
+                return this.PlayedTime.TotalSeconds;
+            }
+            private set
+            {
+                this.PlayedTime = TimeSpan.FromSeconds(value);
+            }
+        }
 
         private Episode() { }
 
@@ -79,6 +90,7 @@ namespace dataneo.TutorialLibs.Domain.Entities
                 throw new InvalidOperationException();
 
             this.PlayedTime = playedTime;
+            this.LastPlayedDate = DateTime.Now;
         }
 
         public void SetAsWatched()

@@ -84,9 +84,8 @@ namespace dataneo.TutorialLibs.WPF.UI
         public async Task LoadTutorialsDtoAsync(TutorialsOrderType tutorialsOrderType)
         {
             using var repo = new TutorialRespositoryAsync();
-            var tutorialHeaders = await repo.GetTutorialHeadersDtoByIdAsync();
+            var tutorialHeaders = await repo.GetAllTutorialHeadersDtoAsync();
             SetNewTutorialsHeader(tutorialHeaders, tutorialsOrderType);
-
         }
 
         private void SetNewTutorialsHeader(IEnumerable<TutorialHeaderDto> tutorialHeaders,

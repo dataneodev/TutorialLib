@@ -23,7 +23,6 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
             base.OnModelCreating(modelBuilder);
         }
     }

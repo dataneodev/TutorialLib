@@ -10,10 +10,6 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
     {
         public void Configure(EntityTypeBuilder<Episode> builder)
         {
-            var timeSpanConverter = new ValueConverter<TimeSpan, long>(
-               v => v.Ticks,
-               v => TimeSpan.FromTicks(v));
-
             var dateTimeConverter = new ValueConverter<DateTime, long>(
                v => v.ToBinary(),
                v => DateTime.FromBinary(v));
@@ -26,12 +22,14 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                     .IsRequired()
                     .HasMaxLength(255);
 
-            builder.Property(p => p.PlayedTime)
-                    .IsRequired()
-                    .HasConversion(timeSpanConverter);
+            builder.Ignore(i => i.PlayedTime);
+
+            builder.Property(p => p.PlayedTimeSecond)
+                   .IsRequired();
 
             builder.Property(p => p.LastPlayedDate)
-                    .IsRequired();
+                    .IsRequired()
+                    .HasConversion(dateTimeConverter);
 
             builder.Property(p => p.DateAdd)
                     .IsRequired()
@@ -56,8 +54,9 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                     b.Property(p => p.FileSize)
                     .IsRequired();
 
-                    b.Property(p => p.PlayTime)
-                     .HasConversion(timeSpanConverter)
+                    b.Ignore(i => i.PlayTime);
+
+                    b.Property(p => p.PlayTimeSecond)
                      .IsRequired();
                 });
         }
