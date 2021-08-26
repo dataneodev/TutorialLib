@@ -1,5 +1,7 @@
-﻿using dataneo.TutorialLibs.Domain.Enums;
+﻿using dataneo.TutorialLibs.Domain.Entities;
+using dataneo.TutorialLibs.Domain.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace dataneo.TutorialLibs.Domain.DTO
 {
@@ -15,5 +17,6 @@ namespace dataneo.TutorialLibs.Domain.DTO
         public DateTime DateAdd { get; init; }
         public RatingStars Rating { get; init; }
         public float TotalSizeMB { get; init; }
+        public IReadOnlyList<Category> Categories { get; init; }
     }
 }

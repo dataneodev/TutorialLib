@@ -23,6 +23,7 @@
             <conv:ProgressBarColorConverter x:Key="progressBarColorConverter" />
             <conv:EnumBooleanConverter x:Key="enumBooleanConverter" />
             <conv:LastPlayedDateConverter x:Key="lastPlayedDateConverter" />
+            <conv:CategoriesConverter x:Key="categoriesConverter" />
 
             <Style x:Key="menuItemColors" TargetType="{x:Type MenuItem}">
                 <Style.Triggers>
@@ -244,7 +245,8 @@
                             FontSize="14"
                             Foreground="{StaticResource foreGround}">
                             <Run Text="{x:Static lang:UI.CATEGORY}" />
-                            <Run Text="DDD" />
+                            <Run Text=":" />
+                            <Run Text="{Binding Path=Categories, Mode=OneTime, Converter={StaticResource categoriesConverter}}" />
                         </TextBlock>
 
                         <Button

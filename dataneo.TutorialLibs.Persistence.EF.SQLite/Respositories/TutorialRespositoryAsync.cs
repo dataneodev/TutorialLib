@@ -38,6 +38,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
                                             w.Episodes.Count(w => w.PlayedTimeSecond > w.File.PlayTimeSecond * watchProgressFractor)),
                         TotalEpisodes = (short)s.Folders.Sum(w => w.Episodes.Count()),
                         TotalSizeMB = (float)s.Folders.Sum(w => w.Episodes.Sum(se => se.File.FileSize / 1048576f)),
+                        Categories = s.Categories,
                     })
                 .ToArrayAsync(cancellationToken)
                 .ConfigureAwait(false);
@@ -53,7 +54,8 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
                 TimePlayed = TimeSpan.FromSeconds(s.TimePlayed),
                 PlayedEpisodes = s.PlayedEpisodes,
                 TotalEpisodes = s.TotalEpisodes,
-                TotalSizeMB = s.TotalSizeMB
+                TotalSizeMB = s.TotalSizeMB,
+                Categories = s.Categories
             }).ToArray();
         }
 

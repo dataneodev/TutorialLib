@@ -1,17 +1,21 @@
-﻿using System;
+﻿using dataneo.TutorialLibs.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Data;
 
 namespace dataneo.TutorialLibs.WPF.Converters
 {
-    public class LastPlayedDateConverter : IValueConverter
+    public class CategoriesConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value is DateTime dateTime)
+            if (value is IReadOnlyList<Category> categories)
             {
-                return dateTime.Ticks <= 1 ?
-                    Translation.UI.NOT_WATCHED :
-                    dateTime.ToString("dd.MM.yyyy HH:mm");
+                if (categories.Count == 0)
+                    return "-";
+
+                return string.Join(',', categories.Select(s => s.Name));
             }
             return "-";
         }
