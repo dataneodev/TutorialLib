@@ -14,6 +14,10 @@ namespace dataneo.TutorialLibs.Domain.Entities
         public DirectoryPath BasePath { get; private set; }
         public RatingStars Rating { get; private set; }
         public IReadOnlyList<Folder> Folders { get; private set; }
+
+        private List<Category> _categories = new List<Category>();
+        public IReadOnlyList<Category> Categories => _categories;
+
         public DateTime AddDate { get; private set; }
         public DateTime ModifiedTime { get; private set; }
 
@@ -48,6 +52,18 @@ namespace dataneo.TutorialLibs.Domain.Entities
                 AddDate = dateTimeNow,
                 ModifiedTime = dateTimeNow,
             };
+        }
+
+        public void AddCategory(Category category)
+        {
+
+
+        }
+
+        public void RemoveCategory(Category category)
+        {
+
+
         }
     }
 }

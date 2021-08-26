@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:conv="clr-namespace:dataneo.TutorialLibs.WPF.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lang="clr-namespace:dataneo.TutorialLibs.WPF.Translation"
     xmlns:local="clr-namespace:dataneo.TutorialLibs.WPF.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="tutorialSelectorWindow"
@@ -133,13 +134,6 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-
-            <!--<Style x:Key="menuItemColors" TargetType="MenuItem">
-                <Setter Property="BorderBrush" Value="{StaticResource backGround}" />
-                <Setter Property="Background" Value="{StaticResource backGround}" />
-                <Setter Property="Foreground" Value="{StaticResource foreGround}" />
-            </Style>-->
-
         </ResourceDictionary>
     </Window.Resources>
     <Window.Background>
@@ -164,25 +158,24 @@
                 </Style>
             </Menu.Style>
             <MenuItem Header="Tutorial" Style="{StaticResource menuItemColors}">
-                <MenuItem Command="{Binding Path=AddTutorialCommand, Mode=OneTime}" Header="Dodaj pojedyńczy tutorial" />
-                <!--<MenuItem Command="{Binding Path=SearchForUpdateCommand, Mode=OneTime}" Header="Szukaj nowych odcinków tutorialach" />-->
-                <MenuItem Command="{Binding Path=SearchForNewTutorialsCommand, Mode=OneTime}" Header="Dodaj wszystkie tutoriale z folderu" />
+                <MenuItem Command="{Binding Path=AddTutorialCommand, Mode=OneTime}" Header="{x:Static lang:UI.ADD_SINGLE}" />
+                <MenuItem Command="{Binding Path=SearchForNewTutorialsCommand, Mode=OneTime}" Header="{x:Static lang:UI.ADD_FOLDER}" />
             </MenuItem>
-            <MenuItem Header="Sortuj" Style="{StaticResource menuItemColors}">
+            <MenuItem Header="{x:Static lang:UI.SORT}" Style="{StaticResource menuItemColors}">
                 <MenuItem
-                    Header="Sortuj liste wg tytułu"
+                    Header="{x:Static lang:UI.SORT_BY_TITLE}"
                     IsCheckable="True"
                     IsChecked="{Binding Path=SelectedTutorialsOrderType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=ByTitle}" />
                 <MenuItem
-                    Header="Sortuj liste wg daty dodania"
+                    Header="{x:Static lang:UI.SORT_BY_DATEADD}"
                     IsCheckable="True"
                     IsChecked="{Binding Path=SelectedTutorialsOrderType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=ByDateAdd}" />
                 <MenuItem
-                    Header="Sortuj liste wg ostatniej wizyty"
+                    Header="{x:Static lang:UI.SORT_BY_LASTVISIT}"
                     IsCheckable="True"
                     IsChecked="{Binding Path=SelectedTutorialsOrderType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=ByLastVisit}" />
                 <MenuItem
-                    Header="Oceny"
+                    Header="{x:Static lang:UI.SORT_BY_RATING}"
                     IsCheckable="True"
                     IsChecked="{Binding Path=SelectedTutorialsOrderType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=ByRating}" />
             </MenuItem>
@@ -250,7 +243,7 @@
                             Margin="4,0,0,2"
                             FontSize="14"
                             Foreground="{StaticResource foreGround}">
-                            <Run Text="Category:" />
+                            <Run Text="{x:Static lang:UI.CATEGORY}" />
                             <Run Text="DDD" />
                         </TextBlock>
 
@@ -364,7 +357,7 @@
                             Margin="4,0,2,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Bottom"
-                            FontSize="16"
+                            FontSize="14"
                             Foreground="{StaticResource foreGround}"
                             Text="{Binding DateAdd, Mode=OneTime, StringFormat={}{0:dd.MM.yyyy}}" />
 
@@ -374,12 +367,11 @@
                             Margin="4,0,4,2"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
-                            FontSize="16"
+                            FontSize="14"
                             Foreground="{StaticResource foreGround}">
                             <Run Text="{Binding Path=TotalSizeMB, Mode=OneTime, StringFormat={}{0:##.#}}" />
                             <Run Text="MB" />
                         </TextBlock>
-
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

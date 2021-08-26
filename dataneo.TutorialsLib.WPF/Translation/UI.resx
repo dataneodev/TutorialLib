@@ -117,10 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ADD_FOLDER" xml:space="preserve">
+    <value>Add tutorials from folder</value>
+  </data>
+  <data name="ADD_SINGLE" xml:space="preserve">
+    <value>Add single tutorial</value>
+  </data>
+  <data name="CATEGORY" xml:space="preserve">
+    <value>Kategoria</value>
+  </data>
   <data name="ERROR" xml:space="preserve">
     <value>Error</value>
   </data>
   <data name="NOT_WATCHED" xml:space="preserve">
     <value>Not watched</value>
+  </data>
+  <data name="SORT" xml:space="preserve">
+    <value>Order by</value>
+  </data>
+  <data name="SORT_BY_DATEADD" xml:space="preserve">
+    <value>Order by date add</value>
+  </data>
+  <data name="SORT_BY_LASTVISIT" xml:space="preserve">
+    <value>Order by last visit</value>
+  </data>
+  <data name="SORT_BY_RATING" xml:space="preserve">
+    <value>Order by rating</value>
+  </data>
+  <data name="SORT_BY_TITLE" xml:space="preserve">
+    <value>Order by title</value>
   </data>
 </root>

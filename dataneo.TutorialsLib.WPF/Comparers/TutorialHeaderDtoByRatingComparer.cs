@@ -10,7 +10,7 @@ namespace dataneo.TutorialLibs.WPF.Comparers
             if (x.Rating == y.Rating)
                 return 0;
 
-            if (x.Rating > y.Rating)
+            if (x.Rating < y.Rating)
                 return 1;
 
             return -1;

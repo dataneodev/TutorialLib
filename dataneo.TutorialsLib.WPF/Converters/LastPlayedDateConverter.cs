@@ -11,7 +11,7 @@ namespace dataneo.TutorialLibs.WPF.Converters
             {
                 return dateTime.Ticks == 1 ?
                     Translation.UI.NOT_WATCHED :
-                    dateTime.ToString("dd.MM.yyyy hh:mm");
+                    dateTime.ToString("dd.MM.yyyy HH:mm");
             }
             return "-";
         }

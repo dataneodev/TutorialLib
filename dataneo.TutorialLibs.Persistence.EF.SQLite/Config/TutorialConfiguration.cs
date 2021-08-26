@@ -38,7 +38,12 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
             builder.HasMany(m => m.Folders)
                    .WithOne()
                    .HasForeignKey(f => f.ParentTutorialId)
-                   .IsRequired();
+                   .IsRequired()
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(p => p.Categories)
+                    .WithMany(c => c.Tutorials)
+                    .UsingEntity(j => j.ToTable("CategoryTutorials"));
         }
     }
 }

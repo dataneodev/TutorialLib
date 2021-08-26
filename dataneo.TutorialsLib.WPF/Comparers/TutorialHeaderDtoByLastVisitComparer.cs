@@ -10,7 +10,7 @@ namespace dataneo.TutorialLibs.WPF.Comparers
             if (x.LastPlayedDate == y.LastPlayedDate)
                 return 0;
 
-            if (x.LastPlayedDate > y.LastPlayedDate)
+            if (x.LastPlayedDate < y.LastPlayedDate)
                 return 1;
 
             return -1;

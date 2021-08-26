@@ -147,6 +147,9 @@
   <data name="FILE_SIZE_TO_SMALL" xml:space="preserve">
     <value>Za mała wielkość pliku</value>
   </data>
+  <data name="INVALID_CATEGORY_NAME" xml:space="preserve">
+    <value>Niepoprawna nazwa kategorii</value>
+  </data>
   <data name="INVALID_DATE" xml:space="preserve">
     <value>Niepoprawna data</value>
   </data>

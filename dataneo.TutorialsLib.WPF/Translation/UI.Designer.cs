@@ -61,6 +61,33 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add tutorials from folder.
+        /// </summary>
+        public static string ADD_FOLDER {
+            get {
+                return ResourceManager.GetString("ADD_FOLDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add single tutorial.
+        /// </summary>
+        public static string ADD_SINGLE {
+            get {
+                return ResourceManager.GetString("ADD_SINGLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kategoria.
+        /// </summary>
+        public static string CATEGORY {
+            get {
+                return ResourceManager.GetString("CATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string ERROR {
@@ -75,6 +102,51 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         public static string NOT_WATCHED {
             get {
                 return ResourceManager.GetString("NOT_WATCHED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order by.
+        /// </summary>
+        public static string SORT {
+            get {
+                return ResourceManager.GetString("SORT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order by date add.
+        /// </summary>
+        public static string SORT_BY_DATEADD {
+            get {
+                return ResourceManager.GetString("SORT_BY_DATEADD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order by last visit.
+        /// </summary>
+        public static string SORT_BY_LASTVISIT {
+            get {
+                return ResourceManager.GetString("SORT_BY_LASTVISIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order by rating.
+        /// </summary>
+        public static string SORT_BY_RATING {
+            get {
+                return ResourceManager.GetString("SORT_BY_RATING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order by title.
+        /// </summary>
+        public static string SORT_BY_TITLE {
+            get {
+                return ResourceManager.GetString("SORT_BY_TITLE", resourceCulture);
             }
         }
     }
