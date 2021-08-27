@@ -34,5 +34,10 @@ namespace dataneo.TutorialLibs.WPF.UI
             this.Content = _playerPage;
             await _playerPage.LoadAsync(idTutorial);
         }
+
+        private async void tutorialWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            await this._playerPage.ClosingAsync();
+        }
     }
 }
