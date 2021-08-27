@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace dataneo.TutorialLibs.WPF.UI
+namespace dataneo.TutorialLibs.WPF.UI.Player
 {
     public partial class VideoPlayer : UserControl, INotifyPropertyChanged
     {
@@ -95,18 +95,6 @@ namespace dataneo.TutorialLibs.WPF.UI
             get { return (ICommand)GetValue(NextEpisodeProperty); }
             set { SetValue(NextEpisodeProperty, value); }
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
         public static readonly DependencyProperty VideoEndedProperty =
          DependencyProperty.Register(
@@ -224,25 +212,40 @@ namespace dataneo.TutorialLibs.WPF.UI
         {
             InitializeComponent();
             this.DataContext = this;
-            Unloaded += Controls_Unloaded;
             Loaded += VideoPlayer_Loaded;
+        }
+
+        public void StopPlaying()
+        {
+            _mediaPlayer?.Stop();
         }
 
         private void PlayMediaFile(PlayFileParameter mediaPath)
         {
             ThreadPool.QueueUserWorkItem(_ =>
             {
+                WaitForLoad();
                 using var media = new Media(_libVLC, new Uri(mediaPath.Path));
                 this._mediaPlayer.Play(media);
                 this._mediaPlayer.Position = mediaPath.Position / 100f;
             });
         }
 
+        private void WaitForLoad()
+        {
+            while (!App.Current.Dispatcher.Invoke(() => IsLoaded))
+            {
+                Thread.Sleep(10);
+            }
+        }
+
         private void VideoPlayer_Loaded(object sender, RoutedEventArgs e)
         {
+            if (this._libVLC != null)
+                return;
+
             this._libVLC = new LibVLC();
             this._mediaPlayer = GetMediaPlayer(this._libVLC);
-
             videoView.MediaPlayer = this._mediaPlayer;
         }
 
@@ -256,13 +259,6 @@ namespace dataneo.TutorialLibs.WPF.UI
             mediaPlayer.Playing += _mediaPlayer_Playing;
             mediaPlayer.EndReached += _mediaPlayer_EndReached;
             return mediaPlayer;
-        }
-
-        private void Controls_Unloaded(object sender, RoutedEventArgs e)
-        {
-            _mediaPlayer.Stop();
-            _mediaPlayer.Dispose();
-            _libVLC.Dispose();
         }
 
         private void _mediaPlayer_EndReached(object sender, System.EventArgs e)

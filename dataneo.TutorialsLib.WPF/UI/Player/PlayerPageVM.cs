@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace dataneo.TutorialLibs.WPF.UI
+namespace dataneo.TutorialLibs.WPF.UI.Player
 {
-    internal class PlayerWindowVM : BaseViewModel
+    internal class PlayerPageVM : BaseViewModel
     {
-        private readonly int _tutorialId;
-        private readonly Window _windowHandle;
+        private readonly MainWindow _windowHandle;
         private QueueManager _queueManager;
 
         private IReadOnlyList<object> videoItems;
@@ -73,10 +72,9 @@ namespace dataneo.TutorialLibs.WPF.UI
             set { episodeTitle = value; Notify(); }
         }
 
-        public PlayerWindowVM(Window windowHandle, int tutorialPlayerId)
+        public PlayerPageVM(MainWindow windowHandle)
         {
             this._windowHandle = Guard.Against.Null(windowHandle, nameof(windowHandle));
-            this._tutorialId = Guard.Against.NegativeOrZero(tutorialPlayerId, nameof(tutorialPlayerId));
             this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);
             this.ClickedOnEpisodeCommand = new Command<int>(ClickedOnEpisodeCommandImpl);
             this.FullscreenToggleCommand = new Command(FullscreenToggleCommandImpl);
@@ -120,6 +118,12 @@ namespace dataneo.TutorialLibs.WPF.UI
         private void ClickedOnEpisodeCommandImpl(int episodeId)
             => this._queueManager?.UserRequestEpisodePlay(episodeId);
 
+        public async Task GoBackToTutorialListCommandAsync()
+        {
+            await EndWorkAsync();
+            await this._windowHandle.LoadTutorialLibAsync();
+        }
+
         private void SetEpsiodePosition(int position)
             => this._queueManager?.SetPlayedEpisodePositionAsync(position);
 
@@ -129,12 +133,14 @@ namespace dataneo.TutorialLibs.WPF.UI
         private void NextEpisodeCommandImpl()
             => this._queueManager?.PlayNextEpisodeAsync();
 
-        public async Task LoadAsync()
+        public async Task LoadAsync(int tutorialId)
         {
+            Guard.Against.NegativeOrZero(tutorialId, nameof(tutorialId));
+
             using var repo = new TutorialRespositoryAsync();
             var videoItemsCreator = new VideoItemsCreatorEngine(repo);
 
-            (await videoItemsCreator.LoadAndCreate(this._tutorialId))
+            (await videoItemsCreator.LoadAndCreate(tutorialId))
                 .OnFailure(error => ErrorWindow.ShowError(this._windowHandle, error))
                 .Tap(result =>
                 {

@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace dataneo.TutorialLibs.WPF.UI
+namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 {
     /// <summary>
     /// Interaction logic for RatingStars.xaml

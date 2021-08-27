@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace dataneo.TutorialLibs.WPF.UI
+namespace dataneo.TutorialLibs.WPF.UI.Player
 {
     public partial class VideoList : UserControl, INotifyPropertyChanged
     {

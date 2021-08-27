@@ -11,16 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
-namespace dataneo.TutorialLibs.WPF.UI
+namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 {
-    internal sealed class MainWindowVM : BaseViewModel
+    internal sealed class TutorialListPageVM : BaseViewModel
     {
-        private readonly Window _parentHandle;
-
-        public Action<bool> SetWindowVisibility;
+        private readonly MainWindow _parentHandle;
 
         private IEnumerable<TutorialHeaderDto> tutorials;
         public IEnumerable<TutorialHeaderDto> Tutorials
@@ -47,7 +44,7 @@ namespace dataneo.TutorialLibs.WPF.UI
         public ICommand SearchForUpdateCommand { get; }
         public ICommand SearchForNewTutorialsCommand { get; }
 
-        public MainWindowVM(Window parentHandle)
+        public TutorialListPageVM(MainWindow parentHandle)
         {
             this._parentHandle = Guard.Against.Null(parentHandle, nameof(parentHandle));
             this.RatingChangedCommand = new Command<ValueTuple<int, RatingStars>>(RatingChangedCommandImpl);
@@ -64,9 +61,7 @@ namespace dataneo.TutorialLibs.WPF.UI
 
         private async void PlayTutorialCommandImpl(int tutorialId)
         {
-            this.SetWindowVisibility?.Invoke(false);
-            var playerWindow = new PlayerWindow(tutorialId, () => ClosePlayerWindow(tutorialId));
-            await Result.Try(async () => await playerWindow.LoadAsync());
+            await this._parentHandle.PlayTutorialAsync(tutorialId);
         }
 
         private async void RatingChangedCommandImpl(ValueTuple<int, RatingStars> tutorialIdAndRating)
@@ -75,11 +70,6 @@ namespace dataneo.TutorialLibs.WPF.UI
                 .Map(input => ChangeTutorialRatingAction.ChangeAsync(input.Item1, input.Item2))
                 .Bind(r => r)
                 .OnFailure(error => ErrorWindow.ShowError(this._parentHandle, error));
-
-        private void ClosePlayerWindow(int playedTutorialId)
-        {
-            this.SetWindowVisibility?.Invoke(true);
-        }
 
         public async Task LoadTutorialsDtoAsync(TutorialsOrderType tutorialsOrderType)
         {
