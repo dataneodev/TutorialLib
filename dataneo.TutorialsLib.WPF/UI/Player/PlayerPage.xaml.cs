@@ -29,7 +29,9 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
 
         private void btToggleVideo_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            ucVideoList.Visibility = (ucVideoList.Visibility == System.Windows.Visibility.Visible) ?
+                                        System.Windows.Visibility.Collapsed :
+                                        System.Windows.Visibility.Visible;
         }
 
         private async void btnBackToTutorialList_Click(object sender, System.Windows.RoutedEventArgs e)
