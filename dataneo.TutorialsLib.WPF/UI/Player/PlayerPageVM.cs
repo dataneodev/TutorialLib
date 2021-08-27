@@ -152,8 +152,12 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         }
 
         public async Task EndWorkAsync()
-            => await this._queueManager
+        {
+            if (this._queueManager is null)
+                return;
+            await this._queueManager
                             .EndWorkAsync()
                             .ConfigureAwait(false);
+        }
     }
 }

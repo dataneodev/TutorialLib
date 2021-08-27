@@ -240,9 +240,11 @@
                         <TextBlock
                             Grid.Row="2"
                             Grid.Column="0"
+                            Grid.ColumnSpan="2"
                             Margin="4,0,0,2"
                             FontSize="14"
-                            Foreground="{StaticResource foreGround}">
+                            Foreground="{StaticResource foreGround}"
+                            TextWrapping="Wrap">
                             <Run Text="{x:Static lang:UI.CATEGORY}" />
                             <Run Text=":" />
                             <Run Text="{Binding Path=Categories, Mode=OneTime, Converter={StaticResource categoriesConverter}}" />

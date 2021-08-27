@@ -24,7 +24,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
 
         public async Task ClosingAsync()
         {
-            this.ucVideoView.StopPlaying();
+            this.ucVideoView?.StopPlaying();
             await this._VM.EndWorkAsync();
         }
 

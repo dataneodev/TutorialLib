@@ -31,7 +31,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
                         Name = s.Name,
                         DateAdd = s.AddDate,
                         Rating = s.Rating,
-                        LastPlayedDate = s.Folders.Min(m => m.Episodes.Min(se => se.LastPlayedDate)),
+                        LastPlayedDate = s.Folders.Max(m => m.Episodes.Max(se => se.LastPlayedDate)),
                         TotalTime = s.Folders.Sum(w => w.Episodes.Sum(se => se.File.PlayTimeSecond)),
                         TimePlayed = s.Folders.Sum(w => w.Episodes.Sum(se => se.PlayedTimeSecond)),
                         PlayedEpisodes = (short)s.Folders.Sum(w =>

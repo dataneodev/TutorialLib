@@ -1,8 +1,6 @@
 ﻿using dataneo.TutorialLibs.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
 
 namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
 {
@@ -10,10 +8,6 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
     {
         public void Configure(EntityTypeBuilder<Episode> builder)
         {
-            var dateTimeConverter = new ValueConverter<DateTime, long>(
-               v => v.ToBinary(),
-               v => DateTime.FromBinary(v));
-
             builder.HasKey(k => k.Id);
             builder.Property(p => p.Order)
                     .IsRequired();
@@ -28,12 +22,10 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                    .IsRequired();
 
             builder.Property(p => p.LastPlayedDate)
-                    .IsRequired()
-                    .HasConversion(dateTimeConverter);
+                    .IsRequired();
 
             builder.Property(p => p.DateAdd)
-                    .IsRequired()
-                    .HasConversion(dateTimeConverter);
+                    .IsRequired();
 
             builder.OwnsOne(o =>
                 o.File,
@@ -44,12 +36,10 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                     .HasMaxLength(255);
 
                     b.Property(p => p.DateCreated)
-                    .IsRequired()
-                    .HasConversion(dateTimeConverter);
+                    .IsRequired();
 
                     b.Property(p => p.DateModified)
-                    .IsRequired()
-                    .HasConversion(dateTimeConverter);
+                    .IsRequired();
 
                     b.Property(p => p.FileSize)
                     .IsRequired();

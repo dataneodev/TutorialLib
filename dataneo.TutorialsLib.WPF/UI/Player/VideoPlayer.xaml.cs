@@ -217,7 +217,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
 
         public void StopPlaying()
         {
-            _mediaPlayer?.Stop();
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                _mediaPlayer?.Stop();
+            });
         }
 
         private void PlayMediaFile(PlayFileParameter mediaPath)
