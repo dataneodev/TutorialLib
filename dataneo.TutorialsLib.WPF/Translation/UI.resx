@@ -129,6 +129,9 @@
   <data name="CATEGORY" xml:space="preserve">
     <value>Category</value>
   </data>
+  <data name="CATEGORYWINDOW" xml:space="preserve">
+    <value>Categories</value>
+  </data>
   <data name="ERROR" xml:space="preserve">
     <value>Error</value>
   </data>

@@ -143,7 +143,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 
         private static async void SetAsWatchedAsync(EpisodeData episode)
         {
-            episode.VideoItemD.Episode.SetAsWatched();
+            episode.VideoItemD.SetAsWatched();
             await SaveEpisodeToDBAsync(episode.VideoItemD.Episode)
                     .ConfigureAwait(false);
         }

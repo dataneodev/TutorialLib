@@ -97,6 +97,15 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Categories.
+        /// </summary>
+        public static string CATEGORYWINDOW {
+            get {
+                return ResourceManager.GetString("CATEGORYWINDOW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string ERROR {

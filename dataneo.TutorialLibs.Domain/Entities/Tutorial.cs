@@ -53,17 +53,5 @@ namespace dataneo.TutorialLibs.Domain.Entities
                 ModifiedTime = dateTimeNow,
             };
         }
-
-        public void AddCategory(Category category)
-        {
-
-
-        }
-
-        public void RemoveCategory(Category category)
-        {
-
-
-        }
     }
 }
