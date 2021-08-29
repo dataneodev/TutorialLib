@@ -11,6 +11,7 @@ namespace dataneo.TutorialLibs.WPF
     {
         public App()
         {
+            //   Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us"); // tests
             Result.DefaultConfigureAwait = true;
             using var dbContext = new ApplicationDbContext();
             dbContext.Database.EnsureCreated();

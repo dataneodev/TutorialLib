@@ -38,11 +38,23 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             }
         }
 
+        private IEnumerable<CategoryMenuItem> _categories = new List<CategoryMenuItem>()
+        {
+            CategoryMenuItem.CreateForAll(),
+            CategoryMenuItem.CreateForNoCategory()
+        };
+        public IEnumerable<CategoryMenuItem> Categories
+        {
+            get { return _categories; }
+            set { _categories = value; Notify(); }
+        }
+
         public ICommand RatingChangedCommand { get; }
         public ICommand PlayTutorialCommand { get; }
         public ICommand AddTutorialCommand { get; }
         public ICommand SearchForUpdateCommand { get; }
         public ICommand SearchForNewTutorialsCommand { get; }
+        public ICommand FilterByCategory { get; }
 
         public TutorialListPageVM(MainWindow parentHandle)
         {
@@ -50,6 +62,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             this.RatingChangedCommand = new Command<ValueTuple<int, RatingStars>>(RatingChangedCommandImpl);
             this.PlayTutorialCommand = new Command<int>(PlayTutorialCommandImpl);
             this.AddTutorialCommand = new Command(AddTutorialCommandImplAsync);
+            this.FilterByCategory = new Command<CategoryMenuItem>(FilterByCategoryImplAsync);
         }
 
         private async void AddTutorialCommandImplAsync()
@@ -60,9 +73,8 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                .OnFailure(error => ErrorWindow.ShowError(this._parentHandle, error));
 
         private async void PlayTutorialCommandImpl(int tutorialId)
-        {
-            await this._parentHandle.PlayTutorialAsync(tutorialId);
-        }
+            => await Result.Try(async () => this._parentHandle.PlayTutorialAsync(tutorialId), exception => exception.Message)
+                        .OnFailure(error => ErrorWindow.ShowError(this._parentHandle, error));
 
         private async void RatingChangedCommandImpl(ValueTuple<int, RatingStars> tutorialIdAndRating)
             => await Result
@@ -70,6 +82,14 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                 .Map(input => ChangeTutorialRatingAction.ChangeAsync(input.Item1, input.Item2))
                 .Bind(r => r)
                 .OnFailure(error => ErrorWindow.ShowError(this._parentHandle, error));
+
+        private void FilterByCategoryImplAsync(CategoryMenuItem obj)
+        {
+
+
+
+
+        }
 
         public async Task LoadTutorialsDtoAsync(TutorialsOrderType tutorialsOrderType)
         {

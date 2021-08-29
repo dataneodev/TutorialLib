@@ -79,7 +79,16 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kategoria.
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string ALL {
+            get {
+                return ResourceManager.GetString("ALL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Category.
         /// </summary>
         public static string CATEGORY {
             get {
@@ -97,11 +106,38 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        public static string FILTER {
+            get {
+                return ResourceManager.GetString("FILTER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No category.
+        /// </summary>
+        public static string NOCATEGORY {
+            get {
+                return ResourceManager.GetString("NOCATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not watched.
         /// </summary>
         public static string NOT_WATCHED {
             get {
                 return ResourceManager.GetString("NOT_WATCHED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play.
+        /// </summary>
+        public static string PLAY {
+            get {
+                return ResourceManager.GetString("PLAY", resourceCulture);
             }
         }
         

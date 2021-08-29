@@ -8,7 +8,6 @@
     xmlns:local="clr-namespace:dataneo.TutorialLibs.WPF.UI.TutorialList"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="tutorialSelectorWindow"
-    Title="TutorialListPage"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -17,13 +16,11 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/dataneo.TutorialLibs.WPF;component/Resources/Global.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
             <conv:ProgressBarValueConverter x:Key="progressBarValueConverter" />
             <conv:ProgressBarColorConverter x:Key="progressBarColorConverter" />
             <conv:EnumBooleanConverter x:Key="enumBooleanConverter" />
             <conv:LastPlayedDateConverter x:Key="lastPlayedDateConverter" />
             <conv:CategoriesConverter x:Key="categoriesConverter" />
-
             <Style x:Key="menuItemColors" TargetType="{x:Type MenuItem}">
                 <Style.Triggers>
                     <Trigger Property="MenuItem.Role" Value="TopLevelHeader">
@@ -179,7 +176,17 @@
                     IsCheckable="True"
                     IsChecked="{Binding Path=SelectedTutorialsOrderType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=ByRating}" />
             </MenuItem>
-            <!--<MenuItem Header="Ustawienia" Style="{StaticResource menuItemColors}" />-->
+            <MenuItem
+                Header="{x:Static lang:UI.FILTER}"
+                ItemsSource="{Binding Path=Categories, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource menuItemColors}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Command" Value="{Binding ElementName=tutorialSelectorWindow, Path=DataContext.FilterByCategory}" />
+                        <Setter Property="CommandParameter" Value="{Binding}" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
         </Menu>
 
         <ListView
@@ -282,7 +289,7 @@
                                     Margin="8,2,2,2"
                                     FontSize="14"
                                     Foreground="{StaticResource foreGround}"
-                                    Text="Odtwórz" />
+                                    Text="{x:Static lang:UI.PLAY}" />
                             </StackPanel>
                         </Button>
                         <StackPanel

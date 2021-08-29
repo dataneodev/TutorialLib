@@ -6,7 +6,6 @@
     xmlns:local="clr-namespace:dataneo.TutorialLibs.WPF.UI.Player"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="playerWindow"
-    Title="PlayerPage"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Background="Black"

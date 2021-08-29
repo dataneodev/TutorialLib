@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace dataneo.TutorialLibs.Domain.Entities
 {
-    public sealed class Category : BaseEntity
+    public sealed class Category : BaseEntity, IAggregateRoot
     {
         public const short MaxCategoryName = 32;
         public const short MinCategoryName = 1;
@@ -51,5 +51,7 @@ namespace dataneo.TutorialLibs.Domain.Entities
             this.Name = name.Trim();
             return Result.Success();
         }
+
+        public override string ToString() => this.Name;
     }
 }

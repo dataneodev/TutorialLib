@@ -123,14 +123,26 @@
   <data name="ADD_SINGLE" xml:space="preserve">
     <value>Dodaj pojedyńczy tutorial</value>
   </data>
+  <data name="ALL" xml:space="preserve">
+    <value>Wszystkie</value>
+  </data>
   <data name="CATEGORY" xml:space="preserve">
     <value>Category</value>
   </data>
   <data name="ERROR" xml:space="preserve">
     <value>Błąd</value>
   </data>
+  <data name="FILTER" xml:space="preserve">
+    <value>Filtruj</value>
+  </data>
+  <data name="NOCATEGORY" xml:space="preserve">
+    <value>Bez kategorii</value>
+  </data>
   <data name="NOT_WATCHED" xml:space="preserve">
     <value>Nieoglądany</value>
+  </data>
+  <data name="PLAY" xml:space="preserve">
+    <value>Odtwórz</value>
   </data>
   <data name="SORT" xml:space="preserve">
     <value>Sortuj</value>

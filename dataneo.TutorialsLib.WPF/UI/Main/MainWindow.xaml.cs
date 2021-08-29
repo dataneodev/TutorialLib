@@ -1,5 +1,8 @@
-﻿using dataneo.TutorialLibs.WPF.UI.Player;
+﻿using CSharpFunctionalExtensions;
+using dataneo.TutorialLibs.WPF.UI.Player;
 using dataneo.TutorialLibs.WPF.UI.TutorialList;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -20,7 +23,20 @@ namespace dataneo.TutorialLibs.WPF.UI
             this._playerPage = new PlayerPage(this);
 
             InitializeComponent();
+            AppendWindowTitle();
             LoadTutorialLibAsync();
+        }
+
+        private void AppendWindowTitle()
+        {
+            var version = Assembly.GetEntryAssembly().GetName().Version;
+
+            var assembly = Assembly.GetEntryAssembly()
+                                   .GetCustomAttributes(typeof(AssemblyProductAttribute))
+                                   .OfType<AssemblyProductAttribute>()
+                                   .FirstOrDefault();
+
+            this.mainWindow.Title = $"{assembly.Product} - {version}";
         }
 
         public async Task LoadTutorialLibAsync()
@@ -37,7 +53,7 @@ namespace dataneo.TutorialLibs.WPF.UI
 
         private async void tutorialWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            await this._playerPage.ClosingAsync();
+            await Result.Try(() => this._playerPage.ClosingAsync());
         }
     }
 }
