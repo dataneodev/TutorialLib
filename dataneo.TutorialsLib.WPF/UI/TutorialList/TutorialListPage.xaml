@@ -187,6 +187,15 @@
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
+            <MenuItem
+                x:Name="settingWindow"
+                Header="{x:Static lang:UI.SETTING}"
+                Style="{StaticResource menuItemColors}">
+                <MenuItem
+                    x:Name="settingCategory"
+                    Click="settingCategory_Click"
+                    Header="{x:Static lang:UI.CATEGORYWINDOW}" />
+            </MenuItem>
         </Menu>
 
         <ListView

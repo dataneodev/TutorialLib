@@ -151,6 +151,15 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Setting.
+        /// </summary>
+        public static string SETTING {
+            get {
+                return ResourceManager.GetString("SETTING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Order by.
         /// </summary>
         public static string SORT {

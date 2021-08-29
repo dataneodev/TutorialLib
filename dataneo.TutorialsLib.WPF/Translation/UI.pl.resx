@@ -147,6 +147,9 @@
   <data name="PLAY" xml:space="preserve">
     <value>Odtwórz</value>
   </data>
+  <data name="SETTING" xml:space="preserve">
+    <value>Ustawienia</value>
+  </data>
   <data name="SORT" xml:space="preserve">
     <value>Sortuj</value>
   </data>
