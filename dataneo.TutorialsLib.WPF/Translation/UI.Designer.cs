@@ -61,6 +61,15 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string ADD {
+            get {
+                return ResourceManager.GetString("ADD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add tutorials from folder.
         /// </summary>
         public static string ADD_FOLDER {
@@ -102,6 +111,15 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         public static string CATEGORYWINDOW {
             get {
                 return ResourceManager.GetString("CATEGORYWINDOW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string DELETE {
+            get {
+                return ResourceManager.GetString("DELETE", resourceCulture);
             }
         }
         
@@ -201,6 +219,15 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         public static string SORT_BY_TITLE {
             get {
                 return ResourceManager.GetString("SORT_BY_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string UPDATE {
+            get {
+                return ResourceManager.GetString("UPDATE", resourceCulture);
             }
         }
     }

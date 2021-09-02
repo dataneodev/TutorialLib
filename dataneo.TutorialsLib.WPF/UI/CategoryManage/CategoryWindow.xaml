@@ -7,9 +7,8 @@
     xmlns:local="clr-namespace:dataneo.TutorialLibs.WPF.UI.CategoryManage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="{x:Static lang:UI.CATEGORYWINDOW}"
-    Width="800"
-    Height="450"
-    SizeToContent="WidthAndHeight"
+    Width="360"
+    Height="500"
     Topmost="True"
     WindowStartupLocation="CenterOwner"
     WindowStyle="SingleBorderWindow"
@@ -27,5 +26,87 @@
     <Window.Foreground>
         <StaticResource ResourceKey="foreGround" />
     </Window.Foreground>
-    <Grid />
+    <Grid Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ListBox
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="4"
+            HorizontalAlignment="Stretch"
+            Background="{StaticResource backGround}"
+            BorderThickness="0"
+            Foreground="{StaticResource foreGround}"
+            ItemsSource="{Binding Path=Categories, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding Path=SelectedCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="2"
+            HorizontalAlignment="Stretch"
+            Background="#353535"
+            BorderBrush="Black"
+            FontSize="14"
+            Foreground="{StaticResource foreGround}"
+            Text="{Binding Path=CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="1"
+            Command="{Binding Path=AddCategoryCommand, Mode=OneTime}"
+            Cursor="Hand"
+            Style="{StaticResource button}"
+            ToolTip="{x:Static lang:UI.ADD}">
+            <Button.Content>
+                <TextBlock
+                    Margin="1"
+                    Foreground="Green"
+                    Text="✔️" />
+            </Button.Content>
+        </Button>
+        <Button
+            Grid.Row="1"
+            Grid.Column="2"
+            Margin="1"
+            Command="{Binding Path=UpdateCategoryCommand, Mode=OneTime}"
+            Cursor="Hand"
+            IsEnabled="{Binding Path=EditExistingCategory, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource button}"
+            ToolTip="{x:Static lang:UI.UPDATE}">
+            <Button.Content>
+                <TextBlock
+                    Margin="1"
+                    Foreground="Green"
+                    Text="➕" />
+            </Button.Content>
+        </Button>
+        <Button
+            Grid.Row="1"
+            Grid.Column="3"
+            Margin="1"
+            Command="{Binding Path=DeleteCategoryCommand, Mode=OneTime}"
+            Cursor="Hand"
+            IsEnabled="{Binding Path=EditExistingCategory, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource button}"
+            ToolTip="{x:Static lang:UI.DELETE}">
+            <Button.Content>
+                <TextBlock
+                    Margin="1"
+                    Foreground="Red"
+                    Text="❌" />
+            </Button.Content>
+        </Button>
+
+    </Grid>
 </Window>
