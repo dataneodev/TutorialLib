@@ -30,13 +30,12 @@ namespace dataneo.TutorialLibs.WPF.UI
         private void AppendWindowTitle()
         {
             var version = Assembly.GetEntryAssembly().GetName().Version;
-
             var assembly = Assembly.GetEntryAssembly()
                                    .GetCustomAttributes(typeof(AssemblyProductAttribute))
                                    .OfType<AssemblyProductAttribute>()
                                    .FirstOrDefault();
 
-            this.mainWindow.Title = $"{assembly.Product} - {version}";
+            this.mainWindow.Title = $"{assembly?.Product} - {version}";
         }
 
         public async Task LoadTutorialLibAsync()

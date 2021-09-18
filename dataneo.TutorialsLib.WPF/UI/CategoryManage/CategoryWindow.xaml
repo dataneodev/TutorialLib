@@ -72,7 +72,7 @@
                 <TextBlock
                     Margin="1"
                     Foreground="Green"
-                    Text="✔️" />
+                    Text="➕" />
             </Button.Content>
         </Button>
         <Button
@@ -88,7 +88,7 @@
                 <TextBlock
                     Margin="1"
                     Foreground="Green"
-                    Text="➕" />
+                    Text="✔️" />
             </Button.Content>
         </Button>
         <Button
