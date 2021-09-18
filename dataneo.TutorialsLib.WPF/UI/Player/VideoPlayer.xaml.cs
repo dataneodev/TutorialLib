@@ -120,30 +120,6 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             set { SetValue(VideoEndedProperty, value); }
         }
 
-        public static readonly DependencyProperty FullscreenToggleProperty =
-         DependencyProperty.Register(
-             nameof(FullscreenToggle),
-             typeof(ICommand),
-             typeof(VideoPlayer),
-              new PropertyMetadata(null, new PropertyChangedCallback(OnFullscreenToggleChanged)));
-
-        private static void OnFullscreenToggleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var vPlayer = d as VideoPlayer;
-            vPlayer.OnSetFullscreenToggleChanged(e);
-        }
-
-        private void OnSetFullscreenToggleChanged(DependencyPropertyChangedEventArgs e)
-        {
-            this.FullscreenToggle = (ICommand)e.NewValue;
-        }
-
-        public ICommand FullscreenToggle
-        {
-            get { return (ICommand)GetValue(FullscreenToggleProperty); }
-            set { SetValue(FullscreenToggleProperty, value); }
-        }
-
         public static readonly DependencyProperty PositionProperty =
          DependencyProperty.Register(
              nameof(Position),
@@ -334,14 +310,6 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         private void btnFullscreen_Click(object sender, RoutedEventArgs e)
             => SetFullscreenToggle();
 
-        private void SetFullscreenToggle()
-        {
-            if (this.FullscreenToggle?.CanExecute(null) ?? false)
-            {
-                this.FullscreenToggle?.Execute(null);
-            }
-        }
-
         private TimeSpan playTime;
         private void SetTimes(TimeSpan playTime)
         {
@@ -364,5 +332,30 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
 
         private string GetFormatedTimeSpan(TimeSpan timeSpan)
             => timeSpan.ToString(@"mm\:ss");
+
+        WindowState toggleFullscreenOldState;
+        private void SetFullscreenToggle()
+        {
+            var parentWindow = Window.GetWindow(this);
+            if (parentWindow is null)
+                return;
+
+            if (parentWindow.WindowState != WindowState.Maximized)
+            {
+                toggleFullscreenOldState = parentWindow.WindowState;
+                parentWindow.WindowState = WindowState.Maximized;
+                parentWindow.Visibility = Visibility.Collapsed;
+                parentWindow.WindowStyle = WindowStyle.None;
+                parentWindow.ResizeMode = ResizeMode.NoResize;
+                parentWindow.Visibility = Visibility.Visible;
+                parentWindow.Activate();
+            }
+            else
+            {
+                parentWindow.WindowState = toggleFullscreenOldState;
+                parentWindow.WindowStyle = WindowStyle.SingleBorderWindow;
+                parentWindow.ResizeMode = ResizeMode.CanResize;
+            }
+        }
     }
 }

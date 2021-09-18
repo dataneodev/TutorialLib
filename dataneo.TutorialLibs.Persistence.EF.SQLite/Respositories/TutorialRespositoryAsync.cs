@@ -14,9 +14,6 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
 {
     public class TutorialRespositoryAsync : EfRepository<Tutorial>, ITutorialRespositoryAsync, IDisposable
     {
-        public TutorialRespositoryAsync() : base(new ApplicationDbContext())
-        { }
-
         public TutorialRespositoryAsync(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
 

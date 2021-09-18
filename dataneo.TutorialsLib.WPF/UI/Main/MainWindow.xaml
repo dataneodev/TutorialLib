@@ -5,12 +5,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:dataneo.TutorialLibs.WPF.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
     x:Name="mainWindow"
     Width="1200"
     Height="800"
+    prism:ViewModelLocator.AutoWireViewModel="True"
     Closing="tutorialWindow_Closing"
     Topmost="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <Frame Name="mainWinFrame" NavigationUIVisibility="Hidden" />
+    <Grid>
+        <ContentControl prism:RegionManager.RegionName="{x:Static local:RegionNames.ContentRegion}" />
+    </Grid>
 </Window>

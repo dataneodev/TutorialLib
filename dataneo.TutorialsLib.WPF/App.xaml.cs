@@ -1,5 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
+using dataneo.TutorialLibs.WPF.Services;
+using dataneo.TutorialLibs.WPF.UI;
+using Prism.Ioc;
+using Prism.Modularity;
 using System.Windows;
 
 namespace dataneo.TutorialLibs.WPF
@@ -7,7 +11,7 @@ namespace dataneo.TutorialLibs.WPF
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
         public App()
         {
@@ -15,6 +19,22 @@ namespace dataneo.TutorialLibs.WPF
             Result.DefaultConfigureAwait = true;
             using var dbContext = new ApplicationDbContext();
             dbContext.Database.EnsureCreated();
+        }
+
+        protected override Window CreateShell()
+        {
+            return Container.Resolve<MainWindow>();
+        }
+
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+
+        }
+
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        {
+            moduleCatalog.AddModule<ServicesModule>();
+            moduleCatalog.AddModule<UIModule>();
         }
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)

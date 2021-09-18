@@ -1,35 +1,35 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Ardalis.GuardClauses;
+using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.EndPoints;
+using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
 using dataneo.TutorialLibs.Domain.ValueObjects;
 using dataneo.TutorialLibs.FileIO.Win.Services;
-using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
 using Serilog;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
 
 namespace dataneo.TutorialLibs.WPF.Actions
 {
     internal class AddNewTutorialAction
     {
-        private readonly Window _window;
+        private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
 
-        public AddNewTutorialAction(Window window)
+        public AddNewTutorialAction(ITutorialRespositoryAsync tutorialRespositoryAsync)
         {
-            this._window = window;
+            this._tutorialRespositoryAsync = Guard.Against.Null(tutorialRespositoryAsync, nameof(tutorialRespositoryAsync));
         }
+
         public async Task<Result> AddAsync()
         {
             var directory = GetDirectoryUserSelect();
             if (directory.HasNoValue)
                 return Result.Success();
 
-            using var repo = new TutorialRespositoryAsync();
             var addTutorialEngine = new AddTutorial(
                 new FileScanner(),
                 new MediaInfoProvider(),
                 new HandledFileExtension(),
-                repo,
+                this._tutorialRespositoryAsync,
                 Log.Logger);
 
             return await addTutorialEngine.AddTutorialAsync(directory.Value);

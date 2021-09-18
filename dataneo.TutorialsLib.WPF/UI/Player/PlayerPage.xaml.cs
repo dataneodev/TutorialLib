@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace dataneo.TutorialLibs.WPF.UI.Player
@@ -6,27 +6,41 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
     /// <summary>
     /// Interaction logic for PlayerPage.xaml
     /// </summary>
-    public partial class PlayerPage : Page
+    public partial class PlayerPage : UserControl
     {
-        private readonly PlayerPageVM _VM;
-
-        public PlayerPage(MainWindow mainWindow)
+        public PlayerPage()
         {
             InitializeComponent();
-            this._VM = new PlayerPageVM(mainWindow);
-            this.DataContext = _VM;
+            this.Loaded += UserControl1_Loaded;
+            this.Unloaded += PlayerPage_Unloaded;
         }
 
-        public async Task LoadAsync(int tutorialId)
+        private void PlayerPage_Unloaded(object sender, RoutedEventArgs e)
         {
-            await this._VM.LoadAsync(tutorialId);
+            Window window = Window.GetWindow(this);
+            window.Closing -= window_Closing;
         }
 
-        public async Task ClosingAsync()
+        private void UserControl1_Loaded(object sender, RoutedEventArgs e)
         {
+            Window window = Window.GetWindow(this);
+            window.Closing += window_Closing;
+        }
+
+        private void window_Closing(object sender, global::System.ComponentModel.CancelEventArgs e)
+        {
+
             this.ucVideoView?.StopPlaying();
-            await this._VM.EndWorkAsync();
+            //await this._VM.EndWorkAsync();
+            //    return Task.CompletedTask;
         }
+
+
+
+        //public Task ClosingAsync()
+        //{
+        //   
+        //}
 
         private void btToggleVideo_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -35,10 +49,9 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
                                         System.Windows.Visibility.Visible;
         }
 
-        private async void btnBackToTutorialList_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void btnBackToTutorialList_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             this.ucVideoView.StopPlaying();
-            await this._VM.GoBackToTutorialListCommandAsync();
         }
     }
 }

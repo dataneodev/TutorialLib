@@ -1,16 +1,15 @@
-﻿using Ardalis.GuardClauses;
-using System.Windows;
+﻿using System.Windows;
 
 namespace dataneo.TutorialLibs.WPF.UI.Dialogs
 {
     public partial class ErrorWindow : Window
     {
-        public static void ShowError(Window parent, string message)
+        public static void ShowError(string message)
         {
-            Guard.Against.Null(parent, nameof(parent));
+            // Guard.Against.Null(parent, nameof(parent));
             var errorWindow = new ErrorWindow()
             {
-                Owner = parent
+                //Owner = parent
             };
             errorWindow.tbErrorMessage.Text = message;
             errorWindow.Show();

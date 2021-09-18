@@ -1,39 +1,40 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
-using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
+using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
 using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using dataneo.TutorialLibs.WPF.UI.Player.Services;
+using dataneo.TutorialLibs.WPF.UI.TutorialList;
+using Prism.Regions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace dataneo.TutorialLibs.WPF.UI.Player
 {
-    internal class PlayerPageVM : BaseViewModel
+    internal class PlayerPageViewModel : BaseViewModel
     {
-        private readonly MainWindow _windowHandle;
         private QueueManager _queueManager;
+        private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
 
         private IReadOnlyList<object> videoItems;
         public IReadOnlyList<object> VideoItems
         {
             get { return videoItems; }
-            set { videoItems = value; Notify(); }
+            set { videoItems = value; RaisePropertyChanged(); }
         }
 
         private object selectedItem;
         public object SelectedItem
         {
             get { return selectedItem; }
-            set { selectedItem = value; Notify(); }
+            set { selectedItem = value; RaisePropertyChanged(); }
         }
 
         public ICommand ClickedOnEpisodeCommand { get; }
         public ICommand CurrentVideoEndedCommand { get; }
         public ICommand NextEpisodeCommand { get; }
         public ICommand PrevEpisodeCommand { get; }
-        public ICommand FullscreenToggleCommand { get; }
+        public ICommand GoBackCommand { get; }
 
         private PlayFileParameter currentMediaPath;
         public PlayFileParameter CurrentMediaPath
@@ -42,7 +43,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             set
             {
                 currentMediaPath = value;
-                Notify();
+                RaisePropertyChanged();
             }
         }
 
@@ -53,7 +54,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             set
             {
                 position = value;
-                Notify();
+                RaisePropertyChanged();
                 SetEpsiodePosition(value);
             }
         }
@@ -62,45 +63,32 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         public string FolderTitle
         {
             get { return folderTitle; }
-            set { folderTitle = value; Notify(); }
+            set { folderTitle = value; RaisePropertyChanged(); }
         }
 
         private string episodeTitle;
         public string EpisodeTitle
         {
             get { return episodeTitle; }
-            set { episodeTitle = value; Notify(); }
+            set { episodeTitle = value; RaisePropertyChanged(); }
         }
 
-        public PlayerPageVM(MainWindow windowHandle)
+        public PlayerPageViewModel(IRegionManager regionManager, ITutorialRespositoryAsync tutorialRespositoryAsync) : base(regionManager)
         {
-            this._windowHandle = Guard.Against.Null(windowHandle, nameof(windowHandle));
+            this._tutorialRespositoryAsync = Guard.Against.Null(tutorialRespositoryAsync, nameof(tutorialRespositoryAsync));
             this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);
             this.ClickedOnEpisodeCommand = new Command<int>(ClickedOnEpisodeCommandImpl);
-            this.FullscreenToggleCommand = new Command(FullscreenToggleCommandImpl);
             this.NextEpisodeCommand = new Command(NextEpisodeCommandImpl);
             this.PrevEpisodeCommand = new Command(PrevEpisodeCommandImpl);
+            this.GoBackCommand = new Command(GoBackCommandImpl);
         }
 
-        WindowState toggleFullscreenOldState;
-        private void FullscreenToggleCommandImpl()
+        public async override void OnNavigatedTo(NavigationContext navigationContext)
         {
-            if (this._windowHandle.WindowState != WindowState.Maximized)
-            {
-                toggleFullscreenOldState = this._windowHandle.WindowState;
-                this._windowHandle.WindowState = WindowState.Maximized;
-                this._windowHandle.Visibility = Visibility.Collapsed;
-                this._windowHandle.WindowStyle = WindowStyle.None;
-                this._windowHandle.ResizeMode = ResizeMode.NoResize;
-                this._windowHandle.Visibility = Visibility.Visible;
-                this._windowHandle.Activate();
-            }
-            else
-            {
-                this._windowHandle.WindowState = toggleFullscreenOldState;
-                this._windowHandle.WindowStyle = WindowStyle.SingleBorderWindow;
-                this._windowHandle.ResizeMode = ResizeMode.CanResize;
-            }
+            var tutorialId = navigationContext.Parameters["tutorialId"];
+            await Result
+                .Try(() => LoadAsync((int)tutorialId))
+                .OnFailure(error => ErrorWindow.ShowError(error));
         }
 
         private void _queueManager_BeginPlayFile(PlayFileParameter playFileParameter)
@@ -118,12 +106,6 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         private void ClickedOnEpisodeCommandImpl(int episodeId)
             => this._queueManager?.UserRequestEpisodePlay(episodeId);
 
-        public async Task GoBackToTutorialListCommandAsync()
-        {
-            await EndWorkAsync();
-            await this._windowHandle.LoadTutorialLibAsync();
-        }
-
         private void SetEpsiodePosition(int position)
             => this._queueManager?.SetPlayedEpisodePositionAsync(position);
 
@@ -133,18 +115,24 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         private void NextEpisodeCommandImpl()
             => this._queueManager?.PlayNextEpisodeAsync();
 
-        public async Task LoadAsync(int tutorialId)
+        private async void GoBackCommandImpl()
+        {
+            await Result
+                .Try(() => EndWorkAsync())
+                .OnFailure(error => ErrorWindow.ShowError(error));
+            RegionManager.RequestNavigate(RegionNames.ContentRegion, nameof(TutorialListPage));
+        }
+
+        private async Task LoadAsync(int tutorialId)
         {
             Guard.Against.NegativeOrZero(tutorialId, nameof(tutorialId));
-
-            using var repo = new TutorialRespositoryAsync();
-            var videoItemsCreator = new VideoItemsCreatorEngine(repo);
+            var videoItemsCreator = new VideoItemsCreatorEngine(this._tutorialRespositoryAsync);
 
             (await videoItemsCreator.LoadAndCreate(tutorialId))
-                .OnFailure(error => ErrorWindow.ShowError(this._windowHandle, error))
+                .OnFailure(error => ErrorWindow.ShowError(error))
                 .Tap(result =>
                 {
-                    this._queueManager = new QueueManager(result);
+                    this._queueManager = new QueueManager(this._tutorialRespositoryAsync, result);
                     this._queueManager.BeginPlayFile += _queueManager_BeginPlayFile;
                     this.VideoItems = result.AllItems;
                     this._queueManager.StartupPlay();

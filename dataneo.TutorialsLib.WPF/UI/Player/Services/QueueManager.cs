@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Entities;
 using dataneo.TutorialLibs.Domain.Enums;
-using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
+using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,16 +11,20 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 {
     internal sealed class QueueManager
     {
+        private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
         private readonly VideoItemsCreatorResult _videoItemsCreatorResult;
         private EpisodeData _currentPlayedEpisode;
 
         public event Action<PlayFileParameter> BeginPlayFile;
 
-        public QueueManager(VideoItemsCreatorResult videoItemsCreatorResult)
+        public QueueManager(ITutorialRespositoryAsync tutorialRespositoryAsync, VideoItemsCreatorResult videoItemsCreatorResult)
         {
             this._videoItemsCreatorResult = Guard.Against.Null(
                                                 videoItemsCreatorResult,
                                                 nameof(videoItemsCreatorResult));
+            this._tutorialRespositoryAsync = Guard.Against.Null(
+                                                tutorialRespositoryAsync,
+                                                nameof(tutorialRespositoryAsync));
         }
 
         public void StartupPlay()
@@ -141,7 +145,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
             EpisodePlay(nextEpisode.Value);
         }
 
-        private static async void SetAsWatchedAsync(EpisodeData episode)
+        private async void SetAsWatchedAsync(EpisodeData episode)
         {
             episode.VideoItemD.SetAsWatched();
             await SaveEpisodeToDBAsync(episode.VideoItemD.Episode)
@@ -153,10 +157,9 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
             folderItem.NotifyWatchStatus();
         }
 
-        private static async Task SaveEpisodeToDBAsync(Episode episode)
+        private async Task SaveEpisodeToDBAsync(Episode episode)
         {
-            using var repo = new TutorialRespositoryAsync();
-            await repo.UpdateEpisodeAsync(episode);
+            await this._tutorialRespositoryAsync.UpdateEpisodeAsync(episode);
         }
 
         private Maybe<EpisodeData> FindEpisode(int idEpisode)
