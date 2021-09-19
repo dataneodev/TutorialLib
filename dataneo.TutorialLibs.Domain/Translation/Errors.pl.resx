@@ -120,6 +120,9 @@
   <data name="CANCELED_BY_USER" xml:space="preserve">
     <value>Anulowano na żadanie użytkownika</value>
   </data>
+  <data name="CATEGORY_NAME_EXISTS" xml:space="preserve">
+    <value>Taka nazwa kategorii istnieje</value>
+  </data>
   <data name="EMPTY_GUID" xml:space="preserve">
     <value>Pusty GUID</value>
   </data>
