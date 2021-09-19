@@ -92,7 +92,7 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
                 return;
 
             await this.SelectedCategory.SetName(this.CategoryName)
-                .Ensure(async category => await this._categoryRespositoryAsync.CountAsync(new CategoryWithName("")) == 0)
+                //.Ensure(async category => await this._categoryRespositoryAsync.CountAsync(new CategoryWithName("")) == 0)
                 .OnSuccessTry(() => this._categoryRespositoryAsync.UpdateAsync(this.SelectedCategory))
                 .OnSuccessTry(() => LoadCategoriesAsync())
                 .OnFailure(error => ErrorWindow.ShowError(error));
