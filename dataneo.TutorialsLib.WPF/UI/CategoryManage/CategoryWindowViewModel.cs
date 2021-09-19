@@ -1,7 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Categories;
-using dataneo.TutorialLibs.Domain.Categories.Services;
 using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using Prism.Regions;
 using Prism.Services.Dialogs;
@@ -84,9 +83,9 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
                 return;
 
             await Result
-                .Try(() => this._categoryRespositoryAsync.DeleteAsync(this.SelectedCategory))
-                .OnSuccessTry(() => LoadCategoriesAsync())
-                .OnFailure(error => ErrorWindow.ShowError(error));
+               .Try(() => this._categoryRespositoryAsync.DeleteAsync(this.SelectedCategory))
+               .OnSuccessTry(() => LoadCategoriesAsync())
+               .OnFailure(error => ErrorWindow.ShowError(error));
         }
 
         private async void UpdateCategoryCommandImpl()
@@ -95,14 +94,15 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
                 return;
 
             await new UpdateCategory(this._categoryRespositoryAsync)
-                .UpdateCategoryName(this.SelectedCategory, this.CategoryName)
+                .UpdateCategoryNameAsync(this.SelectedCategory, this.CategoryName)
                 .OnSuccessTry(() => LoadCategoriesAsync())
                 .OnFailure(error => ErrorWindow.ShowError(error));
         }
 
         private async void AddCategoryCommandImpl()
         => await Category.Create(this.CategoryName)
-                .Bind(category => new AddCategory(this._categoryRespositoryAsync).AddNewCategory(category))
+                .Bind(category => new AddCategory(this._categoryRespositoryAsync)
+                                        .AddNewCategoryAsync(category))
                 .OnSuccessTry(() => LoadCategoriesAsync())
                 .OnFailure(error => ErrorWindow.ShowError(error));
 

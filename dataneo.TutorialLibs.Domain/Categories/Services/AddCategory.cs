@@ -3,7 +3,7 @@ using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Translation;
 using System.Threading.Tasks;
 
-namespace dataneo.TutorialLibs.Domain.Categories.Services
+namespace dataneo.TutorialLibs.Domain.Categories
 {
     public class AddCategory
     {
@@ -14,9 +14,9 @@ namespace dataneo.TutorialLibs.Domain.Categories.Services
             this._categoryRespositoryAsync = Guard.Against.Null(categoryRespositoryAsync, nameof(categoryRespositoryAsync));
         }
 
-        public async Task<Result> AddNewCategory(Category category)
+        public async Task<Result> AddNewCategoryAsync(Category category)
            => await Result
-                .Try(() => this._categoryRespositoryAsync.CountAsync(new CategoryWithName(category)))
+                .Try(() => this._categoryRespositoryAsync.CountAsync(new CategoryWithNameSpecification(category)))
                 .Ensure(count => count == 0, Errors.CATEGORY_NAME_EXISTS)
                 .OnSuccessTry(count => this._categoryRespositoryAsync.AddAsync(category));
     }

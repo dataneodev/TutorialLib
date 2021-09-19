@@ -42,7 +42,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
 
         private async Task<bool> CheckIfDirectoryPathUsed(DirectoryPath directoryPath, CancellationToken cancelationToken)
         {
-            var spec = new TutorialsForDirectoryPath(directoryPath);
+            var spec = new TutorialsForDirectoryPathSpecification(directoryPath);
             Maybe<Tutorial> findResult = await this._tutorialRespositoryAsync
                                                         .FirstOrDefaultAsync(spec, cancelationToken)
                                                         .ConfigureAwait(false);

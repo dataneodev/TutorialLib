@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Ardalis.Specification;
+using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +13,17 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
 {
     public class TutorialRespositoryAsync : EfRepository<Tutorial>, ITutorialRespositoryAsync, IDisposable
     {
+        private readonly float Megabytes = 1048576f;
         public TutorialRespositoryAsync(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
 
-        public async Task<IReadOnlyList<TutorialHeaderDto>> GetAllTutorialHeadersDtoAsync(CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<TutorialHeaderDto>> GetAllTutorialHeadersDtoAsync(
+                        ISpecification<Tutorial> spec,
+                        CancellationToken cancellationToken = default)
         {
             var watchProgressFractor = Episode.WatchPercentage / 100f;
-            var result = await this._dbContext.Tutorials
+            var specificationResult = ApplySpecification(spec);
+            var result = await specificationResult
                 .Select(s =>
                     new
                     {
@@ -32,26 +37,26 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
                         PlayedEpisodes = (short)s.Folders.Sum(w =>
                                             w.Episodes.Count(w => w.PlayedTimeSecond > w.File.PlayTimeSecond * watchProgressFractor)),
                         TotalEpisodes = (short)s.Folders.Sum(w => w.Episodes.Count()),
-                        TotalSizeMB = (float)s.Folders.Sum(w => w.Episodes.Sum(se => se.File.FileSize / 1048576f)),
+                        TotalSizeMB = (float)s.Folders.Sum(w => w.Episodes.Sum(se => se.File.FileSize / Megabytes)),
                         Categories = s.Categories,
                     })
                 .ToArrayAsync(cancellationToken)
                 .ConfigureAwait(false);
 
-            return result.Select(s => new TutorialHeaderDto
-            {
-                Id = s.Id,
-                Name = s.Name,
-                DateAdd = s.DateAdd,
-                Rating = s.Rating,
-                LastPlayedDate = s.LastPlayedDate,
-                TotalTime = TimeSpan.FromSeconds(s.TotalTime),
-                TimePlayed = TimeSpan.FromSeconds(s.TimePlayed),
-                PlayedEpisodes = s.PlayedEpisodes,
-                TotalEpisodes = s.TotalEpisodes,
-                TotalSizeMB = s.TotalSizeMB,
-                Categories = s.Categories
-            }).ToArray();
+            return result.Select(s =>
+                                new TutorialHeaderDto(
+                                    Id: s.Id,
+                                    Name: s.Name,
+                                    TotalTime: TimeSpan.FromSeconds(s.TotalTime),
+                                    TimePlayed: TimeSpan.FromSeconds(s.TimePlayed),
+                                    PlayedEpisodes: s.PlayedEpisodes,
+                                    TotalEpisodes: s.TotalEpisodes,
+                                    LastPlayedDate: s.LastPlayedDate,
+                                    DateAdd: s.DateAdd,
+                                    Rating: s.Rating,
+                                    TotalSizeMB: s.TotalSizeMB,
+                                    Categories: s.Categories))
+                .ToArray();
         }
 
         public override async Task<Tutorial> GetByIdAsync(int id, CancellationToken cancellationToken = default)

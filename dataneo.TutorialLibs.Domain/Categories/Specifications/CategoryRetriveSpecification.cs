@@ -2,9 +2,9 @@
 
 namespace dataneo.TutorialLibs.Domain.Categories
 {
-    public class CategoryRetrive : Specification<Category>
+    public class CategoryRetriveSpecification : Specification<Category>
     {
-        public CategoryRetrive()
+        public CategoryRetriveSpecification()
         {
             Query.AsNoTracking()
                 .Include(i => i.Tutorials);

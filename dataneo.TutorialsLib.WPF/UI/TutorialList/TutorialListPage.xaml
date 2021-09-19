@@ -184,8 +184,9 @@
                 Style="{StaticResource menuItemColors}">
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="{x:Type MenuItem}">
-                        <Setter Property="Command" Value="{Binding ElementName=tutorialSelectorWindow, Path=DataContext.FilterByCategory}" />
-                        <Setter Property="CommandParameter" Value="{Binding}" />
+                        <Setter Property="Command" Value="{Binding ElementName=tutorialSelectorWindow, Path=DataContext.FilterByCategoryCommand}" />
+                        <Setter Property="IsCheckable" Value="True" />
+                        <Setter Property="IsChecked" Value="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
