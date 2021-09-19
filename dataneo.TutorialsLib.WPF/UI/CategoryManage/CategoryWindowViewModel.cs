@@ -1,7 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using dataneo.TutorialLibs.Domain.Entities;
-using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
-using dataneo.TutorialLibs.Domain.Specifications;
+using dataneo.TutorialLibs.Domain.Categories;
 using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using Prism.Regions;
 using Prism.Services.Dialogs;
@@ -77,20 +75,35 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
                  .Try(() => LoadCategoriesAsync())
                  .OnFailure(error => ErrorWindow.ShowError(error));
 
-        private void DeleteCategoryCommandImpl()
+        private async void DeleteCategoryCommandImpl()
         {
+            if ((this.SelectedCategory?.Id ?? 0) == 0)
+                return;
 
+            await Result
+                .Try(() => this._categoryRespositoryAsync.DeleteAsync(this.SelectedCategory))
+                .OnSuccessTry(() => LoadCategoriesAsync())
+                .OnFailure(error => ErrorWindow.ShowError(error));
         }
 
-        private void UpdateCategoryCommandImpl()
+        private async void UpdateCategoryCommandImpl()
         {
+            if ((this.SelectedCategory?.Id ?? 0) == 0)
+                return;
 
+            await this.SelectedCategory.SetName(this.CategoryName)
+                .Ensure(async category => await this._categoryRespositoryAsync.CountAsync(new CategoryWithName("")) == 0)
+                .OnSuccessTry(() => this._categoryRespositoryAsync.UpdateAsync(this.SelectedCategory))
+                .OnSuccessTry(() => LoadCategoriesAsync())
+                .OnFailure(error => ErrorWindow.ShowError(error));
         }
 
-        private void AddCategoryCommandImpl()
-        {
-
-        }
+        private async void AddCategoryCommandImpl()
+            => await Category
+                .Create(this.CategoryName)
+                .OnSuccessTry(category => this._categoryRespositoryAsync.AddAsync(category))
+                .OnSuccessTry(_ => LoadCategoriesAsync())
+                .OnFailure(error => ErrorWindow.ShowError(error));
 
         private async Task LoadCategoriesAsync()
         {

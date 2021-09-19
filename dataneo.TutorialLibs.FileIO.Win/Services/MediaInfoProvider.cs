@@ -1,8 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using dataneo.Helpers;
-using dataneo.TutorialLibs.Domain.Interfaces;
-using dataneo.TutorialLibs.Domain.ValueObjects;
+using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.FileIO.Win.Translation;
 using MediaInfo.DotNetWrapper.Enumerations;
 using System;

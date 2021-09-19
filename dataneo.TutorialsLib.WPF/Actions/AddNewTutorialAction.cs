@@ -1,8 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
-using dataneo.TutorialLibs.Domain.EndPoints;
-using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
-using dataneo.TutorialLibs.Domain.ValueObjects;
+using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.FileIO.Win.Services;
 using Serilog;
 using System.Threading.Tasks;

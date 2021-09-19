@@ -1,5 +1,5 @@
 ﻿using Ardalis.GuardClauses;
-using dataneo.TutorialLibs.Domain.Entities;
+using dataneo.TutorialLibs.Domain.Categories;
 using System;
 
 namespace dataneo.TutorialLibs.WPF.UI.TutorialList

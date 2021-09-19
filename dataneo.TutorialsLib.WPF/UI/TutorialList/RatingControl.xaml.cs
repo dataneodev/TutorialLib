@@ -1,4 +1,4 @@
-﻿using dataneo.TutorialLibs.Domain.Enums;
+﻿using dataneo.TutorialLibs.Domain.Tutorials;
 using System;
 using System.Windows;
 using System.Windows.Controls;

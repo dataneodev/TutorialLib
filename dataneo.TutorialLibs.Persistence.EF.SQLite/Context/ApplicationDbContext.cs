@@ -1,4 +1,4 @@
-﻿using dataneo.TutorialLibs.Domain.Entities;
+﻿using dataneo.TutorialLibs.Domain.Tutorials;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 

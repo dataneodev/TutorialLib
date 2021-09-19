@@ -1,9 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using dataneo.Extensions;
-using dataneo.TutorialLibs.Domain.DTO;
-using dataneo.TutorialLibs.Domain.Enums;
-using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
+using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.WPF.Actions;
 using dataneo.TutorialLibs.WPF.Comparers;
 using dataneo.TutorialLibs.WPF.UI.CategoryManage;

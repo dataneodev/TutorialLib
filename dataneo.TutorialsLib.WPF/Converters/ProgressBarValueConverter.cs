@@ -1,5 +1,5 @@
 ﻿using dataneo.Extensions;
-using dataneo.TutorialLibs.Domain.DTO;
+using dataneo.TutorialLibs.Domain.Tutorials;
 using System;
 using System.Globalization;
 using System.Windows.Data;

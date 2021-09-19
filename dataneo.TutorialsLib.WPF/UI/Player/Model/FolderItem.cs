@@ -1,6 +1,5 @@
 ﻿using Ardalis.GuardClauses;
-using dataneo.TutorialLibs.Domain.Entities;
-using dataneo.TutorialLibs.Domain.Enums;
+using dataneo.TutorialLibs.Domain.Tutorials;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

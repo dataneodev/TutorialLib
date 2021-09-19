@@ -1,6 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
-using dataneo.TutorialLibs.Domain.Entities;
+using dataneo.TutorialLibs.Domain.Tutorials;
 using System.Collections.Generic;
 using System.Linq;
 

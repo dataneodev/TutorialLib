@@ -1,5 +1,5 @@
 ﻿using Ardalis.GuardClauses;
-using dataneo.TutorialLibs.Domain.Entities;
+using dataneo.TutorialLibs.Domain.Tutorials;
 
 namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 {

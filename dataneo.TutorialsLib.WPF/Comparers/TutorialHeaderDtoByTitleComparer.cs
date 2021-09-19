@@ -1,4 +1,4 @@
-﻿using dataneo.TutorialLibs.Domain.DTO;
+﻿using dataneo.TutorialLibs.Domain.Tutorials;
 using System;
 using System.Collections.Generic;
 

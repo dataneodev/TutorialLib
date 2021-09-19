@@ -1,5 +1,4 @@
-﻿using dataneo.TutorialLibs.Domain.Entities;
-using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
+﻿using dataneo.TutorialLibs.Domain.Categories;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
 using System;
 

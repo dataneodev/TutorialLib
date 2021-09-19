@@ -1,6 +1,5 @@
-﻿using dataneo.TutorialLibs.Domain.Interfaces;
-using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
-using dataneo.TutorialLibs.Domain.Services;
+﻿using dataneo.TutorialLibs.Domain.Categories;
+using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.FileIO.Win.Services;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;

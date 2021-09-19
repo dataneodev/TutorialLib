@@ -1,6 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
-using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
+using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.WPF.Events;
 using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using dataneo.TutorialLibs.WPF.UI.Player.Services;

@@ -1,4 +1,4 @@
-﻿using dataneo.TutorialLibs.Domain.Entities;
+﻿using dataneo.TutorialLibs.Domain.Categories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
