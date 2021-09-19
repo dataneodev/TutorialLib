@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.FileIO.Win.Services;
-using Serilog;
+using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -28,7 +28,7 @@ namespace dataneo.TutorialLibs.WPF.Actions
                 new MediaInfoProvider(),
                 new HandledFileExtension(),
                 this._tutorialRespositoryAsync,
-                Log.Logger);
+                new LoggerDialog());
 
             return await addTutorialEngine.AddTutorialAsync(directory.Value);
         }
