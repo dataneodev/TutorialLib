@@ -1,26 +1,26 @@
 # TutorialsLib
 
-Simple overview of use/purpose.
+Manage your tutorials library.
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+A video player based on VLC Media Player that helps you manage your collection of video courses. 
+This is a WPF application.
+
+## Screenshots
+![Screenshot](img/2.PNG)
+![Screenshot](img/1.PNG)
 
 ## Getting Started
 
 
 ### Installing
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+* No need to be installed.
 
 ### Executing program
 
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
+* Just run TutorialLibs.exe
 
 ## Version History
 
@@ -30,9 +30,10 @@ code blocks for commands
 ## License
 
 This project is licensed under the GPLv3 License
-## Acknowledgments
 
-Inspiration, code snippets, etc.
+## Libraries Used
 * [LibVLCSharp](https://github.com/videolan/libvlcsharp)
 * [vlc](https://github.com/videolan/vlc)
 * [MediaInfo](https://github.com/MediaArea/MediaInfo)
+* [Prism](https://github.com/PrismLibrary/Prism)
+* [SQLite](https://github.com/sqlite/sqlite)
