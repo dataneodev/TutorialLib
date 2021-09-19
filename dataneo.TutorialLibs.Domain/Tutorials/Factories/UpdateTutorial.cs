@@ -1,6 +1,5 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
-using Serilog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

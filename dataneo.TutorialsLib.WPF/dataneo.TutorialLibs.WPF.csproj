@@ -15,7 +15,7 @@
     <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
-  <Target Name="Rename" AfterTargets="AfterBuild">
+  <Target Name="Rename" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
     <Move SourceFiles="$(OUTDIR)\dataneo.TutorialLibs.WPF.exe" DestinationFiles="$(OUTDIR)\TutorialLibs.exe" />
     <Message Text="Renamed executable file." Importance="high" />
   </Target>
