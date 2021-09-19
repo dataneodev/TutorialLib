@@ -19,8 +19,6 @@ namespace dataneo.TutorialLibs.WPF.UI
         }
 
         private void WindowClosingImpl()
-        {
-            this._eventAggregator.GetEvent<CloseAppEvent>().Publish();
-        }
+            => this._eventAggregator.GetEvent<CloseAppEvent>().Publish();
     }
 }

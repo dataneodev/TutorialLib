@@ -64,7 +64,6 @@
                 Grid.Row="0"
                 Grid.RowSpan="2"
                 Grid.Column="0"
-                Click="btnBackToTutorialList_Click"
                 Command="{Binding Path=GoBackCommand, Mode=OneTime}"
                 Cursor="Hand">
                 <Button.Template>

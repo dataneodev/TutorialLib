@@ -18,10 +18,5 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
                                         System.Windows.Visibility.Collapsed :
                                         System.Windows.Visibility.Visible;
         }
-
-        private void btnBackToTutorialList_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            this.ucVideoView.StopPlaying();
-        }
     }
 }

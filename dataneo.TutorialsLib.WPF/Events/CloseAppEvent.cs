@@ -3,7 +3,5 @@
 namespace dataneo.TutorialLibs.WPF.Events
 {
     public class CloseAppEvent : PubSubEvent
-    {
-
-    }
+    { }
 }
