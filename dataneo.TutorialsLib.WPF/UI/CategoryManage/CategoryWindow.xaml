@@ -6,8 +6,10 @@
     xmlns:lang="clr-namespace:dataneo.TutorialLibs.WPF.Translation"
     xmlns:local="clr-namespace:dataneo.TutorialLibs.WPF.UI.CategoryManage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
     Width="360"
     Height="500"
+    prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>

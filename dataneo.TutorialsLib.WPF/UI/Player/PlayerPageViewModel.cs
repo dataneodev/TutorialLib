@@ -1,9 +1,11 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Interfaces.Respositories;
+using dataneo.TutorialLibs.WPF.Events;
 using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using dataneo.TutorialLibs.WPF.UI.Player.Services;
 using dataneo.TutorialLibs.WPF.UI.TutorialList;
+using Prism.Events;
 using Prism.Regions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -73,7 +75,9 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             set { episodeTitle = value; RaisePropertyChanged(); }
         }
 
-        public PlayerPageViewModel(IRegionManager regionManager, ITutorialRespositoryAsync tutorialRespositoryAsync) : base(regionManager)
+        public PlayerPageViewModel(IRegionManager regionManager,
+                                   IEventAggregator eventAggregator,
+                                   ITutorialRespositoryAsync tutorialRespositoryAsync) : base(regionManager)
         {
             this._tutorialRespositoryAsync = Guard.Against.Null(tutorialRespositoryAsync, nameof(tutorialRespositoryAsync));
             this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);
@@ -81,6 +85,8 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             this.NextEpisodeCommand = new Command(NextEpisodeCommandImpl);
             this.PrevEpisodeCommand = new Command(PrevEpisodeCommandImpl);
             this.GoBackCommand = new Command(GoBackCommandImpl);
+
+            eventAggregator.GetEvent<CloseAppEvent>().Subscribe(AppClose);
         }
 
         public async override void OnNavigatedTo(NavigationContext navigationContext)
@@ -123,6 +129,9 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             RegionManager.RequestNavigate(RegionNames.ContentRegion, nameof(TutorialListPage));
         }
 
+        private async void AppClose()
+            => await Result.Try(EndWorkAsync);
+
         private async Task LoadAsync(int tutorialId)
         {
             Guard.Against.NegativeOrZero(tutorialId, nameof(tutorialId));
@@ -139,7 +148,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
                 });
         }
 
-        public async Task EndWorkAsync()
+        private async Task EndWorkAsync()
         {
             if (this._queueManager is null)
                 return;

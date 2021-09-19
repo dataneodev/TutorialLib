@@ -138,7 +138,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
                 SetValue(PositionProperty, value);
                 if (this._mediaPlayer != null)
                 {
-                    this._mediaPlayer.Position = value / 100f;
+                    ThreadPool.QueueUserWorkItem(_ =>
+                    {
+                        this._mediaPlayer.Position = value / 100f;
+                    });
                 }
 
                 OnPropertyChanged();
@@ -153,7 +156,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             set
             {
                 this.volume = value;
-                this._mediaPlayer.Volume = value;
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    this._mediaPlayer.Volume = value;
+                });
                 OnPropertyChanged();
             }
         }
@@ -189,6 +195,12 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             InitializeComponent();
             this.DataContext = this;
             Loaded += VideoPlayer_Loaded;
+            Unloaded += VideoPlayer_Unloaded;
+        }
+
+        private void VideoPlayer_Unloaded(object sender, RoutedEventArgs e)
+        {
+            StopPlaying();
         }
 
         public void StopPlaying()

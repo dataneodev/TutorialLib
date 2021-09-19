@@ -2,6 +2,7 @@
     x:Class="dataneo.TutorialLibs.WPF.UI.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:dataneo.TutorialLibs.WPF.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,10 +11,14 @@
     Width="1200"
     Height="800"
     prism:ViewModelLocator.AutoWireViewModel="True"
-    Closing="tutorialWindow_Closing"
     Topmost="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <Behaviors:Interaction.Triggers>
+        <Behaviors:EventTrigger EventName="Closing" SourceObject="{Binding ElementName=mainWindow}">
+            <Behaviors:InvokeCommandAction Command="{Binding Path=WindowClosing, Mode=OneTime}" />
+        </Behaviors:EventTrigger>
+    </Behaviors:Interaction.Triggers>
     <Grid>
         <ContentControl prism:RegionManager.RegionName="{x:Static local:RegionNames.ContentRegion}" />
     </Grid>
