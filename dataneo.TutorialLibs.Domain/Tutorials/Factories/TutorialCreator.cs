@@ -30,8 +30,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             this._handledFileExtension = Guard.Against.Null(handledFileExtension, nameof(handledFileExtension));
         }
 
-        public async Task<Result<Maybe<Tutorial>>> GetTutorialForFolderAsync(DirectoryPath path,
-                                                                             CancellationToken cancelationToken = default)
+        public async Task<Result<Maybe<Tutorial>>> GetTutorialForFolderAsync(DirectoryPath path, CancellationToken cancelationToken = default)
         {
             Guard.Against.Null(path, nameof(path));
             return await this._fileScanner.GetFilesFromPathAsync(
@@ -66,10 +65,11 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                 return Result.Failure<Maybe<Tutorial>>(Errors.CANCELED_BY_USER);
 
             var folders = await GetFoldersWithEpisodesAsync(
-                            basePath.Value,
-                            tutorialName.Value,
-                            deconstructedPaths.Value,
-                            cancelationToken).ConfigureAwait(false);
+                                    basePath.Value,
+                                    tutorialName.Value,
+                                    deconstructedPaths.Value,
+                                    cancelationToken)
+                                .ConfigureAwait(false);
 
             if (folders.IsFailure)
                 return folders.ConvertFailure<Maybe<Tutorial>>();
@@ -117,9 +117,6 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                 if (folderResult.IsFailure)
                     return folderResult.ConvertFailure<IReadOnlyList<Folder>>();
 
-                if (cancellationToken.IsCancellationRequested)
-                    return Result.Failure<IReadOnlyList<Folder>>(Errors.CANCELED_BY_USER);
-
                 folderList.Add(folderResult.Value);
             }
             return folderList;
@@ -153,9 +150,9 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                         CancellationToken cancellationToken)
         {
             var episodesFiles = await this._mediaInfoProvider.GetFilesDetailsAsync(
-                            folderWithFiles.files.Select(s => Path.Combine(rootPath.Source, folderWithFiles.folder, s)),
-                            cancellationToken)
-                        .ConfigureAwait(false);
+                                        folderWithFiles.files.Select(s => Path.Combine(rootPath.Source, folderWithFiles.folder, s)),
+                                        cancellationToken)
+                                    .ConfigureAwait(false);
 
             if (cancellationToken.IsCancellationRequested)
                 return Result.Failure<IReadOnlyList<Episode>>(Errors.CANCELED_BY_USER);
