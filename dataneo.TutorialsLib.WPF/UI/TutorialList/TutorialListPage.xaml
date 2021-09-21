@@ -90,7 +90,6 @@
                                                                     Height="{Binding ElementName=SubMenuBorder, Path=ActualHeight}"
                                                                     Fill="{Binding ElementName=SubMenuBorder, Path=Background}" />
                                                             </Canvas>
-
                                                             <ItemsPresenter
                                                                 x:Name="ItemsPresenter"
                                                                 Grid.IsSharedSizeScope="true"
@@ -214,13 +213,13 @@
                     <WrapPanel FlowDirection="LeftToRight" Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
-
-            <!--<ListView.ContextMenu>
+            <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Zmień kategorie" Style="{StaticResource menuItemColors}" />
-                    <MenuItem Header="Skanuj w poszukiwaniu nowych odcinków" Style="{StaticResource menuItemColors}" />
+                    <MenuItem Header="File" />
+                    <MenuItem Header="Edit" />
+                    <MenuItem Header="View" />
                 </ContextMenu>
-            </ListView.ContextMenu>-->
+            </ListView.ContextMenu>
 
             <ListView.ItemTemplate>
                 <DataTemplate>

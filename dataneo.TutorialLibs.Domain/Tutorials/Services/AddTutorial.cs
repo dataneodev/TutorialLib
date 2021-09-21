@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace dataneo.TutorialLibs.Domain.Tutorials
 {
-    public sealed class AddTutorialsFromPath
+    public sealed class AddTutorial
     {
         private readonly IFileScanner _fileScanner;
         private readonly IMediaInfoProvider _mediaInfoProvider;
@@ -13,8 +13,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
         private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
         private readonly ILogger _logger;
 
-        public AddTutorialsFromPath(
-                            IFileScanner fileScanner,
+        public AddTutorial(IFileScanner fileScanner,
                             IMediaInfoProvider mediaInfoProvider,
                             IHandledFileExtension handledFileExtension,
                             ITutorialRespositoryAsync tutorialRespositoryAsync,
@@ -27,17 +26,29 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             this._logger = Guard.Against.Null(logger, nameof(logger));
         }
 
-        public async Task<Result> AddTutorialsAsync(DirectoryPath directoryPath, CancellationToken cancelationToken = default)
+        public async Task<Result<Tutorial>> AddTutorialAsync(DirectoryPath tutorialPath, CancellationToken cancelationToken = default)
         {
-            Guard.Against.Null(directoryPath, nameof(directoryPath));
+            Guard.Against.Null(tutorialPath, nameof(tutorialPath));
 
-            if (await CheckIfDirectoryPathUsed(directoryPath, cancelationToken))
-            {
-                return Result.Failure("Ten katalog jest już uzyty");
+            if (await CheckIfDirectoryPathUsed(tutorialPath, cancelationToken).ConfigureAwait(false))
+                return Result.Failure<Tutorial>("Ten katalog jest już uzyty");
 
-            }
+            var tutorialFolderProcessor = new(
+                                            fileScanner: this._fileScanner,
+                                            mediaInfoProvider: this._mediaInfoProvider,
+                                            dateTimeProivder: new DateTimeProivder(),
+                                            handledFileExtension: this._handledFileExtension);
 
-            return Result.Failure("NotImplement");
+            var folderTutrialResult = await tutorialFolderProcessor.GetTutorialForFolderAsync(
+                                                    tutorialPath,
+                                                    cancelationToken)
+                                                .ConfigureAwait(false);
+
+            return await folderTutrialResult
+                .Bind(result => result.ToResult("Nie znaleziono żadnych plików w folderze"))
+                .OnSuccessTry(tutorial => this._tutorialRespositoryAsync.AddAsync(tutorial, cancelationToken),
+                                                exception => exception?.InnerException?.Message)
+                .ConfigureAwait(false);
         }
 
         private async Task<bool> CheckIfDirectoryPathUsed(DirectoryPath directoryPath, CancellationToken cancelationToken)

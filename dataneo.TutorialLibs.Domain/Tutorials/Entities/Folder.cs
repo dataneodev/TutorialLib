@@ -21,11 +21,14 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
         private Folder() { }
 
         public static Result<Folder> Create(string folderPath, IReadOnlyList<Episode> episodes)
+            => Create(folderPath, folderPath, episodes);
+
+        public static Result<Folder> Create(string folderPath, string folderName, IReadOnlyList<Episode> episodes)
         {
             if ((episodes?.Count ?? 0) < 1)
                 return Result.Failure<Folder>(Errors.NO_EPISODE);
 
-            var folderPathTrimmed = folderPath?.Trim();
+            var folderPathTrimmed = folderName?.Trim();
 
             if (String.IsNullOrWhiteSpace(folderPathTrimmed))
                 return Result.Failure<Folder>(Errors.INVALID_DIRECTORY);

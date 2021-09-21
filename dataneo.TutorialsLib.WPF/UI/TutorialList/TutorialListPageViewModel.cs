@@ -22,7 +22,9 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 {
     internal sealed class TutorialListPageViewModel : BaseViewModel
     {
+        private readonly IDialogService _dialogService;
         private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
+        private readonly ICategoryRespositoryAsync _categoryRespositoryAsync;
 
         private IEnumerable<TutorialHeaderDto> tutorials;
         public IEnumerable<TutorialHeaderDto> Tutorials
@@ -42,9 +44,6 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                 SetNewTutorialsHeader(Tutorials, value);
             }
         }
-
-        private readonly IDialogService _dialogService;
-        private readonly ICategoryRespositoryAsync _categoryRespositoryAsync;
 
         private IEnumerable<CategoryMenuItem> _categories;
         public IEnumerable<CategoryMenuItem> Categories
@@ -135,8 +134,8 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             if (this.Categories.All(a => !a.IsChecked))
                 return false;
 
-            return this.Categories.Any(w =>
-                        w.FilterByCategory() && !newCategory.Any(a => w.IsEqualCategoryId(a.Id)));
+            return this.Categories.Any(w => w.FilterByCategory() &&
+                                            !newCategory.Any(a => w.IsEqualCategoryId(a.Id)));
         }
 
         private void SetCategories(IReadOnlyList<Category> categories)
