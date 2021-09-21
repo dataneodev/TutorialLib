@@ -21,9 +21,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials.Services
 
         private Result<IReadOnlyList<EpisodeFolderDeconstruction>> GetDeconstructedFilesPath(DirectoryPath rootPath, IReadOnlyList<string> files)
         {
-            var rootSplit = rootPath.Source.Split(
-                                Path.DirectorySeparatorChar,
-                                StringSplitOptions.RemoveEmptyEntries);
+            var rootSplit = rootPath.Source.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
 
             var returnList = new List<EpisodeFolderDeconstruction>(files.Count);
             foreach (var deconstructionResult in files.Select(filePath => GetDeconstructedFilePath(rootSplit, filePath)))
@@ -32,7 +30,6 @@ namespace dataneo.TutorialLibs.Domain.Tutorials.Services
                     return deconstructionResult.ConvertFailure<IReadOnlyList<EpisodeFolderDeconstruction>>();
                 returnList.Add(deconstructionResult.Value);
             }
-
             return Result.Success(returnList as IReadOnlyList<EpisodeFolderDeconstruction>);
         }
 
