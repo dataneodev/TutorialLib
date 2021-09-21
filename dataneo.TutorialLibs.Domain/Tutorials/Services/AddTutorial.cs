@@ -33,7 +33,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             if (await CheckIfDirectoryPathUsed(tutorialPath, cancelationToken).ConfigureAwait(false))
                 return Result.Failure<Tutorial>("Ten katalog jest już uzyty");
 
-            var tutorialFolderProcessor = new TutorialFolderProcessor(
+            var tutorialFolderProcessor = new TutorialCreator(
                                             fileScanner: this._fileScanner,
                                             mediaInfoProvider: this._mediaInfoProvider,
                                             dateTimeProivder: new DateTimeProivder(),

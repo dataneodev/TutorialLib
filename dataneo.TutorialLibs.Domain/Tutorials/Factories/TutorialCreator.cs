@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace dataneo.TutorialLibs.Domain.Tutorials
 {
-    internal sealed class TutorialFolderProcessor
+    internal sealed class TutorialCreator
     {
         private readonly IFileScanner _fileScanner;
         private readonly IDateTimeProivder _dateTimeProivder;
         private readonly IMediaInfoProvider _mediaInfoProvider;
         private readonly IHandledFileExtension _handledFileExtension;
 
-        public TutorialFolderProcessor(
+        public TutorialCreator(
             IFileScanner fileScanner,
             IMediaInfoProvider mediaInfoProvider,
             IDateTimeProivder dateTimeProivder,
@@ -30,9 +30,8 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             this._handledFileExtension = Guard.Against.Null(handledFileExtension, nameof(handledFileExtension));
         }
 
-        public async Task<Result<Maybe<Tutorial>>> GetTutorialForFolderAsync(
-                                                        DirectoryPath path,
-                                                        CancellationToken cancelationToken = default)
+        public async Task<Result<Maybe<Tutorial>>> GetTutorialForFolderAsync(DirectoryPath path,
+                                                                             CancellationToken cancelationToken = default)
         {
             Guard.Against.Null(path, nameof(path));
             return await this._fileScanner.GetFilesFromPathAsync(
@@ -108,12 +107,13 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                         CancellationToken cancellationToken)
         {
             var folderList = new List<Folder>(episodeFolderStructures.Count);
-            await foreach (var folderResult in GetFolderWithEpisodesAsync(
-                                                rootPath,
-                                                tutorialName,
-                                                episodeFolderStructures,
-                                                cancellationToken))
+            foreach (var folder in episodeFolderStructures)
             {
+                if (cancellationToken.IsCancellationRequested)
+                    return Result.Failure<IReadOnlyList<Folder>>(Errors.CANCELED_BY_USER);
+
+                var folderResult = await GetFolderWithEpisodesAsync(rootPath, tutorialName, folder, cancellationToken);
+
                 if (folderResult.IsFailure)
                     return folderResult.ConvertFailure<IReadOnlyList<Folder>>();
 
@@ -125,37 +125,26 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             return folderList;
         }
 
-        private async IAsyncEnumerable<Result<Folder>> GetFolderWithEpisodesAsync(
+        private async Task<Result<Folder>> GetFolderWithEpisodesAsync(
                         DirectoryPath rootPath,
                         string tutorialName,
-                        IEnumerable<FolderWithFiles> episodeFolderStructures,
+                        FolderWithFiles folderWithFiles,
                         CancellationToken cancellationToken)
         {
-            foreach (var directory in episodeFolderStructures)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    yield break;
+            var episodesResult = await GetEpisodesResultAsync(
+                                    rootPath,
+                                    folderWithFiles,
+                                    cancellationToken);
 
-                var episodesResult = await GetEpisodesResultAsync(
-                    rootPath,
-                    directory,
-                    cancellationToken);
+            if (episodesResult.IsFailure)
+                return episodesResult.ConvertFailure<Folder>();
 
-                if (episodesResult.IsFailure)
-                    yield return episodesResult.ConvertFailure<Folder>();
+            var folderName = string.IsNullOrWhiteSpace(folderWithFiles.folder) ? tutorialName : folderWithFiles.folder;
 
-                var folderName = string.IsNullOrWhiteSpace(directory.folder) ? tutorialName : directory.folder;
-
-                var folder = Folder.Create(
-                    directory.folder,
-                    folderName,
-                    episodesResult.Value);
-
-                if (folder.IsFailure)
-                    continue;
-
-                yield return folder;
-            }
+            return Folder.Create(
+                            folderWithFiles.folder,
+                            folderName,
+                            episodesResult.Value);
         }
 
         private async Task<Result<IReadOnlyList<Episode>>> GetEpisodesResultAsync(

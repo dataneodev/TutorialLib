@@ -32,10 +32,6 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Tutorials\Factories\" />
-  </ItemGroup>
-
 
   <Import Project="..\..\dataneo\dataneo.Extensions\dataneo.Extensions.projitems" Label="Shared" />
 

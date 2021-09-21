@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace dataneo.TutorialLibs.Domain.Tutorials.Services
 {
-    internal class FilePathsDeconstruction
+    internal sealed class FilePathsDeconstruction
     {
         public Result<IReadOnlyList<FolderWithFiles>> GetFolderWithFiles(DirectoryPath rootPath, IReadOnlyList<string> files)
           => GetDeconstructedFilesPath(rootPath, files)
@@ -22,15 +22,16 @@ namespace dataneo.TutorialLibs.Domain.Tutorials.Services
         private Result<IReadOnlyList<EpisodeFolderDeconstruction>> GetDeconstructedFilesPath(DirectoryPath rootPath, IReadOnlyList<string> files)
         {
             var rootSplit = rootPath.Source.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
+            var deconstructionResult = files.Select(filePath => GetDeconstructedFilePath(rootSplit, filePath))
+                                            .ToArray();
 
-            var returnList = new List<EpisodeFolderDeconstruction>(files.Count);
-            foreach (var deconstructionResult in files.Select(filePath => GetDeconstructedFilePath(rootSplit, filePath)))
-            {
-                if (deconstructionResult.IsFailure)
-                    return deconstructionResult.ConvertFailure<IReadOnlyList<EpisodeFolderDeconstruction>>();
-                returnList.Add(deconstructionResult.Value);
-            }
-            return Result.Success(returnList as IReadOnlyList<EpisodeFolderDeconstruction>);
+            if (deconstructionResult.Any(a => a.IsFailure))
+                return Result.Combine(deconstructionResult.Where(w => w.IsFailure))
+                             .ConvertFailure<IReadOnlyList<EpisodeFolderDeconstruction>>();
+
+            return Result.Success(
+                deconstructionResult.Select(s => s.Value)
+                                    .ToArray() as IReadOnlyList<EpisodeFolderDeconstruction>);
         }
 
         private Result<EpisodeFolderDeconstruction> GetDeconstructedFilePath(string[] rootSplit, string episodePath)
