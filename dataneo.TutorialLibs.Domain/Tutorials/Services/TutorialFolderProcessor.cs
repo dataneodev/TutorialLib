@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions;
 using dataneo.Extensions;
 using dataneo.TutorialLibs.Domain.Translation;
-using System;
+using dataneo.TutorialLibs.Domain.Tutorials.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,8 +13,6 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
 {
     internal sealed class TutorialFolderProcessor
     {
-        private const byte MaxSubFolderLevels = 1;
-
         private readonly IFileScanner _fileScanner;
         private readonly IDateTimeProivder _dateTimeProivder;
         private readonly IMediaInfoProvider _mediaInfoProvider;
@@ -56,24 +54,22 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             if (basePath.IsFailure)
                 return basePath.ConvertFailure<Maybe<Tutorial>>();
 
-            var tutorialName = GetTutorialName(rootFolder);
+            var deconstructionEngine = new FilePathsDeconstruction();
+            var deconstructedPaths = deconstructionEngine.GetFolderWithFiles(basePath.Value, files);
+            if (deconstructedPaths.IsFailure)
+                return deconstructedPaths.ConvertFailure<Maybe<Tutorial>>();
+
+            var tutorialName = deconstructionEngine.GetTutorialName(rootFolder);
             if (tutorialName.IsFailure)
                 return tutorialName.ConvertFailure<Maybe<Tutorial>>();
-
-            var deconstructedPaths = GetDeconstructedFilesPath(basePath.Value, files)
-                                        .ToArray(files.Count);
 
             if (cancelationToken.IsCancellationRequested)
                 return Result.Failure<Maybe<Tutorial>>(Errors.CANCELED_BY_USER);
 
-            if (deconstructedPaths.Any(a => a.IsFailure))
-                return Result.Combine(deconstructedPaths)
-                             .ConvertFailure<Maybe<Tutorial>>();
-
             var folders = await GetFoldersWithEpisodesAsync(
                             basePath.Value,
                             tutorialName.Value,
-                            deconstructedPaths.Select(s => s.Value),
+                            deconstructedPaths.Value,
                             cancelationToken).ConfigureAwait(false);
 
             if (folders.IsFailure)
@@ -99,16 +95,6 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             return Maybe<Tutorial>.From(tutorial.Value);
         }
 
-        private static Result<string> GetTutorialName(string rootFolder)
-        {
-            var tutorialname = rootFolder
-                                    .Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries)
-                                    .LastOrDefault();
-            if (String.IsNullOrWhiteSpace(tutorialname))
-                return Result.Failure<string>(Errors.TUTORIAL_NAME_INCORECT);
-            return tutorialname;
-        }
-
         private static void OrderTutorial(Tutorial tutorial)
         {
             var orderEngine = new OrderTutorialDefault();
@@ -118,17 +104,14 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
         private async Task<Result<IReadOnlyList<Folder>>> GetFoldersWithEpisodesAsync(
                         DirectoryPath rootPath,
                         string tutorialName,
-                        IEnumerable<EpisodeFolderDeconstruction> episodeFolderStructures,
+                        IReadOnlyList<FolderWithFiles> episodeFolderStructures,
                         CancellationToken cancellationToken)
         {
-            var grupedFolders = episodeFolderStructures
-                                    .GroupBy(g => g.Folder?.Trim() ?? String.Empty,
-                                                  StringComparer.InvariantCultureIgnoreCase);
-            var folderList = new List<Folder>(256);
+            var folderList = new List<Folder>(episodeFolderStructures.Count);
             await foreach (var folderResult in GetFolderWithEpisodesAsync(
                                                 rootPath,
                                                 tutorialName,
-                                                grupedFolders,
+                                                episodeFolderStructures,
                                                 cancellationToken))
             {
                 if (folderResult.IsFailure)
@@ -145,10 +128,10 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
         private async IAsyncEnumerable<Result<Folder>> GetFolderWithEpisodesAsync(
                         DirectoryPath rootPath,
                         string tutorialName,
-                        IEnumerable<IGrouping<string, EpisodeFolderDeconstruction>> grupedFolders,
+                        IEnumerable<FolderWithFiles> episodeFolderStructures,
                         CancellationToken cancellationToken)
         {
-            foreach (var directory in grupedFolders)
+            foreach (var directory in episodeFolderStructures)
             {
                 if (cancellationToken.IsCancellationRequested)
                     yield break;
@@ -161,9 +144,11 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                 if (episodesResult.IsFailure)
                     yield return episodesResult.ConvertFailure<Folder>();
 
+                var folderName = string.IsNullOrWhiteSpace(directory.folder) ? tutorialName : directory.folder;
+
                 var folder = Folder.Create(
-                    directory.Key,
-                    string.IsNullOrWhiteSpace(directory.Key) ? tutorialName : directory.Key,
+                    directory.folder,
+                    folderName,
                     episodesResult.Value);
 
                 if (folder.IsFailure)
@@ -175,11 +160,11 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
 
         private async Task<Result<IReadOnlyList<Episode>>> GetEpisodesResultAsync(
                         DirectoryPath rootPath,
-                        IEnumerable<EpisodeFolderDeconstruction> episodeFolderDeconstructions,
+                        FolderWithFiles folderWithFiles,
                         CancellationToken cancellationToken)
         {
             var episodesFiles = await this._mediaInfoProvider.GetFilesDetailsAsync(
-                            episodeFolderDeconstructions.Select(s => Path.Combine(rootPath.Source, s.Folder, s.FileName)),
+                            folderWithFiles.files.Select(s => Path.Combine(rootPath.Source, folderWithFiles.folder, s)),
                             cancellationToken)
                         .ConfigureAwait(false);
 
@@ -203,49 +188,6 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
 
             return Result.Success(episodes.Select(s => s.Value)
                                           .ToArray() as IReadOnlyList<Episode>);
-        }
-
-        private class EpisodeFolderDeconstruction
-        {
-            public static Result<EpisodeFolderDeconstruction> Create(
-                    string[] rootPath,
-                    string[] episodePath)
-            {
-                if (episodePath.Length < 2 || episodePath.Length < rootPath.Length)
-                    return Result.Failure<EpisodeFolderDeconstruction>(Errors.INVALID_FILE_PATH);
-
-                if (episodePath.Length > rootPath.Length + MaxSubFolderLevels + 1)
-                    return Result.Failure<EpisodeFolderDeconstruction>(Errors.TOO_MANY_DIRECTORY_LEVELS);
-
-                var folder = episodePath.Length > rootPath.Length + 1 ? episodePath[^2] : String.Empty;
-                var filePath = episodePath[^1];
-                return new EpisodeFolderDeconstruction(folder, filePath);
-            }
-
-            public readonly string Folder;
-            public readonly string FileName;
-
-            private EpisodeFolderDeconstruction(string folder, string filePath)
-            {
-                Folder = folder;
-                FileName = filePath;
-            }
-        }
-
-        private IEnumerable<Result<EpisodeFolderDeconstruction>> GetDeconstructedFilesPath(
-                    DirectoryPath rootPath, IEnumerable<string> files)
-        {
-            var rootSplit = rootPath.Source.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
-            return files.Select(filePath => GetDeconstructedFilePath(rootSplit, filePath));
-        }
-
-        private Result<EpisodeFolderDeconstruction> GetDeconstructedFilePath(string[] rootSplit, string episodePath)
-        {
-            var episodeSplit = episodePath.Split(
-                    Path.DirectorySeparatorChar,
-                    StringSplitOptions.RemoveEmptyEntries);
-
-            return EpisodeFolderDeconstruction.Create(rootSplit, episodeSplit);
         }
     }
 }
