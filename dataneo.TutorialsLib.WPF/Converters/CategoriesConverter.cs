@@ -15,7 +15,7 @@ namespace dataneo.TutorialLibs.WPF.Converters
                 if (categories.Count == 0)
                     return "-";
 
-                return string.Join(',', categories.Select(s => s.Name));
+                return string.Join(Environment.NewLine, categories.Select(s => s.Name));
             }
             return "-";
         }

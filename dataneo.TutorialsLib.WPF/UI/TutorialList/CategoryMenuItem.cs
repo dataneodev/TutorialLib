@@ -58,5 +58,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 
         public bool IsEqualCategoryId(int categoryId)
             => this.Filter == FilterType.ByCategory && this._category.Id == categoryId;
+
+        public Maybe<Category> GetCategory() => this._category;
     }
 }

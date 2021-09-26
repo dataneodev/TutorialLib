@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
 using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Tutorials;
-using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
+using dataneo.TutorialLibs.Persistence.EF.SQLite.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,18 +11,19 @@ using System.Threading.Tasks;
 
 namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
 {
-    public class TutorialRespositoryAsync : EfRepository<Tutorial>, ITutorialRespositoryAsync, IDisposable
+    public class TutorialRespositoryAsync : EfRepositoryDetached<Tutorial>, ITutorialRespositoryAsync
     {
         private readonly float Megabytes = 1048576f;
-        public TutorialRespositoryAsync(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
+        public TutorialRespositoryAsync(IApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
 
         public async Task<IReadOnlyList<TutorialHeaderDto>> GetAllTutorialHeadersDtoAsync(
                         ISpecification<Tutorial> spec,
                         CancellationToken cancellationToken = default)
         {
+            using var dbContext = _applicationDbContext.GetApplicationDbContext();
             var watchProgressFractor = Episode.WatchPercentage / 100f;
-            var specificationResult = ApplySpecification(spec);
+            var specificationResult = ApplySpecification(spec, dbContext);
             var result = await specificationResult
                 .Select(s =>
                     new
@@ -60,20 +61,20 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
         }
 
         public override async Task<Tutorial> GetByIdAsync(int id, CancellationToken cancellationToken = default)
-            => await _dbContext.Tutorials
-                        .Include(i => i.Folders)
-                        .ThenInclude(f => f.Episodes)
-                        .FirstOrDefaultAsync(f => f.Id == id, cancellationToken);
-
-        public void Dispose()
         {
-            this._dbContext.Dispose();
+            using var dbContext = _applicationDbContext.GetApplicationDbContext();
+            return await dbContext.Tutorials
+                                    .Include(i => i.Folders)
+                                    .ThenInclude(f => f.Episodes)
+                                    .FirstOrDefaultAsync(f => f.Id == id, cancellationToken);
         }
+
 
         public async Task UpdateEpisodeAsync(Episode episode, CancellationToken cancellationToken = default)
         {
-            _dbContext.Update(episode);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            using var dbContext = _applicationDbContext.GetApplicationDbContext();
+            dbContext.Update(episode);
+            await dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -4,6 +4,7 @@ using CSharpFunctionalExtensions;
 using dataneo.Extensions;
 using dataneo.TutorialLibs.Domain.Categories;
 using dataneo.TutorialLibs.Domain.Tutorials;
+using dataneo.TutorialLibs.Domain.Tutorials.Services;
 using dataneo.TutorialLibs.Domain.Tutorials.Specifications;
 using dataneo.TutorialLibs.WPF.Actions;
 using dataneo.TutorialLibs.WPF.Comparers;
@@ -33,6 +34,13 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             set { tutorials = value; RaisePropertyChanged(); }
         }
 
+        private TutorialHeaderDto selectedTutorial;
+        public TutorialHeaderDto SelectedTutorial
+        {
+            get { return selectedTutorial; }
+            set { selectedTutorial = value; RaisePropertyChanged(); }
+        }
+
         private TutorialsOrderType selectedTutorialsOrderType = TutorialsOrderType.ByLastVisit;
         public TutorialsOrderType SelectedTutorialsOrderType
         {
@@ -52,6 +60,13 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             set { _categories = value; RaisePropertyChanged(); }
         }
 
+        private IEnumerable<CategoryMenuItem> _tutorialCategories;
+        public IEnumerable<CategoryMenuItem> TutorialCategories
+        {
+            get { return _tutorialCategories; }
+            set { _tutorialCategories = value; RaisePropertyChanged(); }
+        }
+
         public ICommand RatingChangedCommand { get; }
         public ICommand PlayTutorialCommand { get; }
         public ICommand AddTutorialCommand { get; }
@@ -59,6 +74,8 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         public ICommand SearchForNewTutorialsCommand { get; }
         public ICommand FilterByCategoryCommand { get; }
         public ICommand ShowCategoryManagerCommand { get; }
+        public ICommand ShowTutorialCategoriesCommand { get; }
+        public ICommand TutorialCategoriesChangedCommand { get; }
 
         public TutorialListPageViewModel(IRegionManager regionManager,
                                          IDialogService dialogService,
@@ -74,13 +91,15 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             this.AddTutorialCommand = new Command(AddTutorialCommandImplAsync);
             this.FilterByCategoryCommand = new Command(FilterByCategoryCommandImplAsync);
             this.ShowCategoryManagerCommand = new Command(ShowCategoryManagerCommandImpl);
+            this.ShowTutorialCategoriesCommand = new Command(ShowTutorialCategoriesCommandImpl);
+            this.TutorialCategoriesChangedCommand = new Command(TutorialCategoriesChangedCommandImpl);
         }
 
         public async override void OnNavigatedTo(NavigationContext navigationContext)
-            => await Result
-                .Try(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
-                .OnSuccessTry(() => LoadCategoriesAsync())
-                .OnFailure(error => ErrorWindow.ShowError(error));
+                  => await Result
+                      .Try(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
+                      .OnSuccessTry(() => LoadCategoriesAsync())
+                      .OnFailure(error => ErrorWindow.ShowError(error));
 
         private async void AddTutorialCommandImplAsync()
             => await Result
@@ -109,9 +128,68 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                 .OnFailure(error => ErrorWindow.ShowError(error));
 
         private void ShowCategoryManagerCommandImpl()
+            => this._dialogService.ShowDialog(nameof(CategoryWindow),
+                    async callback => await LoadCategoriesAndTutorialsonSelectionChangeAsync());
+
+        private async void ShowTutorialCategoriesCommandImpl()
         {
-            this._dialogService.ShowDialog(nameof(CategoryWindow),
-                async callback => await LoadCategoriesAndTutorialsonSelectionChangeAsync());
+            if (this.SelectedTutorial is null)
+                return;
+
+            this.TutorialCategories = GetCategoryMenuItem(this.SelectedTutorial, this.Categories);
+        }
+
+        private IReadOnlyList<CategoryMenuItem> GetCategoryMenuItem(TutorialHeaderDto tutorialHeaderDto,
+                                                                    IEnumerable<CategoryMenuItem> categoryMenuItems)
+        {
+            var categories = categoryMenuItems.Select(s => s.GetCategory())
+                                               .Where(w => w.HasValue)
+                                               .Select(s => new CategoryMenuItem(s.Value))
+                                               .ToArray();
+
+            if (tutorialHeaderDto.Categories is null)
+                return categories;
+
+            var toChecked = categories
+                .Join(
+                    tutorialHeaderDto.Categories,
+                    f => f.GetCategoryId(),
+                    s => s.Id,
+                    (f, s) => f);
+
+            foreach (var category in toChecked)
+            {
+                category.IsChecked = true;
+            }
+            return categories;
+        }
+
+        private async void TutorialCategoriesChangedCommandImpl()
+        {
+            if (this.SelectedTutorial is null)
+                return;
+            var selectedTutorial = this.SelectedTutorial;
+            var newTutorialCategories = this.TutorialCategories.Where(w => w.IsChecked)
+                                                    .Select(S => S.GetCategory().Value)
+                                                    .ToArray();
+
+            UpdateTutorialDtoCategories(newTutorialCategories, selectedTutorial);
+            await UpdateTutorialCategories(newTutorialCategories, selectedTutorial);
+        }
+
+        private async void UpdateTutorialDtoCategories(IReadOnlyList<Category> newTutorialCategories, TutorialHeaderDto tutorialHeaderDto)
+        {
+            var newTutorialDto = tutorialHeaderDto with { Categories = newTutorialCategories };
+            this.Tutorials = this.Tutorials.Select(s => s == tutorialHeaderDto ? newTutorialDto : s)
+                                           .ToArray();
+        }
+
+        private async Task UpdateTutorialCategories(IReadOnlyList<Category> newTutorialCategories, TutorialHeaderDto tutorialHeaderDto)
+        {
+            var updateCategory = new UpdateTutorial(this._tutorialRespositoryAsync);
+            await Result
+                .Try(() => updateCategory.UpdateTutorialCategories(tutorialHeaderDto.Id, newTutorialCategories))
+                .OnFailure(error => ErrorWindow.ShowError(error));
         }
 
         private async Task LoadCategoriesAndTutorialsonSelectionChangeAsync()
