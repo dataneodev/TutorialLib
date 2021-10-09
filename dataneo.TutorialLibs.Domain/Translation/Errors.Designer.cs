@@ -70,6 +70,15 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Category name exists.
+        /// </summary>
+        public static string CATEGORY_NAME_EXISTS {
+            get {
+                return ResourceManager.GetString("CATEGORY_NAME_EXISTS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Empty GUID.
         /// </summary>
         public static string EMPTY_GUID {

@@ -2,6 +2,7 @@
     x:Class="dataneo.TutorialLibs.WPF.UI.TutorialList.TutorialListPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:conv="clr-namespace:dataneo.TutorialLibs.WPF.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lang="clr-namespace:dataneo.TutorialLibs.WPF.Translation"
@@ -90,7 +91,6 @@
                                                                     Height="{Binding ElementName=SubMenuBorder, Path=ActualHeight}"
                                                                     Fill="{Binding ElementName=SubMenuBorder, Path=Background}" />
                                                             </Canvas>
-
                                                             <ItemsPresenter
                                                                 x:Name="ItemsPresenter"
                                                                 Grid.IsSharedSizeScope="true"
@@ -184,8 +184,9 @@
                 Style="{StaticResource menuItemColors}">
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="{x:Type MenuItem}">
-                        <Setter Property="Command" Value="{Binding ElementName=tutorialSelectorWindow, Path=DataContext.FilterByCategory}" />
-                        <Setter Property="CommandParameter" Value="{Binding}" />
+                        <Setter Property="Command" Value="{Binding ElementName=tutorialSelectorWindow, Path=DataContext.FilterByCategoryCommand}" />
+                        <Setter Property="IsCheckable" Value="True" />
+                        <Setter Property="IsChecked" Value="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
@@ -207,25 +208,44 @@
             Background="{StaticResource backGround}"
             BorderThickness="0"
             ItemsSource="{Binding Path=Tutorials, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            SelectedItem="{Binding Path=SelectedTutorial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel FlowDirection="LeftToRight" Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
+            <ListView.ContextMenu>
+                <ContextMenu x:Name="cmTutorial" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                    <Behaviors:Interaction.Triggers>
+                        <Behaviors:EventTrigger EventName="Opened" SourceObject="{Binding ElementName=cmTutorial}">
+                            <Behaviors:InvokeCommandAction Command="{Binding ShowTutorialCategoriesCommand}" />
+                        </Behaviors:EventTrigger>
+                    </Behaviors:Interaction.Triggers>
+                    <MenuItem Header="File" />
+                    <MenuItem Header="Edit" />
+                    <MenuItem
+                        x:Name="miTutorialCategories"
+                        Header="{x:Static lang:UI.CATEGORYWINDOW}"
+                        ItemsSource="{Binding Path=TutorialCategories, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="{x:Type MenuItem}">
+                                <Setter Property="IsCheckable" Value="True" />
+                                <Setter Property="IsChecked" Value="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Setter Property="Command" Value="{Binding Path=DataContext.TutorialCategoriesChangedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
 
-            <!--<ListView.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Zmień kategorie" Style="{StaticResource menuItemColors}" />
-                    <MenuItem Header="Skanuj w poszukiwaniu nowych odcinków" Style="{StaticResource menuItemColors}" />
+                    </MenuItem>
                 </ContextMenu>
-            </ListView.ContextMenu>-->
+            </ListView.ContextMenu>
 
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid
                         Width="240"
-                        Height="160"
+                        MinHeight="160"
+                        MaxHeight="200"
                         Margin="0,4,0,4"
                         Background="#2F2F2F">
                         <Grid.ColumnDefinitions>

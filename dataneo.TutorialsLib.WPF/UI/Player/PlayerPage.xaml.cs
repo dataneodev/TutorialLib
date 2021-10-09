@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 
 namespace dataneo.TutorialLibs.WPF.UI.Player
 {
@@ -12,11 +13,17 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             InitializeComponent();
         }
 
+        private double gcVideoListWidth;
         private void btToggleVideo_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            ucVideoList.Visibility = (ucVideoList.Visibility == System.Windows.Visibility.Visible) ?
-                                        System.Windows.Visibility.Collapsed :
-                                        System.Windows.Visibility.Visible;
+            if (gcVideoList.Width.Value == 0)
+            {
+                gcVideoList.Width = new System.Windows.GridLength(Math.Max(gcVideoListWidth, 100));
+                return;
+            }
+
+            gcVideoListWidth = gcVideoList.Width.Value;
+            gcVideoList.Width = new System.Windows.GridLength(0);
         }
     }
 }

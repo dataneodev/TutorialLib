@@ -13,6 +13,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite
     /// <summary>
     /// "There's some repetition here - couldn't we have some the sync methods call the async?"
     /// https://blogs.msdn.microsoft.com/pfxteam/2012/04/13/should-i-expose-synchronous-wrappers-for-asynchronous-methods/
+    /// https://github.com/dotnet-architecture/eShopOnWeb/blob/master/src/Infrastructure/Data/EfRepository.cs
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class EfRepository<T> : IAsyncRepository<T> where T : BaseEntity, IAggregateRoot
@@ -79,7 +80,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite
             return await specificationResult.FirstOrDefaultAsync(cancellationToken);
         }
 
-        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        protected IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
             var evaluator = new SpecificationEvaluator();
             return evaluator.GetQuery(_dbContext.Set<T>().AsQueryable(), spec);

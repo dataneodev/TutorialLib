@@ -42,7 +42,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="8*" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition x:Name="gcVideoList" Width="300" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>

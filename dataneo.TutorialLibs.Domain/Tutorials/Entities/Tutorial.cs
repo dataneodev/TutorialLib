@@ -1,9 +1,11 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Ardalis.GuardClauses;
+using CSharpFunctionalExtensions;
 using dataneo.SharedKernel;
 using dataneo.TutorialLibs.Domain.Categories;
 using dataneo.TutorialLibs.Domain.Translation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace dataneo.TutorialLibs.Domain.Tutorials
 {
@@ -51,6 +53,13 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                 AddDate = dateTimeNow,
                 ModifiedTime = dateTimeNow,
             };
+        }
+
+        public void SetNewCategories(IEnumerable<Category> categories)
+        {
+            Guard.Against.Null(categories, nameof(categories));
+            this._categories.Clear();
+            this._categories.AddRange(categories.Distinct());
         }
     }
 }
