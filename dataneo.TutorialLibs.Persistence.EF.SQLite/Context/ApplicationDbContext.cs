@@ -1,4 +1,5 @@
-﻿using dataneo.TutorialLibs.Domain.Tutorials;
+﻿using dataneo.TutorialLibs.Domain.Categories;
+using dataneo.TutorialLibs.Domain.Tutorials;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -7,9 +8,11 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Context
     public class ApplicationDbContext : DbContext
     {
         public const string DatabaseName = "TutorialsLibDB.db";
-        public DbSet<Tutorial> Tutorials { get; set; }
-        public DbSet<Episode> Episodes { get; set; }
-        public DbSet<Folder> Folders { get; set; }
+
+        public DbSet<Tutorial> Tutorials { get; private set; }
+        public DbSet<Category> Categories { get; private set; }
+        public DbSet<Folder> Folders { get; private set; }
+        public DbSet<Episode> Episodes { get; private set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
