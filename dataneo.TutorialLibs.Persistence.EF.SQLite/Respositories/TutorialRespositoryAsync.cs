@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using dataneo.TutorialLibs.Domain.Tutorials;
+﻿using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
