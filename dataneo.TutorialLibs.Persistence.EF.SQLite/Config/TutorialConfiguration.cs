@@ -34,7 +34,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(p => p.Categories)
-                   .WithMany(p => p.Tutorials)
+                   .WithMany("_tutorials")
                    .UsingEntity(j => j.ToTable("CategoriesTutorials"));
         }
     }

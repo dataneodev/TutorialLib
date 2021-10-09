@@ -15,10 +15,13 @@ namespace dataneo.TutorialLibs.Domain.Categories
         }
 
         public async Task<Result> UpdateCategoryNameAsync(Category category, string newName)
-           => await category
+        {
+            Guard.Against.Null(category, nameof(category));
+            return await category
                 .SetName(newName)
                 .OnSuccessTry(() => this._categoryRespositoryAsync.CountAsync(new CategoryWithNameSpecification(category)))
                 .Ensure(count => count == 0, Errors.CATEGORY_NAME_EXISTS)
-                .OnSuccessTry(count => this._categoryRespositoryAsync.UpdateAsync(category));
+                .OnSuccessTry(count => this._categoryRespositoryAsync.UpdateAsync(category), error => error.InnerException?.Message);
+        }
     }
 }

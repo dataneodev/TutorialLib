@@ -1,7 +1,7 @@
 ﻿using dataneo.TutorialLibs.Domain.Categories;
 using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.FileIO.Win.Services;
-using dataneo.TutorialLibs.Persistence.EF.SQLite.Interfaces;
+using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -16,7 +16,7 @@ namespace dataneo.TutorialLibs.WPF.Services
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<ApplicationDbContext>();
+            containerRegistry.RegisterSingleton<ApplicationDbContext>();
             containerRegistry.Register<ITutorialRespositoryAsync, TutorialRespositoryAsync>();
             containerRegistry.Register<ICategoryRespositoryAsync, CattegoryRespositoryAsync>();
             containerRegistry.Register<IDateTimeProivder, DateTimeProivder>();

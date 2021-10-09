@@ -6,7 +6,6 @@ namespace dataneo.TutorialLibs.WPF.UI.Dialogs
     {
         public static void ShowError(string message)
         {
-            // Guard.Against.Null(parent, nameof(parent));
             var errorWindow = new ErrorWindow()
             {
                 //Owner = parent

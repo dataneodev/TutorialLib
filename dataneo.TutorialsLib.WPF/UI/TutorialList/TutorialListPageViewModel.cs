@@ -174,7 +174,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                                                     .ToArray();
 
             UpdateTutorialDtoCategories(newTutorialCategories, selectedTutorial);
-            await UpdateTutorialCategories(newTutorialCategories, selectedTutorial);
+            await UpdateTutorialCategoriesAsync(newTutorialCategories, selectedTutorial);
         }
 
         private async void UpdateTutorialDtoCategories(IReadOnlyList<Category> newTutorialCategories, TutorialHeaderDto tutorialHeaderDto)
@@ -184,11 +184,10 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                                            .ToArray();
         }
 
-        private async Task UpdateTutorialCategories(IReadOnlyList<Category> newTutorialCategories, TutorialHeaderDto tutorialHeaderDto)
+        private async Task UpdateTutorialCategoriesAsync(IReadOnlyList<Category> newTutorialCategories, TutorialHeaderDto tutorialHeaderDto)
         {
             var updateCategory = new UpdateTutorial(this._tutorialRespositoryAsync);
-            await Result
-                .Try(() => updateCategory.UpdateTutorialCategories(tutorialHeaderDto.Id, newTutorialCategories))
+            (await updateCategory.UpdateTutorialCategoriesAsync(tutorialHeaderDto.Id, newTutorialCategories))
                 .OnFailure(error => ErrorWindow.ShowError(error));
         }
 

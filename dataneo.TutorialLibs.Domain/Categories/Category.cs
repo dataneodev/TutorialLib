@@ -12,7 +12,8 @@ namespace dataneo.TutorialLibs.Domain.Categories
         public const short MinCategoryName = 1;
 
         public string Name { get; private set; }
-        public IReadOnlyList<Tutorial> Tutorials { get; private set; }
+
+        private readonly ICollection<Tutorial> _tutorials = new List<Tutorial>();
 
         private Category() { }
 

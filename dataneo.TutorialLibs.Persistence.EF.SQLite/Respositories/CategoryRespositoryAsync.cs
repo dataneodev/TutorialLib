@@ -15,13 +15,13 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
 
         public override async Task<Category> GetByIdAsync(int id, CancellationToken cancellationToken = default)
             => await _dbContext.Categories
-                        .Include(i => i.Tutorials)
+                        .Include("_tutorials")
                         .FirstOrDefaultAsync(f => f.Id == id, cancellationToken)
                         .ConfigureAwait(false);
 
         public async Task<IReadOnlyList<Category>> ListAllAsync(CancellationToken cancellationToken = default)
             => await _dbContext.Categories
-                        .Include(i => i.Tutorials)
+                        .Include("_tutorials")
                         .ToListAsync(cancellationToken)
                         .ConfigureAwait(false);
 
@@ -29,7 +29,7 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
         {
             var specificationResult = ApplySpecification(spec);
             return await specificationResult
-                            .Include(i => i.Tutorials)
+                            .Include("_tutorials")
                             .ToListAsync(cancellationToken);
         }
     }

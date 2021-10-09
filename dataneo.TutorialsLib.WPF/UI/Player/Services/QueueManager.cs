@@ -61,10 +61,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 
         public async Task EndWorkAsync()
         {
-            if (this._currentPlayedEpisode.VideoItemD?.Episode is null)
+            if (this._currentPlayedEpisode.Episode is null)
                 return;
 
-            await SaveEpisodeToDBAsync(this._currentPlayedEpisode.VideoItemD.Episode)
+            await SaveTutorialToDBAsync(this._currentPlayedEpisode.TutorialD)
                     .ConfigureAwait(false);
         }
 
@@ -120,8 +120,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 
             UpdateFolderPlayedStatus(this._currentPlayedEpisode.FolderItemD);
 
-            await SaveEpisodeToDBAsync(this._currentPlayedEpisode.VideoItemD.Episode)
-                .ConfigureAwait(false);
+            await SaveTutorialToDBAsync(this._currentPlayedEpisode.TutorialD);
 
             EpisodePlay(nextEpisode.Value);
         }
@@ -137,8 +136,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 
             UpdateFolderPlayedStatus(this._currentPlayedEpisode.FolderItemD);
 
-            await SaveEpisodeToDBAsync(this._currentPlayedEpisode.VideoItemD.Episode)
-                .ConfigureAwait(false);
+            await SaveTutorialToDBAsync(this._currentPlayedEpisode.TutorialD);
 
             EpisodePlay(nextEpisode.Value);
         }
@@ -146,7 +144,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
         private async void SetAsWatchedAsync(EpisodeData episode)
         {
             episode.VideoItemD.SetAsWatched();
-            await SaveEpisodeToDBAsync(episode.VideoItemD.Episode)
+            await SaveTutorialToDBAsync(episode.TutorialD)
                     .ConfigureAwait(false);
         }
 
@@ -155,9 +153,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
             folderItem.NotifyWatchStatus();
         }
 
-        private async Task SaveEpisodeToDBAsync(Episode episode)
+        private async Task SaveTutorialToDBAsync(Tutorial tutorial)
         {
-            await this._tutorialRespositoryAsync.UpdateEpisodeAsync(episode);
+            await this._tutorialRespositoryAsync.UpdateAsync(tutorial)
+                            .ConfigureAwait(false);
         }
 
         private Maybe<EpisodeData> FindEpisode(int idEpisode)

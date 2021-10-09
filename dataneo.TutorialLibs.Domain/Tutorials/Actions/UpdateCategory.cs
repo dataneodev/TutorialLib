@@ -15,7 +15,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials.Services
             this._tutorialRespositoryAsync = Guard.Against.Null(tutorialRespositoryAsync, nameof(tutorialRespositoryAsync));
         }
 
-        public async Task<Result> UpdateTutorialCategories(int tutorialId, IEnumerable<Category> categories)
+        public async Task<Result> UpdateTutorialCategoriesAsync(int tutorialId, IEnumerable<Category> categories)
         {
             Guard.Against.NegativeOrZero(tutorialId, nameof(tutorialId));
             Guard.Against.Null(categories, nameof(categories));
@@ -25,8 +25,10 @@ namespace dataneo.TutorialLibs.Domain.Tutorials.Services
                 return Result.Failure("Tutorial not found");
 
             tutorial.SetNewCategories(categories);
-            await this._tutorialRespositoryAsync.UpdateAsync(tutorial);
-            return Result.Success();
+
+            return await Result.Try(
+                () => this._tutorialRespositoryAsync.UpdateAsync(tutorial),
+                error => error.InnerException?.Message);
         }
     }
 }

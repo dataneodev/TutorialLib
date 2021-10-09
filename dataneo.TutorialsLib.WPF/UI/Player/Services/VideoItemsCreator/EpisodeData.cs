@@ -9,6 +9,9 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
         public VideoItem VideoItemD { get; }
         public FolderItem FolderItemD { get; }
 
+        public Episode Episode => this.VideoItemD.Episode;
+        public Folder Fodler => this.FolderItemD.Folder;
+
         public EpisodeData(
                     Tutorial tutorialD,
                     VideoItem videoItemD,
