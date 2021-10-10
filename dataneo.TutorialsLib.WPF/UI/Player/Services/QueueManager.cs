@@ -68,6 +68,12 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
                     .ConfigureAwait(false);
         }
 
+        private async Task StopPlayingAsync()
+        {
+            await EndWorkAsync();
+            this.BeginPlayFile?.Invoke(null);
+        }
+
         private void EpisodePlay(int idEpisode)
         {
             var episode = FindEpisode(idEpisode);
@@ -116,7 +122,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 
             var nextEpisode = GetNextEpisode(this._currentPlayedEpisode.VideoItemD.EpisodeId);
             if (nextEpisode.HasNoValue)
+            {
+                await StopPlayingAsync();
                 return;
+            }
 
             UpdateFolderPlayedStatus(this._currentPlayedEpisode.FolderItemD);
 
@@ -132,7 +141,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 
             var nextEpisode = GetPrevEpisode(this._currentPlayedEpisode.VideoItemD.EpisodeId);
             if (nextEpisode.HasNoValue)
+            {
+                await StopPlayingAsync();
                 return;
+            }
 
             UpdateFolderPlayedStatus(this._currentPlayedEpisode.FolderItemD);
 

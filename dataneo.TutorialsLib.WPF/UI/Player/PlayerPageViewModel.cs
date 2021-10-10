@@ -77,6 +77,8 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             set { episodeTitle = value; RaisePropertyChanged(); }
         }
 
+        private bool _isLoaded;
+
         public PlayerPageViewModel(IRegionManager regionManager,
                                    IDialogService dialogService,
                                    IEventAggregator eventAggregator,
@@ -105,6 +107,9 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         private void _queueManager_BeginPlayFile(PlayFileParameter playFileParameter)
         {
             this.CurrentMediaPath = playFileParameter;
+
+            if (playFileParameter is null)
+                return;
             this.Caption = playFileParameter.TutorialTitle;
             this.FolderTitle = playFileParameter.FolderTitle;
             this.EpisodeTitle = playFileParameter.EpisodeTitle;
@@ -155,11 +160,13 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
 
         private async Task EndWorkAsync()
         {
+            this.CurrentMediaPath = null;
+
             if (this._queueManager is null)
                 return;
             await this._queueManager
-                            .EndWorkAsync()
-                            .ConfigureAwait(false);
+                    .EndWorkAsync()
+                    .ConfigureAwait(false);
         }
 
         private void ShowError(string error)

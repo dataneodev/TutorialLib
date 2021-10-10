@@ -11,6 +11,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
 {
     public partial class VideoPlayer : UserControl, INotifyPropertyChanged
     {
+        private volatile bool _isLoaded;
         private LibVLC _libVLC;
         private MediaPlayer _mediaPlayer;
 
@@ -43,9 +44,14 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         private void OnSetMediaPathChanged(DependencyPropertyChangedEventArgs e)
         {
             this.MediaPath = e.NewValue as PlayFileParameter;
+            if (this.MediaPath is null)
+            {
+                StopPlaying();
+                return;
+            }
+
             SetTimes(this.MediaPath.PlayTime);
-            if (this.MediaPath is not null)
-                PlayMediaFile(this.MediaPath);
+            PlayMediaFile(this.MediaPath);
         }
 
         public static readonly DependencyProperty PrevEpisodeProperty =
@@ -136,13 +142,11 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             set
             {
                 SetValue(PositionProperty, value);
-                if (this._mediaPlayer != null)
+                ThreadPool.QueueUserWorkItem(_ =>
                 {
-                    ThreadPool.QueueUserWorkItem(_ =>
-                    {
+                    if (this._mediaPlayer?.IsSeekable ?? false)
                         this._mediaPlayer.Position = value / 100f;
-                    });
-                }
+                });
 
                 OnPropertyChanged();
             }
@@ -195,12 +199,6 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             InitializeComponent();
             this.DataContext = this;
             Loaded += VideoPlayer_Loaded;
-            Unloaded += VideoPlayer_Unloaded;
-        }
-
-        private void VideoPlayer_Unloaded(object sender, RoutedEventArgs e)
-        {
-            StopPlaying();
         }
 
         public void StopPlaying()
@@ -215,29 +213,29 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         {
             ThreadPool.QueueUserWorkItem(_ =>
             {
-                WaitForLoad();
+                if (!this._isLoaded)
+                {
+                    while (!this._isLoaded)
+                        Thread.Sleep(50);
+
+                    Thread.Sleep(500);
+                }
+
                 using var media = new Media(_libVLC, new Uri(mediaPath.Path));
                 this._mediaPlayer.Play(media);
                 this._mediaPlayer.Position = mediaPath.Position / 100f;
             });
         }
 
-        private void WaitForLoad()
-        {
-            while (!App.Current.Dispatcher.Invoke(() => IsLoaded))
-            {
-                Thread.Sleep(10);
-            }
-        }
-
         private void VideoPlayer_Loaded(object sender, RoutedEventArgs e)
         {
-            if (this._libVLC != null)
+            if (this._isLoaded == true)
                 return;
 
             this._libVLC = new LibVLC();
             this._mediaPlayer = GetMediaPlayer(this._libVLC);
             videoView.MediaPlayer = this._mediaPlayer;
+            this._isLoaded = true;
         }
 
         private MediaPlayer GetMediaPlayer(LibVLC libVLC)
@@ -343,7 +341,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         }
 
         private string GetFormatedTimeSpan(TimeSpan timeSpan)
-            => timeSpan.ToString(@"mm\:ss");
+            => timeSpan.ToString(@"hh\:mm\:ss");
 
         WindowState toggleFullscreenOldState;
         private void SetFullscreenToggle()
