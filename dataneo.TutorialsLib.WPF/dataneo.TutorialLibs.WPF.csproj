@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/dataneodev/TutorialLib</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dataneodev/TutorialLib</RepositoryUrl>
     <Product>TutorialLibs</Product>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <AssemblyVersion>1.0.0.2</AssemblyVersion>
     <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 

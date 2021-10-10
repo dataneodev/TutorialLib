@@ -246,9 +246,9 @@
                             </Setter>
                         </Style>
                     </ContextMenu.Style>
-                    <MenuItem Command="{Binding Path=DataContext.SetTutorialAsWatchedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" Header="{x:Static lang:UI.SETASWATCHED}" />
+                    <!--<MenuItem Command="{Binding Path=DataContext.SetTutorialAsWatchedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" Header="{x:Static lang:UI.SETASWATCHED}" />
                     <MenuItem Command="{Binding Path=DataContext.SetTutorialAsUnWatchedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" Header="{x:Static lang:UI.SETASUNWATCHED}" />
-                    <MenuItem Command="{Binding Path=DataContext.DeleteTutorialCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" Header="{x:Static lang:UI.DELETE}" />
+                    <MenuItem Command="{Binding Path=DataContext.DeleteTutorialCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" Header="{x:Static lang:UI.DELETE}" />-->
                     <MenuItem
                         x:Name="miTutorialCategories"
                         Header="{x:Static lang:UI.SETCATEGORY}"
