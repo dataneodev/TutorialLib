@@ -19,9 +19,9 @@ namespace dataneo.TutorialLibs.WPF.Services
             containerRegistry.RegisterSingleton<ApplicationDbContext>();
             containerRegistry.Register<ITutorialRespositoryAsync, TutorialRespositoryAsync>();
             containerRegistry.Register<ICategoryRespositoryAsync, CattegoryRespositoryAsync>();
-            containerRegistry.Register<IDateTimeProivder, DateTimeProivder>();
+            containerRegistry.RegisterSingleton<IDateTimeProivder, DateTimeProivder>();
+            containerRegistry.RegisterSingleton<IHandledFileExtension, HandledFileExtension>();
             containerRegistry.Register<IFileScanner, FileScanner>();
-            containerRegistry.Register<IHandledFileExtension, HandledFileExtension>();
             containerRegistry.Register<IMediaInfoProvider, MediaInfoProvider>();
         }
     }

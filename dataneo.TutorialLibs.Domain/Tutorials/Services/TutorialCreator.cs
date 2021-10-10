@@ -16,18 +16,15 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
         private readonly IFileScanner _fileScanner;
         private readonly IDateTimeProivder _dateTimeProivder;
         private readonly IMediaInfoProvider _mediaInfoProvider;
-        private readonly IHandledFileExtension _handledFileExtension;
 
         public TutorialCreator(
             IFileScanner fileScanner,
             IMediaInfoProvider mediaInfoProvider,
-            IDateTimeProivder dateTimeProivder,
-            IHandledFileExtension handledFileExtension)
+            IDateTimeProivder dateTimeProivder)
         {
             this._fileScanner = Guard.Against.Null(fileScanner, nameof(fileScanner));
             this._dateTimeProivder = Guard.Against.Null(dateTimeProivder, nameof(dateTimeProivder));
             this._mediaInfoProvider = Guard.Against.Null(mediaInfoProvider, nameof(mediaInfoProvider));
-            this._handledFileExtension = Guard.Against.Null(handledFileExtension, nameof(handledFileExtension));
         }
 
         public async Task<Result<Maybe<Tutorial>>> GetTutorialForFolderAsync(DirectoryPath path, CancellationToken cancelationToken = default)
@@ -35,7 +32,6 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             Guard.Against.Null(path, nameof(path));
             return await this._fileScanner.GetFilesFromPathAsync(
                                 folderPath: path,
-                                handledFileExtension: this._handledFileExtension,
                                 cancellationToken: cancelationToken)
                     .Bind(files => GetTutorialFromFilesAsync(path.Source, files, cancelationToken));
         }
@@ -123,15 +119,15 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
         }
 
         private async Task<Result<Folder>> GetFolderWithEpisodesAsync(
-                        DirectoryPath rootPath,
-                        string tutorialName,
-                        FolderWithFiles folderWithFiles,
-                        CancellationToken cancellationToken)
+                                                DirectoryPath rootPath,
+                                                string tutorialName,
+                                                FolderWithFiles folderWithFiles,
+                                                CancellationToken cancellationToken)
         {
             var episodesResult = await GetEpisodesResultAsync(
-                                    rootPath,
-                                    folderWithFiles,
-                                    cancellationToken);
+                                            rootPath,
+                                            folderWithFiles,
+                                            cancellationToken);
 
             if (episodesResult.IsFailure)
                 return episodesResult.ConvertFailure<Folder>();
@@ -145,9 +141,9 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
         }
 
         private async Task<Result<IReadOnlyList<Episode>>> GetEpisodesResultAsync(
-                        DirectoryPath rootPath,
-                        FolderWithFiles folderWithFiles,
-                        CancellationToken cancellationToken)
+                                                                DirectoryPath rootPath,
+                                                                FolderWithFiles folderWithFiles,
+                                                                CancellationToken cancellationToken)
         {
             var episodesFiles = await this._mediaInfoProvider.GetFilesDetailsAsync(
                                         folderWithFiles.files.Select(s => Path.Combine(rootPath.Source, folderWithFiles.folder, s)),
@@ -172,8 +168,8 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                 return Result.Combine(episodes.Where(a => a.IsFailure))
                              .ConvertFailure<IReadOnlyList<Episode>>();
 
-            return Result.Success(episodes.Select(s => s.Value)
-                                          .ToArray() as IReadOnlyList<Episode>);
+            return Result.Success(
+                            episodes.Select(s => s.Value).ToArray() as IReadOnlyList<Episode>);
         }
     }
 }

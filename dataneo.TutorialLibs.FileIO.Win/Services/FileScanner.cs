@@ -14,6 +14,13 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
 {
     public sealed class FileScanner : IFileScanner
     {
+        private readonly IHandledFileExtension _handledFileExtension;
+
+        public FileScanner(IHandledFileExtension handledFileExtension)
+        {
+            this._handledFileExtension = Guard.Against.Null(handledFileExtension, nameof(handledFileExtension));
+        }
+
         public async Task<Result<IReadOnlyList<string>>> GetRootDirectoryFromPathAsync(
                  DirectoryPath folderPath,
                  CancellationToken cancellationToken = default)
@@ -37,14 +44,12 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
 
         public async Task<Result<IReadOnlyList<string>>> GetFilesFromPathAsync(
                 DirectoryPath folderPath,
-                IHandledFileExtension handledFileExtension,
                 CancellationToken cancellationToken)
         {
             Guard.Against.Null(folderPath, nameof(folderPath));
-            Guard.Against.Null(handledFileExtension, nameof(handledFileExtension));
 
             return await Result
-                .Success((folderPath, handledFileExtension, cancellationToken))
+                .Success((folderPath, this._handledFileExtension, cancellationToken))
                 .Ensure(data => Directory.Exists(data.folderPath.Source), Errors.DIRECTORY_NOT_FOUND)
                 .OnSuccessTry(async fpath =>
                 {
@@ -59,11 +64,10 @@ namespace dataneo.TutorialLibs.FileIO.Win.Services
                     var files = await Task.Run(() => Directory.GetFiles(fpath.folderPath.Source, "*.*", option),
                                                fpath.cancellationToken)
                                            .ConfigureAwait(false);
-                    return (fpath.handledFileExtension, files, cancellationToken);
+                    return (fpath._handledFileExtension, files, cancellationToken);
                 }, exception => Errors.ERROR_SEARCHING_FILES_IN_FOLDER)
-                .Ensure(fileResult => fileResult.cancellationToken.IsCancellationRequested == false,
-                                      Errors.CANCELED_BY_USER)
-                .Map(filesResult => filesResult.files.Where(w => handledFileExtension.FileAreSupported(w))
+                .Ensure(fileResult => fileResult.cancellationToken.IsCancellationRequested == false, Errors.CANCELED_BY_USER)
+                .Map(filesResult => filesResult.files.Where(w => _handledFileExtension.FileAreSupported(w))
                                                      .ToArray() as IReadOnlyList<string>)
                 .ConfigureAwait(false);
         }

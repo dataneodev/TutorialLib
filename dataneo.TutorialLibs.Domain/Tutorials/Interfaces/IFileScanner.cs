@@ -13,7 +13,6 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
 
         Task<Result<IReadOnlyList<string>>> GetFilesFromPathAsync(
             DirectoryPath folderPath,
-            IHandledFileExtension handledFileExtension,
             CancellationToken cancellationToken);
     }
 }

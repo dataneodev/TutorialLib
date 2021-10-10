@@ -19,7 +19,7 @@ namespace dataneo.TutorialLibs.Domain.Categories
 
         public static Result<Category> Create(string name)
         {
-            var nameValidate = Validate(name);
+            var nameValidate = ValidateName(name);
             if (nameValidate.IsFailure)
                 return nameValidate.ConvertFailure<Category>();
 
@@ -29,9 +29,12 @@ namespace dataneo.TutorialLibs.Domain.Categories
             };
         }
 
-        private static Result Validate(string name)
+        public static Result ValidateName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
+                return Result.Failure(Errors.INVALID_CATEGORY_NAME);
+
+            if (name.Contains("|"))
                 return Result.Failure(Errors.INVALID_CATEGORY_NAME);
 
             var trimedName = name.Trim();
@@ -46,7 +49,7 @@ namespace dataneo.TutorialLibs.Domain.Categories
 
         public Result SetName(string name)
         {
-            var nameValidate = Validate(name);
+            var nameValidate = ValidateName(name);
             if (nameValidate.IsFailure)
                 return nameValidate;
 
