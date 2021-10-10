@@ -4,7 +4,6 @@ using CSharpFunctionalExtensions;
 using dataneo.Extensions;
 using dataneo.TutorialLibs.Domain.Categories;
 using dataneo.TutorialLibs.Domain.Tutorials;
-using dataneo.TutorialLibs.Domain.Tutorials.Services;
 using dataneo.TutorialLibs.Domain.Tutorials.Specifications;
 using dataneo.TutorialLibs.WPF.Actions;
 using dataneo.TutorialLibs.WPF.Comparers;
@@ -186,7 +185,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 
         private async Task UpdateTutorialCategoriesAsync(IReadOnlyList<Category> newTutorialCategories, TutorialHeaderDto tutorialHeaderDto)
         {
-            var updateCategory = new UpdateTutorial(this._tutorialRespositoryAsync);
+            var updateCategory = new Domain.Tutorials.Services.UpdateCategory(this._tutorialRespositoryAsync);
             (await updateCategory.UpdateTutorialCategoriesAsync(tutorialHeaderDto.Id, newTutorialCategories))
                 .OnFailure(error => ErrorWindow.ShowError(error));
         }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace dataneo.TutorialLibs.Domain.Tutorials.Services
 {
-    public sealed class UpdateTutorial
+    public sealed class UpdateCategory
     {
         private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
 
-        public UpdateTutorial(ITutorialRespositoryAsync tutorialRespositoryAsync)
+        public UpdateCategory(ITutorialRespositoryAsync tutorialRespositoryAsync)
         {
             this._tutorialRespositoryAsync = Guard.Against.Null(tutorialRespositoryAsync, nameof(tutorialRespositoryAsync));
         }

@@ -24,9 +24,8 @@ namespace dataneo.TutorialLibs.WPF.Actions
                 return Result.Success();
 
             var addTutorialEngine = new AddTutorial(
-                new FileScanner(),
+                new FileScanner(new HandledFileExtension()),
                 new MediaInfoProvider(),
-                new HandledFileExtension(),
                 this._tutorialRespositoryAsync,
                 new LoggerDialog());
 

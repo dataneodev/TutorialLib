@@ -13,7 +13,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
         private readonly ILogger _logger;
 
         public AddTutorial(IFileScanner fileScanner,
-                            IMediaInfoProvider mediaInfoProvider
+                            IMediaInfoProvider mediaInfoProvider,
                             ITutorialRespositoryAsync tutorialRespositoryAsync,
                             ILogger logger)
         {

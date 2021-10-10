@@ -217,11 +217,36 @@
             </ListView.ItemsPanel>
             <ListView.ContextMenu>
                 <ContextMenu x:Name="cmTutorial" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+
                     <Behaviors:Interaction.Triggers>
                         <Behaviors:EventTrigger EventName="Opened" SourceObject="{Binding ElementName=cmTutorial}">
                             <Behaviors:InvokeCommandAction Command="{Binding ShowTutorialCategoriesCommand}" />
                         </Behaviors:EventTrigger>
                     </Behaviors:Interaction.Triggers>
+                    <ContextMenu.Style>
+                        <Style TargetType="{x:Type ContextMenu}">
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="Foreground" Value="{StaticResource foreGround}" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                                        <Border
+                                            Padding="2"
+                                            Background="{StaticResource backGround}"
+                                            BorderBrush="{StaticResource backGround}"
+                                            BorderThickness="1">
+                                            <StackPanel
+                                                Margin="0"
+                                                ClipToBounds="True"
+                                                IsItemsHost="True"
+                                                Orientation="Vertical" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ContextMenu.Style>
                     <MenuItem Header="File" />
                     <MenuItem Header="Edit" />
                     <MenuItem
@@ -233,9 +258,90 @@
                                 <Setter Property="IsCheckable" Value="True" />
                                 <Setter Property="IsChecked" Value="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <Setter Property="Command" Value="{Binding Path=DataContext.TutorialCategoriesChangedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+                                <!--<Setter Property="Foreground" Value="{StaticResource foreGround}" />
+                                <Setter Property="Background" Value="{StaticResource backGround}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource backGround}" />-->
+
                             </Style>
                         </MenuItem.ItemContainerStyle>
-
+                        <MenuItem.Template>
+                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                <Border
+                                    x:Name="templateRoot"
+                                    Padding="2"
+                                    HorizontalAlignment="Left"
+                                    Background="{StaticResource backGround}"
+                                    BorderBrush="{StaticResource backGround}"
+                                    BorderThickness="0"
+                                    SnapsToDevicePixels="True">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="32" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <ContentPresenter
+                                            Grid.Column="1"
+                                            Margin="{TemplateBinding Padding}"
+                                            Content="{TemplateBinding Header}"
+                                            RecognizesAccessKey="True"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        <Popup
+                                            x:Name="PART_Popup"
+                                            AllowsTransparency="True"
+                                            Focusable="False"
+                                            IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Placement="Right"
+                                            PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
+                                            <Border
+                                                x:Name="SubMenuBorder"
+                                                Padding="2"
+                                                Background="{StaticResource backGround}"
+                                                BorderBrush="{StaticResource backGround}"
+                                                BorderThickness="0">
+                                                <ScrollViewer
+                                                    x:Name="SubMenuScrollViewer"
+                                                    Margin="0"
+                                                    Padding="0"
+                                                    Background="{StaticResource backGround}"
+                                                    Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer,
+                                                                                                  TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                                    <Grid RenderOptions.ClearTypeHint="Enabled">
+                                                        <Canvas
+                                                            Width="0"
+                                                            Height="0"
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Top">
+                                                            <Rectangle
+                                                                x:Name="OpaqueRect"
+                                                                Width="{Binding ActualWidth, ElementName=SubMenuBorder}"
+                                                                Height="{Binding ActualHeight, ElementName=SubMenuBorder}"
+                                                                Fill="{Binding Background, ElementName=SubMenuBorder}" />
+                                                        </Canvas>
+                                                        <Rectangle
+                                                            Width="0"
+                                                            Margin="0"
+                                                            HorizontalAlignment="Left"
+                                                            Fill="#383838" />
+                                                        <ItemsPresenter
+                                                            x:Name="ItemsPresenter"
+                                                            Grid.IsSharedSizeScope="True"
+                                                            KeyboardNavigation.DirectionalNavigation="Cycle"
+                                                            KeyboardNavigation.TabNavigation="Cycle"
+                                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                    </Grid>
+                                                </ScrollViewer>
+                                            </Border>
+                                        </Popup>
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsHighlighted" Value="True">
+                                        <Setter TargetName="templateRoot" Property="Border.Background" Value="#3D26A0DA" />
+                                        <Setter TargetName="templateRoot" Property="Border.BorderBrush" Value="#FF26A0DA" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </MenuItem.Template>
                     </MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
