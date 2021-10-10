@@ -217,8 +217,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
                 {
                     while (!this._isLoaded)
                         Thread.Sleep(50);
-
-                    Thread.Sleep(500);
+                    Thread.Sleep(1000);
                 }
 
                 using var media = new Media(_libVLC, new Uri(mediaPath.Path));
@@ -241,6 +240,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         private MediaPlayer GetMediaPlayer(LibVLC libVLC)
         {
             var mediaPlayer = new MediaPlayer(libVLC);
+            mediaPlayer.EnableHardwareDecoding = true;
             mediaPlayer.PositionChanged += _mediaPlayer_PositionChanged;
             mediaPlayer.VolumeChanged += _mediaPlayer_VolumeChanged;
             mediaPlayer.Stopped += _mediaPlayer_Stopped;
