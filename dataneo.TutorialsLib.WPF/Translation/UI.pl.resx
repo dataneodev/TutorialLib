@@ -153,6 +153,15 @@
   <data name="PLAY" xml:space="preserve">
     <value>Odtwórz</value>
   </data>
+  <data name="SETASUNWATCHED" xml:space="preserve">
+    <value>Oznacz jako nieoglądany</value>
+  </data>
+  <data name="SETASWATCHED" xml:space="preserve">
+    <value>Oznacz jako oglądany</value>
+  </data>
+  <data name="SETCATEGORY" xml:space="preserve">
+    <value>Ustaw kategorie</value>
+  </data>
   <data name="SETTING" xml:space="preserve">
     <value>Ustawienia</value>
   </data>

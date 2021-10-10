@@ -158,7 +158,7 @@
             </Menu.Style>
             <MenuItem Header="Tutorial" Style="{StaticResource menuItemColors}">
                 <MenuItem Command="{Binding Path=AddTutorialCommand, Mode=OneTime}" Header="{x:Static lang:UI.ADD_SINGLE}" />
-                <MenuItem Command="{Binding Path=SearchForNewTutorialsCommand, Mode=OneTime}" Header="{x:Static lang:UI.ADD_FOLDER}" />
+                <!--<MenuItem Command="{Binding Path=SearchForNewTutorialsCommand, Mode=OneTime}" Header="{x:Static lang:UI.ADD_FOLDER}" />-->
             </MenuItem>
             <MenuItem Header="{x:Static lang:UI.SORT}" Style="{StaticResource menuItemColors}">
                 <MenuItem
@@ -217,7 +217,6 @@
             </ListView.ItemsPanel>
             <ListView.ContextMenu>
                 <ContextMenu x:Name="cmTutorial" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-
                     <Behaviors:Interaction.Triggers>
                         <Behaviors:EventTrigger EventName="Opened" SourceObject="{Binding ElementName=cmTutorial}">
                             <Behaviors:InvokeCommandAction Command="{Binding ShowTutorialCategoriesCommand}" />
@@ -247,21 +246,18 @@
                             </Setter>
                         </Style>
                     </ContextMenu.Style>
-                    <MenuItem Header="File" />
-                    <MenuItem Header="Edit" />
+                    <MenuItem Command="{Binding Path=DataContext.SetTutorialAsWatchedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" Header="{x:Static lang:UI.SETASWATCHED}" />
+                    <MenuItem Command="{Binding Path=DataContext.SetTutorialAsUnWatchedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" Header="{x:Static lang:UI.SETASUNWATCHED}" />
+                    <MenuItem Command="{Binding Path=DataContext.DeleteTutorialCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" Header="{x:Static lang:UI.DELETE}" />
                     <MenuItem
                         x:Name="miTutorialCategories"
-                        Header="{x:Static lang:UI.CATEGORYWINDOW}"
+                        Header="{x:Static lang:UI.SETCATEGORY}"
                         ItemsSource="{Binding Path=TutorialCategories, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <MenuItem.ItemContainerStyle>
                             <Style TargetType="{x:Type MenuItem}">
                                 <Setter Property="IsCheckable" Value="True" />
                                 <Setter Property="IsChecked" Value="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <Setter Property="Command" Value="{Binding Path=DataContext.TutorialCategoriesChangedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" />
-                                <!--<Setter Property="Foreground" Value="{StaticResource foreGround}" />
-                                <Setter Property="Background" Value="{StaticResource backGround}" />
-                                <Setter Property="BorderBrush" Value="{StaticResource backGround}" />-->
-
                             </Style>
                         </MenuItem.ItemContainerStyle>
                         <MenuItem.Template>

@@ -1,4 +1,5 @@
 ﻿using dataneo.TutorialLibs.WPF.UI.CategoryManage;
+using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using dataneo.TutorialLibs.WPF.UI.Player;
 using dataneo.TutorialLibs.WPF.UI.TutorialList;
 using Prism.Ioc;
@@ -20,6 +21,7 @@ namespace dataneo.TutorialLibs.WPF.UI
             containerRegistry.RegisterForNavigation<PlayerPage>();
             containerRegistry.RegisterForNavigation<TutorialListPage>();
             containerRegistry.RegisterDialog<CategoryWindow>();
+            containerRegistry.RegisterDialog<DialogWindow>();
         }
     }
 }

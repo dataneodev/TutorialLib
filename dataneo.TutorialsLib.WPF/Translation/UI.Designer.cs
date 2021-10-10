@@ -169,6 +169,33 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mark as unwatched.
+        /// </summary>
+        public static string SETASUNWATCHED {
+            get {
+                return ResourceManager.GetString("SETASUNWATCHED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mark as watched.
+        /// </summary>
+        public static string SETASWATCHED {
+            get {
+                return ResourceManager.GetString("SETASWATCHED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set categories.
+        /// </summary>
+        public static string SETCATEGORY {
+            get {
+                return ResourceManager.GetString("SETCATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Setting.
         /// </summary>
         public static string SETTING {

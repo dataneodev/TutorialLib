@@ -153,6 +153,15 @@
   <data name="PLAY" xml:space="preserve">
     <value>Play</value>
   </data>
+  <data name="SETASUNWATCHED" xml:space="preserve">
+    <value>Mark as unwatched</value>
+  </data>
+  <data name="SETASWATCHED" xml:space="preserve">
+    <value>Mark as watched</value>
+  </data>
+  <data name="SETCATEGORY" xml:space="preserve">
+    <value>Set categories</value>
+  </data>
   <data name="SETTING" xml:space="preserve">
     <value>Setting</value>
   </data>

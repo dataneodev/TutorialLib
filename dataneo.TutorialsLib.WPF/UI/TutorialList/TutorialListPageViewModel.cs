@@ -8,7 +8,6 @@ using dataneo.TutorialLibs.Domain.Tutorials.Specifications;
 using dataneo.TutorialLibs.WPF.Actions;
 using dataneo.TutorialLibs.WPF.Comparers;
 using dataneo.TutorialLibs.WPF.UI.CategoryManage;
-using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using dataneo.TutorialLibs.WPF.UI.Player;
 using Prism.Regions;
 using Prism.Services.Dialogs;
@@ -69,10 +68,12 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         public ICommand RatingChangedCommand { get; }
         public ICommand PlayTutorialCommand { get; }
         public ICommand AddTutorialCommand { get; }
-        public ICommand SearchForUpdateCommand { get; }
         public ICommand SearchForNewTutorialsCommand { get; }
         public ICommand FilterByCategoryCommand { get; }
         public ICommand ShowCategoryManagerCommand { get; }
+        public ICommand SetTutorialAsWatchedCommand { get; }
+        public ICommand SetTutorialAsUnWatchedCommand { get; }
+        public ICommand DeleteTutorialCommand { get; }
         public ICommand ShowTutorialCategoriesCommand { get; }
         public ICommand TutorialCategoriesChangedCommand { get; }
 
@@ -90,6 +91,9 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             this.AddTutorialCommand = new Command(AddTutorialCommandImplAsync);
             this.FilterByCategoryCommand = new Command(FilterByCategoryCommandImplAsync);
             this.ShowCategoryManagerCommand = new Command(ShowCategoryManagerCommandImpl);
+            this.DeleteTutorialCommand = new Command(DeleteTutorialCommandImpl);
+            this.SetTutorialAsWatchedCommand = new Command(SetTutorialAsWatchedCommandImpl);
+            this.SetTutorialAsUnWatchedCommand = new Command(SetTutorialAsUnWatchedCommandImpl);
             this.ShowTutorialCategoriesCommand = new Command(ShowTutorialCategoriesCommandImpl);
             this.TutorialCategoriesChangedCommand = new Command(TutorialCategoriesChangedCommandImpl);
         }
@@ -98,14 +102,14 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                   => await Result
                       .Try(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
                       .OnSuccessTry(() => LoadCategoriesAsync())
-                      .OnFailure(error => ErrorWindow.ShowError(error));
+                      .OnFailure(error => ShowError(error));
 
         private async void AddTutorialCommandImplAsync()
             => await Result
                .Try(() => new AddNewTutorialAction(this._tutorialRespositoryAsync).AddAsync(), e => e.Message)
                .Bind(r => r)
                .OnSuccessTry(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
-               .OnFailure(error => ErrorWindow.ShowError(error));
+               .OnFailure(error => ShowError(error));
 
         private async void PlayTutorialCommandImplAsync(int tutorialId)
         {
@@ -119,16 +123,31 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                 .Success(tutorialIdAndRating)
                 .Map(input => ChangeTutorialRatingAction.ChangeAsync(this._tutorialRespositoryAsync, input.Item1, input.Item2))
                 .Bind(r => r)
-                .OnFailure(error => ErrorWindow.ShowError(error));
+                .OnFailure(error => ShowError(error));
 
         private async void FilterByCategoryCommandImplAsync()
             => await Result
                 .Try(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
-                .OnFailure(error => ErrorWindow.ShowError(error));
+                .OnFailure(error => ShowError(error));
 
         private void ShowCategoryManagerCommandImpl()
             => this._dialogService.ShowDialog(nameof(CategoryWindow),
                     async callback => await LoadCategoriesAndTutorialsonSelectionChangeAsync());
+
+        private void SetTutorialAsUnWatchedCommandImpl()
+        {
+
+        }
+
+        private void SetTutorialAsWatchedCommandImpl()
+        {
+
+        }
+
+        private void DeleteTutorialCommandImpl()
+        {
+
+        }
 
         private async void ShowTutorialCategoriesCommandImpl()
         {
@@ -187,7 +206,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         {
             var updateCategory = new Domain.Tutorials.Services.UpdateCategory(this._tutorialRespositoryAsync);
             (await updateCategory.UpdateTutorialCategoriesAsync(tutorialHeaderDto.Id, newTutorialCategories))
-                .OnFailure(error => ErrorWindow.ShowError(error));
+                .OnFailure(error => ShowError(error));
         }
 
         private async Task LoadCategoriesAndTutorialsonSelectionChangeAsync()
@@ -210,8 +229,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             if (this.Categories.All(a => !a.IsChecked))
                 return false;
 
-            return this.Categories.Any(w => w.FilterByCategory() &&
-                                            !newCategory.Any(a => w.IsEqualCategoryId(a.Id)));
+            return this.Categories.Any(w => w.FilterByCategory() && !newCategory.Any(a => w.IsEqualCategoryId(a.Id)));
         }
 
         private void SetCategories(IReadOnlyList<Category> categories)
@@ -276,5 +294,11 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             this.Tutorials = tutorialHeaders.OrderBy(o => o, comparer)
                                             .ToArray();
         }
+
+        private void ShowError(string error)
+            => this._dialogService.ShowDialog(
+                        nameof(DialogWindow),
+                        new DialogParameters($"Message={error}"),
+                        null);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Categories;
-using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 using System;
@@ -14,6 +13,7 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
     public sealed class CategoryWindowViewModel : BaseViewModel, IDialogAware
     {
         private readonly ICategoryRespositoryAsync _categoryRespositoryAsync;
+        private readonly IDialogService _dialogService;
 
         private string _title = Translation.UI.CATEGORYWINDOW;
         public string Title
@@ -46,6 +46,7 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
         }
 
         private string categoryName;
+
         public string CategoryName
         {
             get { return categoryName; }
@@ -60,9 +61,12 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
 
         public event Action<IDialogResult> RequestClose;
 
-        public CategoryWindowViewModel(IRegionManager regionManager, ICategoryRespositoryAsync categoryRespositoryAsync) : base(regionManager)
+        public CategoryWindowViewModel(IRegionManager regionManager,
+                                       ICategoryRespositoryAsync categoryRespositoryAsync,
+                                       IDialogService dialogService) : base(regionManager)
         {
             this._categoryRespositoryAsync = Guard.Against.Null(categoryRespositoryAsync, nameof(categoryRespositoryAsync));
+            this._dialogService = Guard.Against.Null(dialogService, nameof(dialogService));
 
             this.AddCategoryCommand = new Command(AddCategoryCommandImpl);
             this.UpdateCategoryCommand = new Command(UpdateCategoryCommandImpl);
@@ -75,7 +79,7 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
         public async void OnDialogOpened(IDialogParameters parameters)
             => await Result
                  .Try(() => LoadCategoriesAsync())
-                 .OnFailure(error => ErrorWindow.ShowError(error));
+                 .OnFailure(ShowError);
 
         private async void DeleteCategoryCommandImpl()
         {
@@ -85,7 +89,7 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
             await Result
                .Try(() => this._categoryRespositoryAsync.DeleteAsync(this.SelectedCategory))
                .OnSuccessTry(() => LoadCategoriesAsync())
-               .OnFailure(error => ErrorWindow.ShowError(error));
+               .OnFailure(ShowError);
         }
 
         private async void UpdateCategoryCommandImpl()
@@ -96,7 +100,7 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
             await new UpdateCategory(this._categoryRespositoryAsync)
                 .UpdateCategoryNameAsync(this.SelectedCategory, this.CategoryName)
                 .OnSuccessTry(() => LoadCategoriesAsync())
-                .OnFailure(error => ErrorWindow.ShowError(error));
+                .OnFailure(ShowError);
         }
 
         private async void AddCategoryCommandImpl()
@@ -104,11 +108,17 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
                 .Bind(category => new AddCategory(this._categoryRespositoryAsync)
                                         .AddNewCategoryAsync(category))
                 .OnSuccessTry(() => LoadCategoriesAsync())
-                .OnFailure(error => ErrorWindow.ShowError(error));
+                .OnFailure(ShowError);
 
         private async Task LoadCategoriesAsync()
         {
             this.Categories = await this._categoryRespositoryAsync.ListAllAsync();
         }
+
+        private void ShowError(string error)
+            => this._dialogService.ShowDialog(
+                        nameof(DialogWindow),
+                        new DialogParameters($"Message={error}"),
+                        null);
     }
 }

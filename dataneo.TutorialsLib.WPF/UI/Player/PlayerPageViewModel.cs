@@ -2,11 +2,11 @@
 using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.WPF.Events;
-using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using dataneo.TutorialLibs.WPF.UI.Player.Services;
 using dataneo.TutorialLibs.WPF.UI.TutorialList;
 using Prism.Events;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,9 +15,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
 {
     internal class PlayerPageViewModel : BaseViewModel
     {
-        private QueueManager _queueManager;
         private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
+        private readonly IDialogService _dialogService;
 
+        private QueueManager _queueManager;
         private IReadOnlyList<object> videoItems;
         public IReadOnlyList<object> VideoItems
         {
@@ -69,6 +70,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         }
 
         private string episodeTitle;
+
         public string EpisodeTitle
         {
             get { return episodeTitle; }
@@ -76,10 +78,13 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         }
 
         public PlayerPageViewModel(IRegionManager regionManager,
+                                   IDialogService dialogService,
                                    IEventAggregator eventAggregator,
                                    ITutorialRespositoryAsync tutorialRespositoryAsync) : base(regionManager)
         {
             this._tutorialRespositoryAsync = Guard.Against.Null(tutorialRespositoryAsync, nameof(tutorialRespositoryAsync));
+            this._dialogService = Guard.Against.Null(dialogService, nameof(dialogService));
+
             this.CurrentVideoEndedCommand = new Command(CurrentVideoEndedCommandImpl);
             this.ClickedOnEpisodeCommand = new Command<int>(ClickedOnEpisodeCommandImpl);
             this.NextEpisodeCommand = new Command(NextEpisodeCommandImpl);
@@ -94,7 +99,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             var tutorialId = navigationContext.Parameters["tutorialId"];
             await Result
                 .Try(() => LoadAsync((int)tutorialId))
-                .OnFailure(error => ErrorWindow.ShowError(error));
+                .OnFailure(ShowError);
         }
 
         private void _queueManager_BeginPlayFile(PlayFileParameter playFileParameter)
@@ -125,7 +130,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         {
             await Result
                 .Try(() => EndWorkAsync())
-                .OnFailure(error => ErrorWindow.ShowError(error));
+                .OnFailure(ShowError);
             RegionManager.RequestNavigate(RegionNames.ContentRegion, nameof(TutorialListPage));
         }
 
@@ -138,7 +143,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             var videoItemsCreator = new VideoItemsCreatorEngine(this._tutorialRespositoryAsync);
 
             (await videoItemsCreator.LoadAndCreate(tutorialId))
-                .OnFailure(error => ErrorWindow.ShowError(error))
+                .OnFailure(ShowError)
                 .Tap(result =>
                 {
                     this._queueManager = new QueueManager(this._tutorialRespositoryAsync, result);
@@ -156,5 +161,11 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
                             .EndWorkAsync()
                             .ConfigureAwait(false);
         }
+
+        private void ShowError(string error)
+            => this._dialogService.ShowDialog(
+                        nameof(DialogWindow),
+                        new DialogParameters($"Message={error}"),
+                        null);
     }
 }
