@@ -8,7 +8,7 @@ namespace dataneo.TutorialLibs.Domain.Categories
 {
     public sealed class Category : BaseEntity, IAggregateRoot
     {
-        public const short MaxCategoryName = 32;
+        public const short MaxCategoryName = 48;
         public const short MinCategoryName = 1;
 
         public string Name { get; private set; }
