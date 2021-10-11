@@ -1,4 +1,5 @@
 ﻿using Ardalis.Specification;
+using System.IO;
 
 namespace dataneo.TutorialLibs.Domain.Tutorials
 {
@@ -6,8 +7,9 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
     {
         public TutorialsForDirectoryPathSpecification(DirectoryPath directoryPath)
         {
+            var path = directoryPath.Source + Path.DirectorySeparatorChar;
             Query.AsNoTracking()
-                 .Where(w => directoryPath.Source.Contains(w.BasePath.Source));
+                 .Where(w => w.BasePath.Source.Equals(directoryPath.Source) || w.BasePath.Source.Contains(path));
         }
     }
 }
