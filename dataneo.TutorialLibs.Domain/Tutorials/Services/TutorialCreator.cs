@@ -169,8 +169,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                 return Result.Combine(episodes.Where(a => a.IsFailure))
                              .ConvertFailure<IReadOnlyList<Episode>>();
 
-            return Result.Success(
-                            Enumerable.Select<Result<Episode>, Episode>(episodes, (System.Func<Result<Episode>, Episode>)(s => (Episode)s.Value)).ToArray() as IReadOnlyList<Episode>);
+            return Result.Success(episodes.Select(s => s.Value).ToArray() as IReadOnlyList<Episode>);
         }
     }
 }
