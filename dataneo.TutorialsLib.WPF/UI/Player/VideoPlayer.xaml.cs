@@ -47,6 +47,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             if (this.MediaPath is null)
             {
                 StopPlaying();
+                Position = 0;
                 return;
             }
 

@@ -61,7 +61,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 
         public async Task EndWorkAsync()
         {
-            if (this._currentPlayedEpisode.Episode is null)
+            if (this._currentPlayedEpisode?.Episode is null)
                 return;
 
             await SaveTutorialToDBAsync(this._currentPlayedEpisode.TutorialD)
