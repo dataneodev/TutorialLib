@@ -120,7 +120,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             => this._queueManager?.CurrentPlayedEpisodeHasEnded();
 
         private void ClickedOnEpisodeCommandImpl(int episodeId)
-            => this._queueManager?.UserRequestEpisodePlay(episodeId);
+            => this._queueManager?.UserRequestEpisodePlayAsync(episodeId);
 
         private void SetEpsiodePosition(int position)
             => this._queueManager?.SetPlayedEpisodePositionAsync(position);

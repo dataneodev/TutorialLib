@@ -48,7 +48,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
                 EpisodePlay(nextEpisode.Value);
         }
 
-        public async void UserRequestEpisodePlay(int idEpisode)
+        public async void UserRequestEpisodePlayAsync(int idEpisode)
         {
             if (this._currentPlayedEpisode is EpisodeData episodeData &&
                 episodeData.VideoItemD.EpisodeId != idEpisode)
