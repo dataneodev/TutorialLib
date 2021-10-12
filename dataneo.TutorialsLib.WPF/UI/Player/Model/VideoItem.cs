@@ -29,7 +29,7 @@ namespace dataneo.TutorialLibs.WPF.UI
 
         public void SetPlayedTime(TimeSpan playedTime)
         {
-            this.Episode.SetPlayedTime(playedTime);
+            this.Episode.SetPlayedTime(playedTime, DateTime.Now);
             Notify(nameof(WatchStatus));
         }
 

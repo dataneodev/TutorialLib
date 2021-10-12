@@ -146,7 +146,8 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                                                                 CancellationToken cancellationToken)
         {
             var episodesFiles = await this._mediaInfoProvider.GetFilesDetailsAsync(
-                                        folderWithFiles.files.Select(s => Path.Combine(rootPath.Source, folderWithFiles.folder, s)),
+                                        folderWithFiles.files.Select(
+                                            files => Path.Combine(rootPath.Source, folderWithFiles.folder, files)),
                                         cancellationToken)
                                     .ConfigureAwait(false);
 
@@ -169,7 +170,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                              .ConvertFailure<IReadOnlyList<Episode>>();
 
             return Result.Success(
-                            episodes.Select(s => s.Value).ToArray() as IReadOnlyList<Episode>);
+                            Enumerable.Select<Result<Episode>, Episode>(episodes, (System.Func<Result<Episode>, Episode>)(s => (Episode)s.Value)).ToArray() as IReadOnlyList<Episode>);
         }
     }
 }

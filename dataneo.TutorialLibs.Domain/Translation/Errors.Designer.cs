@@ -205,6 +205,15 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No files were found in the folder.
+        /// </summary>
+        public static string NO_FILES_IN_DIRECTORY {
+            get {
+                return ResourceManager.GetString("NO_FILES_IN_DIRECTORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No child folders.
         /// </summary>
         public static string NO_FOLDERS {
@@ -228,6 +237,15 @@ namespace dataneo.TutorialLibs.Domain.Translation {
         public static string TUTORIAL_NAME_INCORECT {
             get {
                 return ResourceManager.GetString("TUTORIAL_NAME_INCORECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tutorial path already used.
+        /// </summary>
+        public static string TUTORIAL_PATH_ALREADY_USED {
+            get {
+                return ResourceManager.GetString("TUTORIAL_PATH_ALREADY_USED", resourceCulture);
             }
         }
     }

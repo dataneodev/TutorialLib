@@ -165,6 +165,9 @@
   <data name="NO_EPISODE" xml:space="preserve">
     <value>No episode</value>
   </data>
+  <data name="NO_FILES_IN_DIRECTORY" xml:space="preserve">
+    <value>No files were found in the folder</value>
+  </data>
   <data name="NO_FOLDERS" xml:space="preserve">
     <value>No child folders</value>
   </data>
@@ -173,5 +176,8 @@
   </data>
   <data name="TUTORIAL_NAME_INCORECT" xml:space="preserve">
     <value>Tutorial name incorrent</value>
+  </data>
+  <data name="TUTORIAL_PATH_ALREADY_USED" xml:space="preserve">
+    <value>Tutorial path already used</value>
   </data>
 </root>

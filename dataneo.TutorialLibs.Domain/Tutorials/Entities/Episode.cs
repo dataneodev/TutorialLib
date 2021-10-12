@@ -36,17 +36,17 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
 
         private Episode() { }
 
-        public static Result<Episode> Create(EpisodeFile episodeFile, DateTime dateAdd)
+        public static Result<Episode> Create(EpisodeFile episodeFile, DateTime now)
         {
             Guard.Against.Null(episodeFile, nameof(episodeFile));
 
-            if (dateAdd == DateTime.MinValue)
+            if (now == DateTime.MinValue)
                 return Result.Failure<Episode>(Errors.INVALID_DATE);
 
             return new Episode
             {
                 Name = Path.GetFileNameWithoutExtension(episodeFile.FileName),
-                DateAdd = dateAdd,
+                DateAdd = now,
                 File = episodeFile
             };
         }
@@ -79,7 +79,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             return Path.Combine(tutorial.BasePath.Source, folder.FolderPath, this.File.FileName);
         }
 
-        public void SetPlayedTime(TimeSpan playedTime)
+        public void SetPlayedTime(TimeSpan playedTime, DateTime now)
         {
             if (playedTime < TimeSpan.Zero)
                 throw new InvalidOperationException();
@@ -88,7 +88,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                 throw new InvalidOperationException();
 
             this.PlayedTime = playedTime;
-            this.LastPlayedDate = DateTime.Now;
+            this.LastPlayedDate = now;
         }
 
         public void SetAsWatched()
@@ -105,7 +105,6 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                 return Result.Failure(Errors.EPISODE_NAME_TO_SHORT);
 
             this.Name = newnameTrimed;
-
             return Result.Success();
         }
 

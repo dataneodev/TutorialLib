@@ -165,6 +165,9 @@
   <data name="NO_EPISODE" xml:space="preserve">
     <value>Brak odcinków</value>
   </data>
+  <data name="NO_FILES_IN_DIRECTORY" xml:space="preserve">
+    <value>Nie znaleziono żadnych plików w folderze</value>
+  </data>
   <data name="NO_FOLDERS" xml:space="preserve">
     <value>Brak rodziałów</value>
   </data>
@@ -173,5 +176,8 @@
   </data>
   <data name="TUTORIAL_NAME_INCORECT" xml:space="preserve">
     <value>Niepoprawna nazwa tutorialu</value>
+  </data>
+  <data name="TUTORIAL_PATH_ALREADY_USED" xml:space="preserve">
+    <value>Ten katalog jest już uzyty</value>
   </data>
 </root>

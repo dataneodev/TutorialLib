@@ -1,8 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using dataneo.TutorialLibs.Domain.Tutorials;
-using dataneo.TutorialLibs.FileIO.Win.Services;
-using dataneo.TutorialLibs.WPF.UI.Dialogs;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -10,11 +8,11 @@ namespace dataneo.TutorialLibs.WPF.Actions
 {
     internal class AddNewTutorialAction
     {
-        private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
+        private readonly IAddTutorial _addTutorial;
 
-        public AddNewTutorialAction(ITutorialRespositoryAsync tutorialRespositoryAsync)
+        public AddNewTutorialAction(IAddTutorial addTutorial)
         {
-            this._tutorialRespositoryAsync = Guard.Against.Null(tutorialRespositoryAsync, nameof(tutorialRespositoryAsync));
+            this._addTutorial = Guard.Against.Null(addTutorial, nameof(addTutorial));
         }
 
         public async Task<Result> AddAsync()
@@ -22,14 +20,7 @@ namespace dataneo.TutorialLibs.WPF.Actions
             var directory = GetDirectoryUserSelect();
             if (directory.HasNoValue)
                 return Result.Success();
-
-            var addTutorialEngine = new AddTutorial(
-                new FileScanner(new HandledFileExtension()),
-                new MediaInfoProvider(),
-                this._tutorialRespositoryAsync,
-                new LoggerDialog());
-
-            return await addTutorialEngine.AddTutorialAsync(directory.Value);
+            return await _addTutorial.AddTutorialAsync(directory.Value);
         }
 
         private static Maybe<DirectoryPath> GetDirectoryUserSelect()

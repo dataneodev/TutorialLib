@@ -24,6 +24,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         private readonly IDialogService _dialogService;
         private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
         private readonly ICategoryRespositoryAsync _categoryRespositoryAsync;
+        private readonly IAddTutorial _addTutorial;
 
         private IEnumerable<TutorialHeaderDto> tutorials;
         public IEnumerable<TutorialHeaderDto> Tutorials
@@ -59,6 +60,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         }
 
         private IEnumerable<CategoryMenuItem> _tutorialCategories;
+
         public IEnumerable<CategoryMenuItem> TutorialCategories
         {
             get { return _tutorialCategories; }
@@ -79,12 +81,14 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 
         public TutorialListPageViewModel(IRegionManager regionManager,
                                          IDialogService dialogService,
+                                         IAddTutorial addTutorial,
                                          ITutorialRespositoryAsync tutorialRespositoryAsync,
                                          ICategoryRespositoryAsync categoryRespositoryAsync) : base(regionManager)
         {
             this._dialogService = Guard.Against.Null(dialogService, nameof(dialogService));
             this._tutorialRespositoryAsync = Guard.Against.Null(tutorialRespositoryAsync, nameof(tutorialRespositoryAsync));
             this._categoryRespositoryAsync = Guard.Against.Null(categoryRespositoryAsync, nameof(categoryRespositoryAsync));
+            this._addTutorial = Guard.Against.Null(addTutorial, nameof(addTutorial));
 
             this.RatingChangedCommand = new Command<ValueTuple<int, RatingStars>>(RatingChangedCommandImplAsync);
             this.PlayTutorialCommand = new Command<int>(PlayTutorialCommandImplAsync);
@@ -106,7 +110,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 
         private async void AddTutorialCommandImplAsync()
             => await Result
-               .Try(() => new AddNewTutorialAction(this._tutorialRespositoryAsync).AddAsync(), e => e.Message)
+               .Try(() => new AddNewTutorialAction(this._addTutorial).AddAsync(), e => e.Message)
                .Bind(r => r)
                .OnSuccessTry(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
                .OnFailure(error => ShowError(error));
