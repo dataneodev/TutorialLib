@@ -91,7 +91,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             this._addTutorial = Guard.Against.Null(addTutorial, nameof(addTutorial));
 
             this.RatingChangedCommand = new Command<ValueTuple<int, RatingStars>>(RatingChangedCommandImplAsync);
-            this.PlayTutorialCommand = new Command<int>(PlayTutorialCommandImplAsync);
+            this.PlayTutorialCommand = new Command<int>(PlayTutorialCommandImpl);
             this.AddTutorialCommand = new Command(AddTutorialCommandImplAsync);
             this.FilterByCategoryCommand = new Command(FilterByCategoryCommandImplAsync);
             this.ShowCategoryManagerCommand = new Command(ShowCategoryManagerCommandImpl);
@@ -115,7 +115,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                .OnSuccessTry(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
                .OnFailure(error => ShowError(error));
 
-        private async void PlayTutorialCommandImplAsync(int tutorialId)
+        private void PlayTutorialCommandImpl(int tutorialId)
         {
             var parameters = new NavigationParameters();
             parameters.Add(nameof(tutorialId), tutorialId);
@@ -153,7 +153,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 
         }
 
-        private async void ShowTutorialCategoriesCommandImpl()
+        private void ShowTutorialCategoriesCommandImpl()
         {
             if (this.SelectedTutorial is null)
                 return;
@@ -166,7 +166,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         {
             var categories = categoryMenuItems.Select(s => s.GetCategory())
                                                .Where(w => w.HasValue)
-                                               .Select(s => new CategoryMenuItem(s.Value))
+                                               .Select(s => new CategoryMenuItem(s.GetValueOrThrow()))
                                                .ToArray();
 
             if (tutorialHeaderDto.Categories is null)
@@ -192,14 +192,14 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                 return;
             var selectedTutorial = this.SelectedTutorial;
             var newTutorialCategories = this.TutorialCategories.Where(w => w.IsChecked)
-                                                    .Select(S => S.GetCategory().Value)
+                                                    .Select(S => S.GetCategory().GetValueOrThrow())
                                                     .ToArray();
 
             UpdateTutorialDtoCategories(newTutorialCategories, selectedTutorial);
             await UpdateTutorialCategoriesAsync(newTutorialCategories, selectedTutorial);
         }
 
-        private async void UpdateTutorialDtoCategories(IReadOnlyList<Category> newTutorialCategories, TutorialHeaderDto tutorialHeaderDto)
+        private void UpdateTutorialDtoCategories(IReadOnlyList<Category> newTutorialCategories, TutorialHeaderDto tutorialHeaderDto)
         {
             var newTutorialDto = tutorialHeaderDto with { Categories = newTutorialCategories };
             this.Tutorials = this.Tutorials.Select(s => s == tutorialHeaderDto ? newTutorialDto : s)
@@ -254,8 +254,8 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             foreach (var merge in oldCategories
                                 .Where(w => w.FilterByCategory())
                                 .Join(newCategories.Where(w => w.Filter == CategoryMenuItem.FilterType.ByCategory),
-                                    f => f.GetCategoryId().Value,
-                                    s => s.GetCategoryId().Value,
+                                    f => f.GetCategoryId().GetValueOrThrow(),
+                                    s => s.GetCategoryId().GetValueOrThrow(),
                                     (f, s) => new { f, s }))
             {
                 merge.s.IsChecked = merge.f.IsChecked;
@@ -287,7 +287,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 
             return new FilterByCategoryIdsSpecification(
                 this.Categories.Where(w => w.FilterByCategory())
-                               .Select(s => s.GetCategoryId().Value),
+                               .Select(s => s.GetCategoryId().GetValueOrThrow()),
                 noCategoryFilter);
         }
 

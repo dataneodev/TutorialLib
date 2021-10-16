@@ -33,7 +33,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Dialogs
             if (message.HasNoValue)
                 throw new ArgumentException("No message parameter");
 
-            this.Message = message.Value;
+            this.Message = message.GetValueOrThrow();
         }
 
         private Maybe<string> GetMessage(IDialogParameters dialogParameters)

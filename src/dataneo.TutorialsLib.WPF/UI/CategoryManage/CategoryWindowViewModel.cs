@@ -59,7 +59,9 @@ namespace dataneo.TutorialLibs.WPF.UI.CategoryManage
         public ICommand UpdateCategoryCommand { get; }
         public ICommand DeleteCategoryCommand { get; }
 
+#pragma warning disable CS0067
         public event Action<IDialogResult> RequestClose;
+#pragma warning restore CS0067 
 
         public CategoryWindowViewModel(IRegionManager regionManager,
                                        ICategoryRespositoryAsync categoryRespositoryAsync,

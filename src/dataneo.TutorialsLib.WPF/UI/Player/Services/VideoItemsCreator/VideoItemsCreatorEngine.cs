@@ -30,7 +30,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
             if (tutorialResult.Value.HasNoValue)
                 return Result.Failure<VideoItemsCreatorResult>($"Tutorial not found id {idTutorial}");
 
-            return Create(tutorialResult.Value.Value);
+            return Create(tutorialResult.Value.GetValueOrThrow());
         }
 
         public static VideoItemsCreatorResult Create(Tutorial tutorial)

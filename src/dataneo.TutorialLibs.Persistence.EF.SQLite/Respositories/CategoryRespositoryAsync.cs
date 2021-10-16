@@ -19,13 +19,13 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Respositories
                         .FirstOrDefaultAsync(f => f.Id == id, cancellationToken)
                         .ConfigureAwait(false);
 
-        public async Task<IReadOnlyList<Category>> ListAllAsync(CancellationToken cancellationToken = default)
+        public override async Task<IReadOnlyList<Category>> ListAllAsync(CancellationToken cancellationToken = default)
             => await _dbContext.Categories
                         .Include("_tutorials")
                         .ToListAsync(cancellationToken)
                         .ConfigureAwait(false);
 
-        public async Task<IReadOnlyList<Category>> ListAsync(ISpecification<Category> spec, CancellationToken cancellationToken = default)
+        public override async Task<IReadOnlyList<Category>> ListAsync(ISpecification<Category> spec, CancellationToken cancellationToken = default)
         {
             var specificationResult = ApplySpecification(spec);
             return await specificationResult

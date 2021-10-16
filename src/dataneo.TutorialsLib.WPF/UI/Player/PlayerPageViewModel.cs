@@ -77,8 +77,6 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             set { episodeTitle = value; RaisePropertyChanged(); }
         }
 
-        private bool _isLoaded;
-
         public PlayerPageViewModel(IRegionManager regionManager,
                                    IDialogService dialogService,
                                    IEventAggregator eventAggregator,
@@ -120,10 +118,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             => this._queueManager?.CurrentPlayedEpisodeHasEnded();
 
         private void ClickedOnEpisodeCommandImpl(int episodeId)
-            => this._queueManager?.UserRequestEpisodePlayAsync(episodeId);
+            => this._queueManager?.UserRequestEpisodePlay(episodeId);
 
         private void SetEpsiodePosition(int position)
-            => this._queueManager?.SetPlayedEpisodePositionAsync(position);
+            => this._queueManager?.SetPlayedEpisodePosition(position);
 
         private void PrevEpisodeCommandImpl()
             => this._queueManager?.PlayPrevEpisodeAsync();

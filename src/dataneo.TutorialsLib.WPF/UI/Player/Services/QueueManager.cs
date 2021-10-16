@@ -45,10 +45,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 
             var nextEpisode = GetNextEpisode(this._currentPlayedEpisode.VideoItemD.EpisodeId);
             if (nextEpisode.HasValue)
-                EpisodePlay(nextEpisode.Value);
+                EpisodePlay(nextEpisode.GetValueOrThrow());
         }
 
-        public async void UserRequestEpisodePlayAsync(int idEpisode)
+        public void UserRequestEpisodePlay(int idEpisode)
         {
             if (this._currentPlayedEpisode is EpisodeData episodeData &&
                 episodeData.VideoItemD.EpisodeId != idEpisode)
@@ -80,29 +80,29 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
             if (episode.HasNoValue)
                 throw new InvalidOperationException();
 
-            this._currentPlayedEpisode = episode.Value;
+            this._currentPlayedEpisode = episode.GetValueOrThrow();
 
-            UpdateFolderPlayedStatus(episode.Value.FolderItemD);
+            UpdateFolderPlayedStatus(episode.GetValueOrThrow().FolderItemD);
 
-            var episodePath = episode.Value.GetEpisodePath();
-            int epsiodePlayPosition = GetEpisodePosition(episode.Value);
+            var episodePath = episode.GetValueOrThrow().GetEpisodePath();
+            int epsiodePlayPosition = GetEpisodePosition(episode.GetValueOrThrow());
 
             this.BeginPlayFile?.Invoke(
                 new PlayFileParameter(
                     episodePath,
-                    episode.Value.TutorialD.Name,
-                    episode.Value.FolderItemD.Name,
-                    episode.Value.VideoItemD.Name,
-                    episode.Value.VideoItemD.Episode.File.PlayTime,
+                    episode.GetValueOrThrow().TutorialD.Name,
+                    episode.GetValueOrThrow().FolderItemD.Name,
+                    episode.GetValueOrThrow().VideoItemD.Name,
+                    episode.GetValueOrThrow().VideoItemD.Episode.File.PlayTime,
                     epsiodePlayPosition,
-                    episode.Value.VideoItemD));
+                    episode.GetValueOrThrow().VideoItemD));
         }
 
         private static int GetEpisodePosition(EpisodeData episode)
             => episode.VideoItemD.WatchStatus == VideoWatchStatus.InProgress ?
                     episode.VideoItemD.Episode.GetPosition() : 0;
 
-        public async void SetPlayedEpisodePositionAsync(int position)
+        public void SetPlayedEpisodePosition(int position)
         {
             var oldState = this._currentPlayedEpisode.VideoItemD.WatchStatus;
             var newPlayedTime = this._currentPlayedEpisode.VideoItemD.Episode.GetPlayedTime(position);
@@ -131,7 +131,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 
             await SaveTutorialToDBAsync(this._currentPlayedEpisode.TutorialD);
 
-            EpisodePlay(nextEpisode.Value);
+            EpisodePlay(nextEpisode.GetValueOrThrow());
         }
 
         public async void PlayPrevEpisodeAsync()
@@ -150,7 +150,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
 
             await SaveTutorialToDBAsync(this._currentPlayedEpisode.TutorialD);
 
-            EpisodePlay(nextEpisode.Value);
+            EpisodePlay(nextEpisode.GetValueOrThrow());
         }
 
         private async void SetAsWatchedAsync(EpisodeData episode)

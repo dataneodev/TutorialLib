@@ -20,7 +20,7 @@ namespace dataneo.TutorialLibs.WPF.Actions
             var directory = GetDirectoryUserSelect();
             if (directory.HasNoValue)
                 return Result.Success();
-            return await _addTutorial.AddTutorialAsync(directory.Value);
+            return await _addTutorial.AddTutorialAsync(directory.GetValueOrThrow());
         }
 
         private static Maybe<DirectoryPath> GetDirectoryUserSelect()
