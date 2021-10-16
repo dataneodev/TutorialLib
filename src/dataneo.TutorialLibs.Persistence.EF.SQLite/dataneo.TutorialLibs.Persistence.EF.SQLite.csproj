@@ -5,14 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\dataneo.TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
+    <PackageReference Include="Ardalis.Specification" Version="5.2.0" />
+    <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="5.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.11" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ardalis.Specification" Version="5.1.0" />
-    <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="5.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.7" />
+    <ProjectReference Include="..\dataneo.TutorialLibs.Domain\dataneo.TutorialLibs.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -17,14 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{1C5876E2-6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{C2242B04-3810-4E56-8C27-0526CC5F2488}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{6FB61415-06B8-438F-A4A8-913E8FDD4E34}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "dataneo.Extensions", "..\dataneo\dataneo.Extensions\dataneo.Extensions.shproj", "{75335CB5-49E9-4697-9D01-CF09F5CCCBAC}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "dataneo.SharedKernel", "..\dataneo\dataneo.SharedKernel\dataneo.SharedKernel.shproj", "{97D2DC3B-ADF6-4A14-ACBA-B3E4027B6307}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "dataneo.Helpers", "..\dataneo\dataneo.Helpers\dataneo.Helpers.shproj", "{4DF445D2-6956-49C7-9B3A-4E7BEC477AB5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialLibs.FileIO.Win", "src\dataneo.TutorialLibs.FileIO.Win\dataneo.TutorialLibs.FileIO.Win.csproj", "{908AF8C7-5CDF-47E0-812A-6D5432248A6E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dataneo.TutorialLibs.FileIO.WinTests", "tests\dataneo.TutorialLibs.FileIO.WinTests\dataneo.TutorialLibs.FileIO.WinTests.csproj", "{D9FCE03D-F7E7-4617-B165-C476EF6366DC}"
@@ -36,11 +28,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{67F4C41E-2050-48DB-B18F-0FD0524B03E3}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\dataneo\dataneo.Helpers\dataneo.Helpers.projitems*{4df445d2-6956-49c7-9b3a-4e7bec477ab5}*SharedItemsImports = 13
-		..\dataneo\dataneo.Extensions\dataneo.Extensions.projitems*{75335cb5-49e9-4697-9d01-cf09f5cccbac}*SharedItemsImports = 13
-		..\dataneo\dataneo.SharedKernel\dataneo.SharedKernel.projitems*{97d2dc3b-adf6-4a14-acba-b3e4027b6307}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -115,10 +102,6 @@ Global
 		{DA9F6A3E-105E-46EB-B184-4305A5C7750E} = {67F4C41E-2050-48DB-B18F-0FD0524B03E3}
 		{AA5B2EBB-D706-413E-B6E4-F0BE8FEF3132} = {DA9F6A3E-105E-46EB-B184-4305A5C7750E}
 		{C2242B04-3810-4E56-8C27-0526CC5F2488} = {67F4C41E-2050-48DB-B18F-0FD0524B03E3}
-		{6FB61415-06B8-438F-A4A8-913E8FDD4E34} = {67F4C41E-2050-48DB-B18F-0FD0524B03E3}
-		{75335CB5-49E9-4697-9D01-CF09F5CCCBAC} = {6FB61415-06B8-438F-A4A8-913E8FDD4E34}
-		{97D2DC3B-ADF6-4A14-ACBA-B3E4027B6307} = {6FB61415-06B8-438F-A4A8-913E8FDD4E34}
-		{4DF445D2-6956-49C7-9B3A-4E7BEC477AB5} = {6FB61415-06B8-438F-A4A8-913E8FDD4E34}
 		{908AF8C7-5CDF-47E0-812A-6D5432248A6E} = {DA9F6A3E-105E-46EB-B184-4305A5C7750E}
 		{D9FCE03D-F7E7-4617-B165-C476EF6366DC} = {1C5876E2-691D-47D7-A7EB-56149A468738}
 		{307AEBCA-B5C9-4F4A-9A85-38988E2D7A68} = {DA9F6A3E-105E-46EB-B184-4305A5C7750E}
