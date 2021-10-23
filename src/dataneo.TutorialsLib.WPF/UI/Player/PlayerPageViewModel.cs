@@ -132,13 +132,16 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
         private async void GoBackCommandImpl()
         {
             await Result
-                .Try(() => EndWorkAsync())
+                .Try(EndWorkAsync)
                 .OnFailure(ShowError);
             RegionManager.RequestNavigate(RegionNames.ContentRegion, nameof(TutorialListPage));
         }
 
         private async void AppClose()
-            => await Result.Try(EndWorkAsync);
+        {
+            VLCLoader.Dispose();
+            await Result.Try(EndWorkAsync);
+        }
 
         private async Task LoadAsync(int tutorialId)
         {
