@@ -62,5 +62,39 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             this._categories.Clear();
             this._categories.AddRange(categories.Distinct());
         }
+
+        public IEnumerable<Folder> GetOrderedFolders()
+            => this.Folders.OrderBy(o => o.Order);
+
+        public IEnumerable<Episode> GetOrderedEpisode()
+            => GetOrderedFolders().SelectMany(folder => folder.Episodes.OrderBy(o => o.Order));
+
+        public Maybe<Episode> GetStartupEpisodeToPlay()
+        {
+            var firstUnwatchedEpisode = GetOrderedEpisode().FirstOrDefault(episode => !episode.IsWatched());
+
+            if (firstUnwatchedEpisode is not null)
+                return firstUnwatchedEpisode;
+
+            return this.Folders.SelectMany(folder => folder.Episodes)
+                               .FirstOrDefault();
+        }
+
+        public Maybe<Episode> GetNextEpisodeToPlay(Episode current)
+        {
+            Guard.Against.Null(current, nameof(current));
+            return GetOrderedEpisode()
+                        .SkipWhile(s => s != current)
+                        .Skip(1)
+                        .FirstOrDefault();
+        }
+
+        public Maybe<Episode> GetPrevEpisodeToPlay(Episode current)
+        {
+            Guard.Against.Null(current, nameof(current));
+            return GetOrderedEpisode()
+                        .TakeWhile(s => s != current)
+                        .LastOrDefault();
+        }
     }
 }

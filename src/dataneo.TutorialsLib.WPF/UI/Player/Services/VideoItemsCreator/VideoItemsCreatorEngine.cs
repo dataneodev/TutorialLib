@@ -42,14 +42,14 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
             var allItems = new List<object>(foldersProcessed.Count + episodesProcessed.Count);
 
             short folderPosition = 0;
-            foreach (var folder in tutorial.Folders.OrderBy(o => o.Order))
+            foreach (var folder in tutorial.GetOrderedFolders())
             {
                 var folderProcessed = GetFolderItem(folder, ref folderPosition);
 
                 foldersProcessed.Add(folderProcessed);
                 allItems.Add(folderProcessed);
 
-                foreach (var episodeProcess in GetVideoItems(folder.Episodes))
+                foreach (var episodeProcess in GetVideoItems(folder.GetOrderedEpisode()))
                 {
                     episodesProcessed.Add(episodeProcess);
                     allItems.Add(episodeProcess);
@@ -82,15 +82,8 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
             return folderItem;
         }
 
-        private static IEnumerable<VideoItem> GetVideoItems(IReadOnlyList<Episode> episodes)
-        {
-            if (episodes.Count == 0)
-                return Enumerable.Empty<VideoItem>();
-
-            return episodes
-                .OrderBy(o => o.Order)
-                .Select((episode, index) => GetEpisodeVideoItem(episodes.Count, episode, index));
-        }
+        private static IEnumerable<VideoItem> GetVideoItems(IEnumerable<Episode> episodes)
+            => episodes.Select((episode, index) => GetEpisodeVideoItem(episodes.Count(), episode, index));
 
         private static VideoItem GetEpisodeVideoItem(int episodeCount, Episode episode, int index)
             => GetVideoItem(episode, GetVideoItemLocationType(index, episodeCount));

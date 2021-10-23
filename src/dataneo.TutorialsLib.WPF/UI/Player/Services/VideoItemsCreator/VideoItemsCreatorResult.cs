@@ -42,26 +42,5 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
                 videoItemD: episode,
                 folderItemD: folder);
         }
-
-        public Maybe<int> GetNextEpisodeId(int currentEpsiodeId)
-        {
-            var id = this.Episodes.SkipWhile(s => s.EpisodeId != currentEpsiodeId)
-                         .Skip(1)
-                         .FirstOrDefault()?.EpisodeId;
-            if (id.HasValue)
-                return id.Value;
-
-            return Maybe<int>.None;
-        }
-
-        public Maybe<int> GetPrevEpisodeId(int currentEpsiodeId)
-        {
-            var id = this.Episodes.TakeWhile(s => s.EpisodeId != currentEpsiodeId)
-                         .LastOrDefault()?.EpisodeId;
-            if (id.HasValue)
-                return id.Value;
-
-            return Maybe<int>.None;
-        }
     }
 }

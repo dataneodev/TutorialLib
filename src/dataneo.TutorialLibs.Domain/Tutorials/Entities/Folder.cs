@@ -62,5 +62,8 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             => this.Episodes.Aggregate(
                     VideoWatchStatus.Watched,
                     (aggregate, episode) => episode.Status < aggregate ? episode.Status : aggregate);
+
+        public IEnumerable<Episode> GetOrderedEpisode()
+            => this.Episodes.OrderBy(o => o.Order);
     }
 }

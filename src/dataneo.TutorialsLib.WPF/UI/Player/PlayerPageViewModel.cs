@@ -114,8 +114,8 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             this.SelectedItem = playFileParameter.Item;
         }
 
-        private void CurrentVideoEndedCommandImpl()
-            => this._queueManager?.CurrentPlayedEpisodeHasEnded();
+        private async void CurrentVideoEndedCommandImpl()
+            => await Result.Try(() => this._queueManager?.CurrentPlayedEpisodeHasEndedAsync());
 
         private void ClickedOnEpisodeCommandImpl(int episodeId)
             => this._queueManager?.UserRequestEpisodePlay(episodeId);

@@ -87,7 +87,9 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             if (playedTime > this.File.PlayTime)
                 throw new InvalidOperationException();
 
-            this.PlayedTime = playedTime;
+            if (!IsWatched())
+                this.PlayedTime = playedTime;
+
             this.LastPlayedDate = now;
         }
 
@@ -114,5 +116,9 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
                 throw new ArgumentException(nameof(order));
             Order = order;
         }
+
+        public bool IsWatched()
+            => this.Status == VideoWatchStatus.Watched;
+
     }
 }
