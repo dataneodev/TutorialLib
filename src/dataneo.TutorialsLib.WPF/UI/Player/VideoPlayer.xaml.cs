@@ -1,4 +1,5 @@
-﻿using LibVLCSharp.Shared;
+﻿using dataneo.TutorialLibs.WPF.UI.Player.Services;
+using LibVLCSharp.Shared;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -12,7 +13,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
     public partial class VideoPlayer : UserControl, INotifyPropertyChanged
     {
         private volatile bool _isLoaded;
-        private LibVLC _libVLC;
+
         private MediaPlayer _mediaPlayer;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -218,10 +219,9 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
                 {
                     while (!this._isLoaded)
                         Thread.Sleep(50);
-                    Thread.Sleep(1000);
                 }
 
-                using var media = new Media(_libVLC, new Uri(mediaPath.Path));
+                using var media = new Media(VLCLoader.GetVLC().GetValueOrThrow(), new Uri(mediaPath.Path));
                 this._mediaPlayer.Play(media);
                 this._mediaPlayer.Position = mediaPath.Position / 100f;
             });
@@ -232,8 +232,10 @@ namespace dataneo.TutorialLibs.WPF.UI.Player
             if (this._isLoaded == true)
                 return;
 
-            this._libVLC = new LibVLC();
-            this._mediaPlayer = GetMediaPlayer(this._libVLC);
+            while (VLCLoader.GetVLC().HasNoValue)
+                Thread.Sleep(50);
+
+            this._mediaPlayer = GetMediaPlayer(VLCLoader.GetVLC().GetValueOrThrow());
             videoView.MediaPlayer = this._mediaPlayer;
             this._isLoaded = true;
         }

@@ -2,6 +2,7 @@
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
 using dataneo.TutorialLibs.WPF.Services;
 using dataneo.TutorialLibs.WPF.UI;
+using dataneo.TutorialLibs.WPF.UI.Player.Services;
 using Prism.Ioc;
 using Prism.Modularity;
 using System.Windows;
@@ -19,6 +20,9 @@ namespace dataneo.TutorialLibs.WPF
             Result.DefaultConfigureAwait = true;
             using var dbContext = new ApplicationDbContext();
             dbContext.Database.EnsureCreated();
+
+            LibVLCSharp.Shared.Core.Initialize();
+            VLCLoader.Init();
         }
 
         protected override Window CreateShell()

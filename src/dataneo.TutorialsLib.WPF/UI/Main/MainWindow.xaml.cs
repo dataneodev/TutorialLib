@@ -11,7 +11,7 @@ namespace dataneo.TutorialLibs.WPF.UI
     {
         public MainWindow()
         {
-            LibVLCSharp.Shared.Core.Initialize();
+
             InitializeComponent();
             AppendWindowTitle();
         }
