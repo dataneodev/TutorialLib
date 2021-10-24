@@ -12,7 +12,6 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
     public sealed class Folder : BaseEntity
     {
         private const int MinFolderName = 1;
-        public int ParentTutorialId { get; private set; }
         public short Order { get; private set; }
         public string Name { get; private set; }
         public string FolderPath { get; private set; }

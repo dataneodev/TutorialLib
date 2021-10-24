@@ -12,8 +12,6 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
         public const byte EpisonNameMinLength = 2;
         public const byte UnWatchPercentage = 10;
         public const byte WatchPercentage = 96;
-
-        public int ParentFolderId { get; private set; }
         public short Order { get; private set; }
         public string Name { get; private set; }
         public EpisodeFile File { get; private set; }
