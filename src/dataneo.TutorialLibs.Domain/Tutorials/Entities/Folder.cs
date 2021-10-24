@@ -3,6 +3,7 @@ using dataneo.SharedKernel;
 using dataneo.TutorialLibs.Domain.Translation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
@@ -15,7 +16,8 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
         public short Order { get; private set; }
         public string Name { get; private set; }
         public string FolderPath { get; private set; }
-        public IReadOnlyList<Episode> Episodes { get; private set; }
+        private readonly List<Episode> _episodes = new List<Episode>();
+        public IReadOnlyList<Episode> Episodes => new ReadOnlyCollection<Episode>(this._episodes);
         public bool IsRootFolder => string.IsNullOrWhiteSpace(FolderPath);
 
         private Folder() { }
@@ -40,12 +42,13 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             if (invalidChars.Any(c => folderPath.Contains(c)))
                 return Result.Failure<Folder>(Errors.INVALID_DIRECTORY);
 
-            return new Folder
+            var folder = new Folder
             {
                 FolderPath = folderPath,
                 Name = folderPathTrimmed,
-                Episodes = episodes,
             };
+            folder._episodes.AddRange(episodes);
+            return folder;
         }
 
         public void SetOrder(short order)

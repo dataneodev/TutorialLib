@@ -29,7 +29,6 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Config
 
             builder.HasMany(m => m.Folders)
                    .WithOne()
-                   .HasForeignKey(f => f.ParentTutorialId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Cascade);
 

@@ -17,7 +17,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
         public RatingStars Rating { get; private set; }
         public IReadOnlyList<Folder> Folders { get; private set; }
 
-        private List<Category> _categories = new List<Category>();
+        private readonly List<Category> _categories = new List<Category>();
         public IReadOnlyList<Category> Categories => new ReadOnlyCollection<Category>(this._categories);
 
         public DateTime AddDate { get; private set; }

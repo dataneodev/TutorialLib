@@ -3,6 +3,7 @@ using Ardalis.Specification;
 using CSharpFunctionalExtensions;
 using dataneo.Extensions;
 using dataneo.TutorialLibs.Domain.Categories;
+using dataneo.TutorialLibs.Domain.Settings;
 using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.Domain.Tutorials.Specifications;
 using dataneo.TutorialLibs.WPF.Actions;
@@ -25,6 +26,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
         private readonly ICategoryRespositoryAsync _categoryRespositoryAsync;
         private readonly IAddTutorial _addTutorial;
+        private readonly ISettingManager _settingManager;
 
         private IEnumerable<TutorialHeaderDto> tutorials;
         public IEnumerable<TutorialHeaderDto> Tutorials
@@ -83,11 +85,13 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                                          IDialogService dialogService,
                                          IAddTutorial addTutorial,
                                          ITutorialRespositoryAsync tutorialRespositoryAsync,
-                                         ICategoryRespositoryAsync categoryRespositoryAsync) : base(regionManager)
+                                         ICategoryRespositoryAsync categoryRespositoryAsync,
+                                         ISettingManager settingManager) : base(regionManager)
         {
             this._dialogService = Guard.Against.Null(dialogService, nameof(dialogService));
             this._tutorialRespositoryAsync = Guard.Against.Null(tutorialRespositoryAsync, nameof(tutorialRespositoryAsync));
             this._categoryRespositoryAsync = Guard.Against.Null(categoryRespositoryAsync, nameof(categoryRespositoryAsync));
+            this._settingManager = Guard.Against.Null(settingManager, nameof(settingManager));
             this._addTutorial = Guard.Against.Null(addTutorial, nameof(addTutorial));
 
             this.RatingChangedCommand = new Command<ValueTuple<int, RatingStars>>(RatingChangedCommandImplAsync);
@@ -103,10 +107,11 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         }
 
         public async override void OnNavigatedTo(NavigationContext navigationContext)
-                  => await Result
-                      .Try(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
-                      .OnSuccessTry(() => LoadCategoriesAsync())
-                      .OnFailure(error => ShowError(error));
+            => await Result
+                .Try(LoadCategoriesAsync)
+                .OnSuccessTry(LoadLastCategoriesAsync)
+                .OnSuccessTry(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
+                .OnFailure(error => ShowError(error));
 
         private async void AddTutorialCommandImplAsync()
             => await Result
@@ -133,7 +138,8 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 
         private async void FilterByCategoryCommandImplAsync()
             => await Result
-                .Try(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
+                .Try(SaveLastCategoriesAsync)
+                .OnSuccessTry(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
                 .OnFailure(error => ShowError(error));
 
         private void ShowCategoryManagerCommandImpl()
@@ -243,12 +249,11 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             var newCategories = ProcessCategories(categories)
                                 .Concat(GetDefaultCategory())
                                 .ToArray();
-            MergeCheckedWithNew(this.Categories, newCategories);
+            MergeCheckedStatusWithNew(this.Categories, newCategories);
             this.Categories = newCategories;
         }
 
-        private void MergeCheckedWithNew(IEnumerable<CategoryMenuItem> oldCategories,
-                                         IReadOnlyList<CategoryMenuItem> newCategories)
+        private void MergeCheckedStatusWithNew(IEnumerable<CategoryMenuItem> oldCategories, IReadOnlyList<CategoryMenuItem> newCategories)
         {
             if (oldCategories is null)
                 return;
@@ -286,11 +291,9 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
                 return new AllTutorialsSpecification();
 
             var noCategoryFilter = this.Categories.Any(a => a.FilterByNone());
-
-            return new FilterByCategoryIdsSpecification(
-                this.Categories.Where(w => w.FilterByCategory())
-                               .Select(s => s.GetCategoryId().GetValueOrThrow()),
-                noCategoryFilter);
+            var categoriesIds = this.Categories.Where(w => w.FilterByCategory())
+                                               .Select(s => s.GetCategoryId().GetValueOrThrow());
+            return new FilterByCategoryIdsSpecification(categoriesIds, noCategoryFilter);
         }
 
         private void SetNewTutorialsHeader(IEnumerable<TutorialHeaderDto> tutorialHeaders,
@@ -300,6 +303,31 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             this.Tutorials = tutorialHeaders.OrderBy(o => o, comparer)
                                             .ToArray();
         }
+
+        private async Task LoadLastCategoriesAsync()
+        {
+            var lastCategories = await this._settingManager.GetValueIntCollectionAsync(SettingDefinition.LastCategory);
+            if (lastCategories.HasNoValue)
+                return;
+            var savedCategories = lastCategories.GetValueOrThrow();
+
+            foreach (var category in this.Categories)
+            {
+                category.IsChecked = category.GetCategoryId().HasValue &&
+                                     savedCategories.Contains(category.GetCategoryId().Value);
+
+                if (category.GetCategoryId().HasNoValue && savedCategories.Contains(0))
+                    category.IsChecked = true;
+            }
+        }
+
+        private async Task SaveLastCategoriesAsync()
+            => this._settingManager.SetIntCollectionValue(
+                SettingDefinition.LastCategory,
+                this.Categories.Where(w => w.IsChecked && w.FilterByCategory())
+                               .Select(s => s.GetCategoryId().Value)
+                               .Concat(this.Categories.Where(w => w.IsChecked && w.FilterByNone()).Take(1).Select(s => 0))
+                               .ToArray());
 
         private void ShowError(string error)
             => this._dialogService.ShowDialog(

@@ -1,4 +1,5 @@
 ﻿using dataneo.TutorialLibs.Domain.Categories;
+using dataneo.TutorialLibs.Domain.Settings;
 using dataneo.TutorialLibs.Domain.Tutorials;
 using dataneo.TutorialLibs.FileIO.Win.Services;
 using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
@@ -18,6 +19,8 @@ namespace dataneo.TutorialLibs.WPF.Services
             containerRegistry.RegisterSingleton<ApplicationDbContext>();
             containerRegistry.Register<ITutorialRespositoryAsync, TutorialRespositoryAsync>();
             containerRegistry.Register<ICategoryRespositoryAsync, CattegoryRespositoryAsync>();
+            containerRegistry.Register<ISettingRespositoryAsync, SettingRespositoryAsync>();
+            containerRegistry.Register<ISettingManager, SettingManager>();
             containerRegistry.RegisterSingleton<IDateTimeProivder, DateTimeProivder>();
             containerRegistry.RegisterSingleton<IHandledFileExtension, HandledFileExtension>();
             containerRegistry.Register<IFileScanner, FileScanner>();
