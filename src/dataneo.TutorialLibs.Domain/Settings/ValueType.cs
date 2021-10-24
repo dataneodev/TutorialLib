@@ -1,11 +1,10 @@
-﻿using System;
-
-namespace dataneo.TutorialLibs.Domain.Settings
+﻿namespace dataneo.TutorialLibs.Domain.Settings
 {
-    public enum ValueType : Byte
+    public enum ValueType : byte
     {
-        Integer,
-        Double,
-        String;
+        ValueOfInteger,
+        ValueOfArrayInteger,
+        ValueOfDouble,
+        ValueOfString
     }
 }

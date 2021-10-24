@@ -1,4 +1,5 @@
 ﻿using dataneo.TutorialLibs.Domain.Categories;
+using dataneo.TutorialLibs.Domain.Settings;
 using dataneo.TutorialLibs.Domain.Tutorials;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -13,6 +14,8 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Context
         public DbSet<Category> Categories { get; private set; }
         public DbSet<Folder> Folders { get; private set; }
         public DbSet<Episode> Episodes { get; private set; }
+        public DbSet<Setting> Settings { get; private set; }
+        public DbSet<SettingItem> SettingItems { get; private set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
