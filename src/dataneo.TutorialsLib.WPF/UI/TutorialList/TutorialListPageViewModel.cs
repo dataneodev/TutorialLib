@@ -112,7 +112,9 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             => await Result
                .Try(() => new AddNewTutorialAction(this._addTutorial).AddAsync(), e => e.Message)
                .Bind(r => r)
-               .OnSuccessTry(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
+               .OnSuccessTry(() => LoadTutorialsDtoAsync(
+                                    this.SelectedTutorialsOrderType,
+                                    GetSpecificationAccToFilterSelect()))
                .OnFailure(error => ShowError(error));
 
         private void PlayTutorialCommandImpl(int tutorialId)
