@@ -10,9 +10,9 @@ namespace dataneo.TutorialLibs.Domain.Settings
         Task<Maybe<IReadOnlyList<int>>> GetValueIntCollectionAsync(ISettingDef settingDef);
         Task<Maybe<double>> GetValueAsDoubleAsync(ISettingDef settingDef);
         Task<Maybe<string>> GetValueAsStringAsync(ISettingDef settingDef);
-        Task SetIntValue(ISettingDef settingDef, int value);
-        Task SetIntCollectionValue(ISettingDef settingDef, IReadOnlyList<int> value);
-        Task SetDoubleValue(ISettingDef settingDef, double value);
-        Task SetStringValue(ISettingDef settingDef, string value);
+        Task SetIntValueAsync(ISettingDef settingDef, int value);
+        Task SetIntCollectionValueAsync(ISettingDef settingDef, IReadOnlyList<int> value);
+        Task SetDoubleValueAsync(ISettingDef settingDef, double value);
+        Task SetStringValueAsync(ISettingDef settingDef, string value);
     }
 }

@@ -322,7 +322,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         }
 
         private async Task SaveLastCategoriesAsync()
-            => this._settingManager.SetIntCollectionValue(
+            => this._settingManager.SetIntCollectionValueAsync(
                 SettingDefinition.LastCategory,
                 this.Categories.Where(w => w.IsChecked && w.FilterByCategory())
                                .Select(s => s.GetCategoryId().Value)

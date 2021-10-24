@@ -87,25 +87,25 @@ namespace dataneo.TutorialLibs.Domain.Settings
             return GetValueFromSettingManagerAsync(settingDef);
         }
 
-        public Task SetDoubleValue(ISettingDef settingDef, double value)
+        public Task SetDoubleValueAsync(ISettingDef settingDef, double value)
         {
             GuardSave(settingDef, ValueType.ValueOfDouble);
             return SetValueToSettingManagerAsync(settingDef, value.ToString());
         }
 
-        public Task SetIntValue(ISettingDef settingDef, int value)
+        public Task SetIntValueAsync(ISettingDef settingDef, int value)
         {
             GuardSave(settingDef, ValueType.ValueOfInteger);
             return SetValueToSettingManagerAsync(settingDef, value.ToString());
         }
 
-        public Task SetIntCollectionValue(ISettingDef settingDef, IReadOnlyList<int> value)
+        public Task SetIntCollectionValueAsync(ISettingDef settingDef, IReadOnlyList<int> value)
         {
             GuardSave(settingDef, ValueType.ValueOfArrayInteger);
             return SetValueToSettingManagerAsync(settingDef, String.Join(CollectionSeparator, value));
         }
 
-        public Task SetStringValue(ISettingDef settingDef, string value)
+        public Task SetStringValueAsync(ISettingDef settingDef, string value)
         {
             GuardSave(settingDef, ValueType.ValueOfString);
             return SetValueToSettingManagerAsync(settingDef, value);
