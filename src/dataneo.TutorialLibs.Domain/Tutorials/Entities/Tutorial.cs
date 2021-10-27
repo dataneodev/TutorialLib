@@ -76,8 +76,7 @@ namespace dataneo.TutorialLibs.Domain.Tutorials
             if (firstUnwatchedEpisode is not null)
                 return firstUnwatchedEpisode;
 
-            return this.Folders.SelectMany(folder => folder.Episodes)
-                               .FirstOrDefault();
+            return GetOrderedEpisode().FirstOrDefault();
         }
 
         public Maybe<Episode> GetNextEpisodeToPlay(Episode current)
