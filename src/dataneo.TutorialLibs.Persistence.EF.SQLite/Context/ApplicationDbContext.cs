@@ -17,6 +17,11 @@ namespace dataneo.TutorialLibs.Persistence.EF.SQLite.Context
         public DbSet<Setting> Settings { get; private set; }
         public DbSet<SettingItem> SettingItems { get; private set; }
 
+        public ApplicationDbContext()
+        {
+            Database.EnsureCreated();
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite($"Filename={DatabaseName}", options =>

@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using dataneo.TutorialLibs.Persistence.EF.SQLite.Context;
 using dataneo.TutorialLibs.WPF.Services;
 using dataneo.TutorialLibs.WPF.UI;
 using dataneo.TutorialLibs.WPF.UI.Player.Services;
@@ -18,9 +17,6 @@ namespace dataneo.TutorialLibs.WPF
         {
             //   Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us"); // tests
             Result.DefaultConfigureAwait = true;
-            using var dbContext = new ApplicationDbContext();
-            dbContext.Database.EnsureCreated();
-
             LibVLCSharp.Shared.Core.Initialize();
             VLCLoader.Init();
         }
