@@ -8,7 +8,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
     public static class VLCLoader
     {
         private static volatile bool _isInit;
-        private static bool _isDisposed;
+        private static volatile bool _isDisposed;
         private static LibVLC _libVLC;
 
         public static void Init()
@@ -40,6 +40,7 @@ namespace dataneo.TutorialLibs.WPF.UI.Player.Services
                 throw new InvalidOperationException();
 
             _libVLC.Dispose();
+            _isDisposed = true;
         }
     }
 }
