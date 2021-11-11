@@ -144,6 +144,9 @@
   <data name="FILTER" xml:space="preserve">
     <value>Filtruj</value>
   </data>
+  <data name="NEXT_PAGE" xml:space="preserve">
+    <value>Następna strona</value>
+  </data>
   <data name="NOCATEGORY" xml:space="preserve">
     <value>Bez kategorii</value>
   </data>
@@ -152,6 +155,12 @@
   </data>
   <data name="PLAY" xml:space="preserve">
     <value>Odtwórz</value>
+  </data>
+  <data name="PREV_PAGE" xml:space="preserve">
+    <value>Poprzednia strona</value>
+  </data>
+  <data name="SEARCH" xml:space="preserve">
+    <value>Szukaj</value>
   </data>
   <data name="SETASUNWATCHED" xml:space="preserve">
     <value>Oznacz jako nieoglądany</value>

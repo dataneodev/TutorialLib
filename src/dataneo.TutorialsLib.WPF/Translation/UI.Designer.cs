@@ -142,6 +142,15 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next page.
+        /// </summary>
+        public static string NEXT_PAGE {
+            get {
+                return ResourceManager.GetString("NEXT_PAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No category.
         /// </summary>
         public static string NOCATEGORY {
@@ -165,6 +174,24 @@ namespace dataneo.TutorialLibs.WPF.Translation {
         public static string PLAY {
             get {
                 return ResourceManager.GetString("PLAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous page.
+        /// </summary>
+        public static string PREV_PAGE {
+            get {
+                return ResourceManager.GetString("PREV_PAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string SEARCH {
+            get {
+                return ResourceManager.GetString("SEARCH", resourceCulture);
             }
         }
         

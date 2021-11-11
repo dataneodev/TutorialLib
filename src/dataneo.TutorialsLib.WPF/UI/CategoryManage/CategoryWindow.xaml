@@ -14,9 +14,9 @@
     <prism:Dialog.WindowStyle>
         <Style TargetType="Window">
             <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
-            <Setter Property="ResizeMode" Value="NoResize"/>
-            <Setter Property="ShowInTaskbar" Value="False"/>
-            <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+            <Setter Property="ResizeMode" Value="NoResize" />
+            <Setter Property="ShowInTaskbar" Value="False" />
+            <Setter Property="SizeToContent" Value="WidthAndHeight" />
         </Style>
     </prism:Dialog.WindowStyle>
     <UserControl.Resources>
@@ -60,10 +60,7 @@
             Grid.Column="0"
             Margin="2"
             HorizontalAlignment="Stretch"
-            Background="#353535"
-            BorderBrush="Black"
-            FontSize="14"
-            Foreground="{StaticResource foreGround}"
+            Style="{StaticResource textBoxGlobalStyle}"
             Text="{Binding Path=CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <Button

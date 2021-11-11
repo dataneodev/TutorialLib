@@ -24,6 +24,12 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="textBoxGlobalStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="#353535" />
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{StaticResource foreGround}" />
+    </Style>
 
     <Style x:Key="btnControlStyle" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="LightBlue" />
