@@ -182,7 +182,7 @@
             </MenuItem>
             <MenuItem
                 Header="{x:Static lang:UI.FILTER}"
-                ItemsSource="{Binding Path=Categories, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                ItemsSource="{Binding Path=CategoriesManager.Categories, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource menuItemColors}">
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="{x:Type MenuItem}">

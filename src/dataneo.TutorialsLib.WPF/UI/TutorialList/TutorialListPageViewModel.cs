@@ -5,9 +5,7 @@ using dataneo.Extensions;
 using dataneo.TutorialLibs.Domain.Categories;
 using dataneo.TutorialLibs.Domain.Settings;
 using dataneo.TutorialLibs.Domain.Tutorials;
-using dataneo.TutorialLibs.Domain.Tutorials.Specifications;
 using dataneo.TutorialLibs.WPF.Actions;
-using dataneo.TutorialLibs.WPF.Comparers;
 using dataneo.TutorialLibs.WPF.UI.CategoryManage;
 using dataneo.TutorialLibs.WPF.UI.Player;
 using Prism.Regions;
@@ -22,11 +20,15 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 {
     internal sealed class TutorialListPageViewModel : BaseViewModel
     {
+        private const short TutorialOnPage = 40;
+
         private readonly IDialogService _dialogService;
         private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
         private readonly ICategoryRespositoryAsync _categoryRespositoryAsync;
         private readonly IAddTutorial _addTutorial;
         private readonly ISettingManager _settingManager;
+
+        public readonly CategoryManager CategoriesManager;
 
         private IEnumerable<TutorialHeaderDto> tutorials;
         public IEnumerable<TutorialHeaderDto> Tutorials
@@ -50,23 +52,52 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             {
                 selectedTutorialsOrderType = value;
                 RaisePropertyChanged();
-                SetNewTutorialsHeader(Tutorials, value);
             }
         }
 
-        private IEnumerable<CategoryMenuItem> _categories;
-        public IEnumerable<CategoryMenuItem> Categories
-        {
-            get { return _categories; }
-            set { _categories = value; RaisePropertyChanged(); }
-        }
-
         private IEnumerable<CategoryMenuItem> _tutorialCategories;
-
         public IEnumerable<CategoryMenuItem> TutorialCategories
         {
             get { return _tutorialCategories; }
             set { _tutorialCategories = value; RaisePropertyChanged(); }
+        }
+
+        private short page;
+        public short Page
+        {
+            get { return page; }
+            set
+            {
+                if (value < 1)
+                {
+                    page = 1;
+                    return;
+                }
+
+                if (value > TotalPage)
+                {
+                    page = TotalPage;
+                    return;
+                }
+                page = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private short totalPage = 1;
+        public short TotalPage
+        {
+            get { return totalPage; }
+            set
+            {
+                if (value < 1)
+                {
+                    totalPage = 1;
+                    return;
+                }
+                totalPage = value;
+                RaisePropertyChanged();
+            }
         }
 
         public ICommand RatingChangedCommand { get; }
@@ -94,6 +125,8 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             this._settingManager = Guard.Against.Null(settingManager, nameof(settingManager));
             this._addTutorial = Guard.Against.Null(addTutorial, nameof(addTutorial));
 
+            this.CategoriesManager = new CategoryManager(categoryRespositoryAsync, settingManager);
+
             this.RatingChangedCommand = new Command<ValueTuple<int, RatingStars>>(RatingChangedCommandImplAsync);
             this.PlayTutorialCommand = new Command<int>(PlayTutorialCommandImpl);
             this.AddTutorialCommand = new Command(AddTutorialCommandImplAsync);
@@ -108,18 +141,15 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 
         public async override void OnNavigatedTo(NavigationContext navigationContext)
             => await Result
-                .Try(LoadCategoriesAsync)
-                .OnSuccessTry(LoadLastCategoriesAsync)
-                .OnSuccessTry(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
+                .Try(this.CategoriesManager.LoadCategoriesAsync)
+                .OnSuccessTry(LoadTutorialsDtoAsync)
                 .OnFailure(error => ShowError(error));
 
         private async void AddTutorialCommandImplAsync()
             => await Result
                .Try(() => new AddNewTutorialAction(this._addTutorial).AddAsync(), e => e.Message)
                .Bind(r => r)
-               .OnSuccessTry(() => LoadTutorialsDtoAsync(
-                                    this.SelectedTutorialsOrderType,
-                                    GetSpecificationAccToFilterSelect()))
+               .OnSuccessTry(LoadTutorialsDtoAsync)
                .OnFailure(error => ShowError(error));
 
         private void PlayTutorialCommandImpl(int tutorialId)
@@ -138,35 +168,26 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 
         private async void FilterByCategoryCommandImplAsync()
             => await Result
-                .Try(SaveLastCategoriesAsync)
-                .OnSuccessTry(() => LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect()))
+                .Try(this.CategoriesManager.SaveCategoriesSelectAsync)
+                .OnSuccessTry(LoadTutorialsDtoAsync)
                 .OnFailure(error => ShowError(error));
 
         private void ShowCategoryManagerCommandImpl()
             => this._dialogService.ShowDialog(nameof(CategoryWindow),
                     async callback => await LoadCategoriesAndTutorialsonSelectionChangeAsync());
 
-        private void SetTutorialAsUnWatchedCommandImpl()
-        {
+        private void SetTutorialAsUnWatchedCommandImpl() { }
 
-        }
+        private void SetTutorialAsWatchedCommandImpl() { }
 
-        private void SetTutorialAsWatchedCommandImpl()
-        {
-
-        }
-
-        private void DeleteTutorialCommandImpl()
-        {
-
-        }
+        private void DeleteTutorialCommandImpl() { }
 
         private void ShowTutorialCategoriesCommandImpl()
         {
             if (this.SelectedTutorial is null)
                 return;
 
-            this.TutorialCategories = GetCategoryMenuItem(this.SelectedTutorial, this.Categories);
+            this.TutorialCategories = GetCategoryMenuItem(this.SelectedTutorial, this.CategoriesManager.Categories);
         }
 
         private IReadOnlyList<CategoryMenuItem> GetCategoryMenuItem(TutorialHeaderDto tutorialHeaderDto,
@@ -223,111 +244,36 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 
         private async Task LoadCategoriesAndTutorialsonSelectionChangeAsync()
         {
-            var categories = await this._categoryRespositoryAsync.ListAllAsync();
-            var categoriesSelectionChange = IsSelectedCategoryChange(categories);
-            SetCategories(categories);
-            if (categoriesSelectionChange)
-                await LoadTutorialsDtoAsync(this.SelectedTutorialsOrderType, GetSpecificationAccToFilterSelect());
+            await this.CategoriesManager.LoadCategoriesAsync();
+            await LoadTutorialsDtoAsync();
         }
 
-        private async Task LoadCategoriesAsync()
+        private async Task LoadTutorialsDtoAsync()
         {
-            var categories = await this._categoryRespositoryAsync.ListAllAsync();
-            SetCategories(categories);
+            var specificationCount = GetSpecificationAccToFilterSelect();
+            var totalRecords = await this._tutorialRespositoryAsync.CountAsync(specificationCount);
+            this.TotalPage = (short)Math.Ceiling(totalRecords / (double)TutorialOnPage);
+            this.Page = 1;
+            var specification = GetSpecificationAccToFilterSelect(this.Page);
+            this.Tutorials = await this._tutorialRespositoryAsync.GetAllTutorialHeadersDtoAsync(specification);
         }
 
-        private bool IsSelectedCategoryChange(IReadOnlyList<Category> newCategory)
+        private ISpecification<Tutorial> GetSpecificationAccToFilterSelect(short? page = null)
         {
-            if (this.Categories.All(a => !a.IsChecked))
-                return false;
+            var specBuilder = new SpecificationBuilder();
+            specBuilder
+                .FilterByCategories(this.CategoriesManager.GetFilteredCategories(),
+                                    this.CategoriesManager.IsFilterByNoCategory());
 
-            return this.Categories.Any(w => w.FilterByCategory() && !newCategory.Any(a => w.IsEqualCategoryId(a.Id)));
-        }
-
-        private void SetCategories(IReadOnlyList<Category> categories)
-        {
-            var newCategories = ProcessCategories(categories)
-                                .Concat(GetDefaultCategory())
-                                .ToArray();
-            MergeCheckedStatusWithNew(this.Categories, newCategories);
-            this.Categories = newCategories;
-        }
-
-        private void MergeCheckedStatusWithNew(IEnumerable<CategoryMenuItem> oldCategories, IReadOnlyList<CategoryMenuItem> newCategories)
-        {
-            if (oldCategories is null)
-                return;
-
-            foreach (var merge in oldCategories
-                                .Where(w => w.FilterByCategory())
-                                .Join(newCategories.Where(w => w.Filter == CategoryMenuItem.FilterType.ByCategory),
-                                    f => f.GetCategoryId().GetValueOrThrow(),
-                                    s => s.GetCategoryId().GetValueOrThrow(),
-                                    (f, s) => new { f, s }))
+            if (page.HasValue)
             {
-                merge.s.IsChecked = merge.f.IsChecked;
+                specBuilder.Page(page.Value, TutorialOnPage)
+                           .OrderBy(this.SelectedTutorialsOrderType);
             }
+
+
+            return specBuilder.GetSpecification();
         }
-
-        private IEnumerable<CategoryMenuItem> ProcessCategories(IReadOnlyList<Category> categories)
-            => categories
-                .OrderBy(o => o.Name)
-                .Select(category => new CategoryMenuItem(category));
-
-        private IEnumerable<CategoryMenuItem> GetDefaultCategory()
-        {
-            yield return CategoryMenuItem.CreateForNoCategory();
-        }
-
-        private async Task LoadTutorialsDtoAsync(TutorialsOrderType tutorialsOrderType, ISpecification<Tutorial> specification)
-        {
-            var tutorialHeaders = await this._tutorialRespositoryAsync.GetAllTutorialHeadersDtoAsync(specification);
-            SetNewTutorialsHeader(tutorialHeaders, tutorialsOrderType);
-        }
-
-        private ISpecification<Tutorial> GetSpecificationAccToFilterSelect()
-        {
-            if (this.Categories?.All(a => !a.IsChecked) ?? true)
-                return new AllTutorialsSpecification();
-
-            var noCategoryFilter = this.Categories.Any(a => a.FilterByNone());
-            var categoriesIds = this.Categories.Where(w => w.FilterByCategory())
-                                               .Select(s => s.GetCategoryId().GetValueOrThrow());
-            return new FilterByCategoryIdsSpecification(categoriesIds, noCategoryFilter);
-        }
-
-        private void SetNewTutorialsHeader(IEnumerable<TutorialHeaderDto> tutorialHeaders,
-                                           TutorialsOrderType tutorialsOrderType)
-        {
-            var comparer = TutorialsOrderComparerFactory.GetComparer(tutorialsOrderType);
-            this.Tutorials = tutorialHeaders.OrderBy(o => o, comparer)
-                                            .ToArray();
-        }
-
-        private async Task LoadLastCategoriesAsync()
-        {
-            var lastCategories = await this._settingManager.GetValueIntCollectionAsync(SettingDefinition.LastCategory);
-            if (lastCategories.HasNoValue)
-                return;
-            var savedCategories = lastCategories.GetValueOrThrow();
-
-            foreach (var category in this.Categories)
-            {
-                category.IsChecked = category.GetCategoryId().HasValue &&
-                                     savedCategories.Contains(category.GetCategoryId().Value);
-
-                if (category.GetCategoryId().HasNoValue && savedCategories.Contains(0))
-                    category.IsChecked = true;
-            }
-        }
-
-        private Task SaveLastCategoriesAsync()
-            => this._settingManager.SetIntCollectionValueAsync(
-                SettingDefinition.LastCategory,
-                this.Categories.Where(w => w.IsChecked && w.FilterByCategory())
-                               .Select(s => s.GetCategoryId().Value)
-                               .Concat(this.Categories.Where(w => w.IsChecked && w.FilterByNone()).Take(1).Select(s => 0))
-                               .ToArray());
 
         private void ShowError(string error)
             => this._dialogService.ShowDialog(
