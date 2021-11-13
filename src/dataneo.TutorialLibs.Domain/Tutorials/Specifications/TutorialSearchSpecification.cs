@@ -8,6 +8,11 @@ namespace dataneo.TutorialLibs.Domain.Tutorials.Specifications
 {
     public class TutorialSearchSpecification : Specification<Tutorial>
     {
+        public TutorialSearchSpecification()
+        {
+            Query.AsNoTracking();
+        }
+
         public TutorialSearchSpecification FilterByCategories(IEnumerable<Category> categories, bool filterWithNoCategory = true)
         {
             Guard.Against.Null(categories, nameof(categories));
@@ -39,8 +44,9 @@ namespace dataneo.TutorialLibs.Domain.Tutorials.Specifications
         {
             if (string.IsNullOrWhiteSpace(title))
                 return this;
+            var titleLowered = title.ToLower();
 
-            Query.Where(w => w.Name.Contains(title));
+            Query.Where(w => w.Name.ToLower().Contains(titleLowered));
 
             return this;
         }

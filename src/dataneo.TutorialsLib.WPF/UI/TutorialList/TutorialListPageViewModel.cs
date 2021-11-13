@@ -12,6 +12,7 @@ using Prism.Regions;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -20,7 +21,7 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
 {
     internal sealed class TutorialListPageViewModel : BaseViewModel
     {
-        private const short TutorialOnPage = 40;
+        private const short TutorialOnPage = 20;
 
         private readonly IDialogService _dialogService;
         private readonly ITutorialRespositoryAsync _tutorialRespositoryAsync;
@@ -28,10 +29,10 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         private readonly IAddTutorial _addTutorial;
         private readonly ISettingManager _settingManager;
 
-        public readonly CategoryManager CategoriesManager;
+        public CategoryManager CategoriesManager { get; }
 
-        private IEnumerable<TutorialHeaderDto> tutorials;
-        public IEnumerable<TutorialHeaderDto> Tutorials
+        private ObservableCollection<TutorialHeaderDto> tutorials = new ObservableCollection<TutorialHeaderDto>();
+        public ObservableCollection<TutorialHeaderDto> Tutorials
         {
             get { return tutorials; }
             set { tutorials = value; RaisePropertyChanged(); }
@@ -60,6 +61,13 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         {
             get { return _tutorialCategories; }
             set { _tutorialCategories = value; RaisePropertyChanged(); }
+        }
+
+        private string searchTitle;
+        public string SearchTitle
+        {
+            get { return searchTitle; }
+            set { searchTitle = value; RaisePropertyChanged(); }
         }
 
         private short page;
@@ -111,6 +119,11 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         public ICommand DeleteTutorialCommand { get; }
         public ICommand ShowTutorialCategoriesCommand { get; }
         public ICommand TutorialCategoriesChangedCommand { get; }
+        public ICommand NextPageCommand { get; }
+        public ICommand PrevPageCommand { get; }
+        public ICommand SearchCommand { get; }
+        public ICommand SearchPrevCommand { get; }
+        public ICommand PageNoEnterCommand { get; }
 
         public TutorialListPageViewModel(IRegionManager regionManager,
                                          IDialogService dialogService,
@@ -137,6 +150,11 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             this.SetTutorialAsUnWatchedCommand = new Command(SetTutorialAsUnWatchedCommandImpl);
             this.ShowTutorialCategoriesCommand = new Command(ShowTutorialCategoriesCommandImpl);
             this.TutorialCategoriesChangedCommand = new Command(TutorialCategoriesChangedCommandImpl);
+            this.NextPageCommand = new Command(NextPageCommandImplAsync);
+            this.PrevPageCommand = new Command(PrevPageCommandImplAsync);
+            this.SearchCommand = new Command(SearchCommandImplAsync);
+            this.SearchPrevCommand = new Command<KeyEventArgs>(SearchPrevCommandImplAsync);
+            this.PageNoEnterCommand = new Command<KeyEventArgs>(PageNoEnterCommandImplAsync);
         }
 
         public async override void OnNavigatedTo(NavigationContext navigationContext)
@@ -190,6 +208,40 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             this.TutorialCategories = GetCategoryMenuItem(this.SelectedTutorial, this.CategoriesManager.Categories);
         }
 
+        private async void PrevPageCommandImplAsync()
+        {
+            await Result.Try(() => LoadTutorialsDtoAsync(this.Page - 1))
+                        .OnFailure(error => ShowError(error));
+        }
+
+        private async void NextPageCommandImplAsync()
+        {
+            await Result.Try(() => LoadTutorialsDtoAsync(this.Page + 1))
+                        .OnFailure(error => ShowError(error));
+        }
+
+        private async void SearchCommandImplAsync()
+        {
+            await Result.Try(LoadTutorialsDtoAsync)
+                        .OnFailure(error => ShowError(error));
+        }
+
+        private async void SearchPrevCommandImplAsync(KeyEventArgs obj)
+        {
+            if (obj.Key != Key.Enter)
+                return;
+            await Result.Try(LoadTutorialsDtoAsync)
+                        .OnFailure(error => ShowError(error));
+        }
+
+        private async void PageNoEnterCommandImplAsync(KeyEventArgs obj)
+        {
+            if (obj.Key != Key.Enter)
+                return;
+            await Result.Try(() => LoadTutorialsDtoAsync(this.Page))
+                        .OnFailure(error => ShowError(error));
+        }
+
         private IReadOnlyList<CategoryMenuItem> GetCategoryMenuItem(TutorialHeaderDto tutorialHeaderDto,
                                                                     IEnumerable<CategoryMenuItem> categoryMenuItems)
         {
@@ -231,8 +283,11 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         private void UpdateTutorialDtoCategories(IReadOnlyList<Category> newTutorialCategories, TutorialHeaderDto tutorialHeaderDto)
         {
             var newTutorialDto = tutorialHeaderDto with { Categories = newTutorialCategories };
-            this.Tutorials = this.Tutorials.Select(s => s == tutorialHeaderDto ? newTutorialDto : s)
+            var newTutorials = this.Tutorials.Select(s => s == tutorialHeaderDto ? newTutorialDto : s)
                                            .ToArray();
+
+            this.Tutorials.Clear();
+            this.Tutorials.AddRange(newTutorials);
         }
 
         private async Task UpdateTutorialCategoriesAsync(IReadOnlyList<Category> newTutorialCategories, TutorialHeaderDto tutorialHeaderDto)
@@ -245,17 +300,25 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
         private async Task LoadCategoriesAndTutorialsonSelectionChangeAsync()
         {
             await this.CategoriesManager.LoadCategoriesAsync();
-            await LoadTutorialsDtoAsync();
+            await LoadTutorialsDtoAsync(this.Page);
         }
 
-        private async Task LoadTutorialsDtoAsync()
+        private Task LoadTutorialsDtoAsync()
+            => LoadTutorialsDtoAsync(Maybe<int>.None);
+
+        private async Task LoadTutorialsDtoAsync(Maybe<int> page)
         {
-            var specificationCount = GetSpecificationAccToFilterSelect();
-            var totalRecords = await this._tutorialRespositoryAsync.CountAsync(specificationCount);
-            this.TotalPage = (short)Math.Ceiling(totalRecords / (double)TutorialOnPage);
-            this.Page = 1;
+            if (page.HasNoValue)
+            {
+                var specificationCount = GetSpecificationAccToFilterSelect();
+                var totalRecords = await this._tutorialRespositoryAsync.CountAsync(specificationCount);
+                this.TotalPage = (short)Math.Ceiling(totalRecords / (double)TutorialOnPage);
+            }
+
+            this.Page = (short)page.GetValueOrDefault(1);
             var specification = GetSpecificationAccToFilterSelect(this.Page);
-            this.Tutorials = await this._tutorialRespositoryAsync.GetAllTutorialHeadersDtoAsync(specification);
+            this.Tutorials.Clear();
+            this.Tutorials.AddRange(await this._tutorialRespositoryAsync.GetAllTutorialHeadersDtoAsync(specification));
         }
 
         private ISpecification<Tutorial> GetSpecificationAccToFilterSelect(short? page = null)
@@ -263,14 +326,14 @@ namespace dataneo.TutorialLibs.WPF.UI.TutorialList
             var specBuilder = new SpecificationBuilder();
             specBuilder
                 .FilterByCategories(this.CategoriesManager.GetFilteredCategories(),
-                                    this.CategoriesManager.IsFilterByNoCategory());
+                                    this.CategoriesManager.IsFilterByNoCategory())
+                .TutorialTitleSearch(this.SearchTitle);
 
             if (page.HasValue)
             {
                 specBuilder.Page(page.Value, TutorialOnPage)
                            .OrderBy(this.SelectedTutorialsOrderType);
             }
-
 
             return specBuilder.GetSpecification();
         }

@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key="foreGround">#B2B1B0</SolidColorBrush>
     <SolidColorBrush x:Key="backGround">#1A1A17</SolidColorBrush>
+    <SolidColorBrush x:Key="drawingLines">#1E1A1A</SolidColorBrush>
     <SolidColorBrush x:Key="btnNavColot" Color="#464646" />
     <Style x:Key="button" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="#353535" />
